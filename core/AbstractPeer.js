@@ -1,46 +1,26 @@
 /**
  * React,React-native webrtc peer implementation...
- * 
+ *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-
-import { EventEmitter } from "events";
-
-import { AbstractPeerConnection } from "./";
-
-export namespace AbstractPeer {
-    export abstract class BasePeer implements AbstractPeerConnection.IPC_Handler {
-
-        id: string;
-        pc: RTCPeerConnection;
-        channels: any;
-        pcEvent: EventEmitter;
-        readonly debug: boolean;
-        readonly type: string;
-        parentsEmitter: EventEmitter;
-        receiveChannel;
-        pcPeers;
-        browserPrefix: string;
-        nick;
-        offer: boolean;
-
-        enableDataChannels: boolean = true;
-        send_event: (messageType: string, payload?: any, optional?: { to: string }) => void;
-        logError = (error) => {
-            console.log(error);
-        };
-
+import { AbstractPeerConnection } from "./IWebRTC";
+export var AbstractPeer;
+(function (AbstractPeer) {
+    class BasePeer {
         /**
          * reture PeerConnection
-         * @param socket 
-         * @param stream 
-         * @param options 
+         * @param socket
+         * @param stream
+         * @param options
          */
-        constructor(config: AbstractPeerConnection.PeerConstructor) {
+        constructor(config) {
+            this.enableDataChannels = true;
+            this.logError = (error) => {
+                console.log(error);
+            };
             if (!config.stream) {
                 throw new Error("Missing stream!!!");
             }
-
             this.debug = config.debug;
             this.id = config.peer_id;
             this.pcPeers = config.pcPeers;
@@ -48,17 +28,13 @@ export namespace AbstractPeer {
             this.send_event = config.sendHandler;
             this.offer = config.offer;
         }
-
-        initPeerConnection(stream: MediaStream) { }
-
-        removeStream(stream: MediaStream) {
+        initPeerConnection(stream) { }
+        removeStream(stream) {
             this.pc.removeStream(stream);
         }
-
-        addStream(stream: MediaStream) {
+        addStream(stream) {
             this.pc.addStream(stream);
         }
-
         onSetSessionDescriptionError(error) {
             console.warn('Failed to set session description: ' + error.toString());
         }
@@ -67,15 +43,12 @@ export namespace AbstractPeer {
         }
         createOffer() {
             let self = this;
-
             this.pc.createOffer(function (desc) {
                 if (self.debug)
                     console.log('createOffer Success');
-
                 self.pc.setLocalDescription(desc, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-
                     self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
@@ -85,16 +58,14 @@ export namespace AbstractPeer {
             self.pc.createAnswer(function (desc) {
                 if (self.debug)
                     console.log('createAnswer Success');
-
                 self.pc.setLocalDescription(desc, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-
                     self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         }
-
-        handleMessage(message: any) { }
+        handleMessage(message) { }
     }
-}
+    AbstractPeer.BasePeer = BasePeer;
+})(AbstractPeer || (AbstractPeer = {}));

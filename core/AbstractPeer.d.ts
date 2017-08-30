@@ -5,7 +5,7 @@
  * Copyright 2017 Ahoo Studio.co.th.
  */
 import { EventEmitter } from "events";
-import { AbstractPeerConnection } from "./";
+import { AbstractPeerConnection } from "./IWebRTC";
 export declare namespace AbstractPeer {
     abstract class BasePeer implements AbstractPeerConnection.IPC_Handler {
         id: string;

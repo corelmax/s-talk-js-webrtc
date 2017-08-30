@@ -4,7 +4,7 @@
  * Copyright 2017 Ahoo Studio.co.th.
  */
 
-import { AbstractWEBRTC, AbstractPeerConnection } from "./index";
+import { AbstractWEBRTC, AbstractPeerConnection } from "./IWebRTC";
 
 export function withExchange(webrtcObject: AbstractWEBRTC.IWebRTC) {
     return function exchange(message) {
