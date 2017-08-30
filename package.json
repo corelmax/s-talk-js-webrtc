@@ -1,0 +1,23 @@
+{
+  "name": "stalk-js-webrtc",
+  "version": "0.0.1",
+  "description": "S-Talk web-rtc javascript client implementation. Support react, react-native.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "S-Talk"
+  ],
+  "author": "nattapon.r <nattapon.r@live.com>",
+  "license": "ISC",
+  "dependencies": {
+    "events": "^1.1.1",
+    "socket.io-client": "^2.0.3",
+    "webrtc-adapter": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.26",
+    "@types/socket.io-client": "^1.4.30"
+  }
+}
