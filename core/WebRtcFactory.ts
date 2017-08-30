@@ -3,7 +3,7 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import { AbstractWEBRTC } from "./IWebRTC";
+import { WebRtcConfig, IWebRTC } from "./IWebRTC";
 
 export enum Platform {
     BROWSER = 0,
@@ -11,7 +11,7 @@ export enum Platform {
 }
 
 export class WebRtcFactory {
-    static getObject(platform: Platform, options: AbstractWEBRTC.WebRtcConfig): Promise<AbstractWEBRTC.IWebRTC | undefined> {
+    static getObject(platform: Platform, options: WebRtcConfig): Promise<IWebRTC | undefined> {
         console.log("userAgent", global["userAgent"]);
 
         if (platform === Platform.BROWSER) {
@@ -19,8 +19,8 @@ export class WebRtcFactory {
             return new WebRTC(options);
         }
         else if (platform === Platform.NODE) {
-            const { WebRTC } = require("./rn-webrtc/WebRTC");
-            return new WebRTC(options);
+            // const { WebRTC } = require("../rn-webrtc/WebRTC");
+            // return new WebRTC(options);
         }
     }
 }

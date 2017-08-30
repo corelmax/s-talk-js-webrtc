@@ -3,7 +3,7 @@
 import 'webrtc-adapter';
 import * as io from 'socket.io-client';
 import * as events from "events";
-import { AbstractWEBRTC, withExchange, withSendMessage } from "../";
+import { AbstractWEBRTC, withExchange, withSendMessage } from "../index";
 import { PeerManager } from "./PeerManager";
 import { UserMedia } from "./UserMedia";
 export function hasGetUserMedia() {

@@ -3,10 +3,10 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import { AbstractPeerConnection } from "../";
+import { IPC_Estabished } from "../index";
 import { Peer } from "./Peer";
 import { WebRTC } from "./WebRTC";
-export declare class PeerManager implements AbstractPeerConnection.IPC_Estabished {
+export declare class PeerManager implements IPC_Estabished {
     peers: Map<string, Peer>;
     debug: boolean;
     constructor(options: {

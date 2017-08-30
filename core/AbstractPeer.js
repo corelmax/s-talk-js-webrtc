@@ -3,7 +3,7 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import { AbstractPeerConnection } from "./IWebRTC";
+import { AbstractPeerConnection } from "./AbstractPeerConnection";
 export var AbstractPeer;
 (function (AbstractPeer) {
     class BasePeer {

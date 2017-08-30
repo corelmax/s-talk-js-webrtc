@@ -4,7 +4,7 @@ import 'webrtc-adapter';
 import * as io from 'socket.io-client';
 import * as events from "events";
 
-import { AbstractWEBRTC, withExchange, withSendMessage } from "../";
+import { AbstractWEBRTC, withExchange, withSendMessage, IWebRTC, WebRtcConfig } from "../index";
 import * as Peer from "./Peer";
 import { PeerManager } from "./PeerManager";
 import { UserMedia } from "./UserMedia";
@@ -14,7 +14,7 @@ export function hasGetUserMedia() {
         navigator.mozGetUserMedia || navigator.msGetUserMedia);
 }
 
-export class WebRTC implements AbstractWEBRTC.IWebRTC {
+export class WebRTC implements IWebRTC {
     signalingSocket: SocketIOClient.Socket;  //{ transports: ['websocket'] }
     webrtcEvents = new events.EventEmitter();
     roomName: string;
@@ -22,7 +22,7 @@ export class WebRTC implements AbstractWEBRTC.IWebRTC {
     userMedia: UserMedia;
     debug: boolean = false;
 
-    constructor(configs: AbstractWEBRTC.WebRtcConfig) {
+    constructor(configs: WebRtcConfig) {
         let self = this;
         self.debug = configs.debug;
 

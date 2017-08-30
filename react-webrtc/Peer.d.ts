@@ -1,4 +1,4 @@
-import { AbstractPeer, AbstractPeerConnection } from "../";
+import { AbstractPeer, PeerConstructor } from "../index";
 export declare class Peer extends AbstractPeer.BasePeer {
     /**
      * reture PeerConnection
@@ -6,7 +6,7 @@ export declare class Peer extends AbstractPeer.BasePeer {
      * @param stream
      * @param options
      */
-    constructor(config: AbstractPeerConnection.PeerConstructor);
+    constructor(config: PeerConstructor);
     initPeerConnection(stream: MediaStream): void;
     getStats(): void;
     handleMessage(message: any): void;

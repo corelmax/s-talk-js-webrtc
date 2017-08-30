@@ -5,9 +5,9 @@
  * Copyright 2017 Ahoo Studio.co.th.
  */
 import { EventEmitter } from "events";
-import { AbstractPeerConnection } from "./IWebRTC";
+import { IPC_Handler, PeerConstructor } from "./AbstractPeerConnection";
 export declare namespace AbstractPeer {
-    abstract class BasePeer implements AbstractPeerConnection.IPC_Handler {
+    abstract class BasePeer implements IPC_Handler {
         id: string;
         pc: RTCPeerConnection;
         channels: any;
@@ -31,7 +31,7 @@ export declare namespace AbstractPeer {
          * @param stream
          * @param options
          */
-        constructor(config: AbstractPeerConnection.PeerConstructor);
+        constructor(config: PeerConstructor);
         initPeerConnection(stream: MediaStream): void;
         removeStream(stream: MediaStream): void;
         addStream(stream: MediaStream): void;

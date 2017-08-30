@@ -3,11 +3,11 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import { AbstractPeerConnection } from "../";
+import { AbstractPeerConnection, IPC_Estabished, PeerConstructor } from "../index";
 import { Peer } from "./Peer";
 import { WebRTC } from "./WebRTC";
 
-export class PeerManager implements AbstractPeerConnection.IPC_Estabished {
+export class PeerManager implements IPC_Estabished {
     peers: Map<string, Peer>;
     debug: boolean = false;
 
@@ -27,7 +27,7 @@ export class PeerManager implements AbstractPeerConnection.IPC_Estabished {
             emitter: webrtc.webrtcEvents,
             sendHandler: webrtc.send,
             debug: self.debug
-        } as AbstractPeerConnection.PeerConstructor;
+        } as PeerConstructor;
         let peer = new Peer(config);
         this.peers.set(options.id, peer);
         return peer;

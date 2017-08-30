@@ -1,8 +1,8 @@
 import 'webrtc-adapter';
-import { AbstractMediaStream } from "../index";
+import { IUserMedia } from "../index";
 import { AudioController } from '../libs/AudioController';
 import { VideoController } from '../libs/VideoController';
-export declare class UserMedia implements AbstractMediaStream.IUserMedia {
+export declare class UserMedia implements IUserMedia {
     debug: boolean;
     private localStream;
     getLocalStream(): MediaStream;

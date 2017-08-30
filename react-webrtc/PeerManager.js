@@ -3,7 +3,7 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import { AbstractPeerConnection } from "../";
+import { AbstractPeerConnection } from "../index";
 import { Peer } from "./Peer";
 export class PeerManager {
     constructor(options) {

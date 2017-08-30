@@ -6,10 +6,10 @@
 
 import { EventEmitter } from "events";
 
-import { AbstractPeerConnection } from "./IWebRTC";
+import { IPC_Handler, PeerConstructor, AbstractPeerConnection } from "./AbstractPeerConnection";
 
 export namespace AbstractPeer {
-    export abstract class BasePeer implements AbstractPeerConnection.IPC_Handler {
+    export abstract class BasePeer implements IPC_Handler {
 
         id: string;
         pc: RTCPeerConnection;
@@ -36,7 +36,7 @@ export namespace AbstractPeer {
          * @param stream 
          * @param options 
          */
-        constructor(config: AbstractPeerConnection.PeerConstructor) {
+        constructor(config: PeerConstructor) {
             if (!config.stream) {
                 throw new Error("Missing stream!!!");
             }

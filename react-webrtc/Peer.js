@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { AbstractPeer, AbstractPeerConnection } from "../";
+import { AbstractPeer, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 // const twilioIceServers = [

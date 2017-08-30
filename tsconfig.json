@@ -1,6 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "watch": true,
         "target": "es2015",
         "module": "es2015",
         "typeRoots": [

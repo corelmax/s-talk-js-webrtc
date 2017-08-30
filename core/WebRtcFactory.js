@@ -11,8 +11,8 @@ export class WebRtcFactory {
             return new WebRTC(options);
         }
         else if (platform === Platform.NODE) {
-            const { WebRTC } = require("./rn-webrtc/WebRTC");
-            return new WebRTC(options);
+            // const { WebRTC } = require("../rn-webrtc/WebRTC");
+            // return new WebRTC(options);
         }
     }
 }

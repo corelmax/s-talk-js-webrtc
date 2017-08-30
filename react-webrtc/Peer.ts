@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 
-import { AbstractPeer, AbstractPeerConnection } from "../";
+import { AbstractPeer, PeerConstructor, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 
@@ -17,7 +17,7 @@ export class Peer extends AbstractPeer.BasePeer {
      * @param stream
      * @param options
      */
-    constructor(config: AbstractPeerConnection.PeerConstructor) {
+    constructor(config: PeerConstructor) {
         super(config);
 
         this.initPeerConnection(config.stream);
