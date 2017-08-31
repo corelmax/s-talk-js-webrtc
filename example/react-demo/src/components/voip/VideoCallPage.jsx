@@ -1,17 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
-const react_redux_1 = require("react-redux");
-const react_router_dom_1 = require("react-router-dom");
-const recompose_1 = require("recompose");
-const flexbox_react_1 = require("flexbox-react");
-const stalk_js_1 = require("stalk-js");
-const Colors = require("material-ui/styles/colors");
-const chatroom = require("../../chitchat/chats/redux/chatroom/");
-const calling = require("../../chitchat/calling/");
-const DialogBoxEnhancer_1 = require("../toolsbox/DialogBoxEnhancer");
-const SimpleToolbar_1 = require("../../components/SimpleToolbar");
-const _1 = require("./");
+import * as React from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { shallowEqual, compose } from "recompose";
+import Flexbox from "flexbox-react";
+import { CallingEvents } from "stalk-js";
+import * as Colors from "material-ui/styles/colors";
+import * as chatroom from "../../chitchat/chats/redux/chatroom/";
+import * as calling from "../../chitchat/calling/";
+import { WithDialog } from "../toolsbox/DialogBoxEnhancer";
+import { SimpleToolbar } from "../../components/SimpleToolbar";
+import { WebRtcPage } from "./";
 class VideoCall extends React.Component {
     constructor(props) {
         super(props);
@@ -31,11 +29,11 @@ class VideoCall extends React.Component {
     componentWillReceiveProps(nextProps) {
         let prevInline = this.props.stalkReducer.get("inline");
         let nextInline = nextProps.stalkReducer.get("inline");
-        if (!nextInline && !recompose_1.shallowEqual(nextInline, prevInline)) {
+        if (!nextInline && !shallowEqual(nextInline, prevInline)) {
             this.onBackPressed();
         }
         let { alertReducer: { error } } = nextProps;
-        if (!recompose_1.shallowEqual(this.props.alertReducer.error, error) && !!error) {
+        if (!shallowEqual(this.props.alertReducer.error, error) && !!error) {
             this.props.onError(error);
         }
         if (!error && this.props.alertReducer.error) {
@@ -88,17 +86,20 @@ class VideoCall extends React.Component {
                 target_ids: targets,
                 user_id: user._id,
                 room_id: match.params.id,
-                calllingType: stalk_js_1.CallingEvents.VideoCall
+                calllingType: CallingEvents.VideoCall
             }));
         }
     }
     render() {
         let { team } = this.props.teamReducer;
-        return (React.createElement(flexbox_react_1.default, { flexDirection: "column", height: "100vh", style: { backgroundColor: Colors.blueGrey50 } },
-            React.createElement("div", { style: { position: "relative", height: "56px" } },
-                React.createElement("div", { style: { position: "fixed", width: "100%", zIndex: 1 } },
-                    React.createElement(SimpleToolbar_1.SimpleToolbar, { title: (!!team) ? team.name.toUpperCase() : "", onBackPressed: this.onBackPressed, onPressTitle: this.onTitlePressed }))),
-            React.createElement(_1.WebRtcPage, { onJoinedRoom: this.onJoinedRoom.bind(this), onError: this.props.onError })));
+        return (<Flexbox flexDirection="column" height="100vh" style={{ backgroundColor: Colors.blueGrey50 }}>
+                <div style={{ position: "relative", height: "56px" }}>
+                    <div style={{ position: "fixed", width: "100%", zIndex: 1 }}>
+                        <SimpleToolbar title={(!!team) ? team.name.toUpperCase() : ""} onBackPressed={this.onBackPressed} onPressTitle={this.onTitlePressed}/>
+                    </div>
+                </div>
+                <WebRtcPage onJoinedRoom={this.onJoinedRoom.bind(this)} onError={this.props.onError}/>
+            </Flexbox>);
     }
 }
 const mapStateToProps = (state) => ({
@@ -107,5 +108,5 @@ const mapStateToProps = (state) => ({
     teamReducer: state.teamReducer,
     stalkReducer: state.stalkReducer
 });
-const enhance = recompose_1.compose(DialogBoxEnhancer_1.WithDialog, react_router_dom_1.withRouter, react_redux_1.connect(mapStateToProps));
-exports.VideoCallPage = enhance(VideoCall);
+const enhance = compose(WithDialog, withRouter, connect(mapStateToProps));
+export const VideoCallPage = enhance(VideoCall);

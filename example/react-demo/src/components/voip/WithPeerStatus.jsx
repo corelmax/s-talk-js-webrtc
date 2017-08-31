@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
-class PeerStatus extends React.Component {
+import * as React from 'react';
+export class PeerStatus extends React.Component {
     componentWillMount() {
         this.state = {
             peerIceState: "",
@@ -33,16 +31,10 @@ class PeerStatus extends React.Component {
         });
     }
     render() {
-        return (React.createElement("div", null,
-            React.createElement("p", { style: { fontSize: 11 } },
-                "iceConnectionState: ",
-                this.state.peerIceState),
-            React.createElement("p", { style: { fontSize: 11 } },
-                "iceGatheringState: ",
-                this.state.peerIceGatheringState),
-            React.createElement("p", { style: { fontSize: 11 } },
-                "signalingState: ",
-                this.state.peerSignalingState)));
+        return (<div>
+                <p style={{ fontSize: 11 }}>iceConnectionState: {this.state.peerIceState}</p>
+                <p style={{ fontSize: 11 }}>iceGatheringState: {this.state.peerIceGatheringState}</p>
+                <p style={{ fontSize: 11 }}>signalingState: {this.state.peerSignalingState}</p>
+            </div>);
     }
 }
-exports.PeerStatus = PeerStatus;
