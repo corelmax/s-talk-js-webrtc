@@ -1,7 +1,7 @@
 {
   "name": "stalk-js-webrtc",
-  "version": "0.0.1-f9",
-  "description": "S-Talk web-rtc javascript client implementation. Support react, react-native.",
+  "version": "0.0.1-f11",
+  "description": "S-Talk web-rtc javascript client implementation.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

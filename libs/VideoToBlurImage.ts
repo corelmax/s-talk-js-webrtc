@@ -2,8 +2,8 @@
 // https://developers.google.com/web/updates/2016/10/capture-stream
 // https://tokbox.com/blog/camera-filters-in-opentok-for-web/
 // https://trackingjs.com/
+import 'tracking';
 const tracking = window.tracking = {};
-require('tracking');
 
 export function getImage(videoElement: HTMLVideoElement) {
     return new Promise((resolve, reject) => {
