@@ -1,4 +1,6 @@
-export var AbstractPeerConnection;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var AbstractPeerConnection;
 (function (AbstractPeerConnection) {
     AbstractPeerConnection.CREATED_PEER = "createdPeer";
     AbstractPeerConnection.PEER_STREAM_ADDED = "peerStreamAdded";
@@ -11,4 +13,4 @@ export var AbstractPeerConnection;
     AbstractPeerConnection.ANSWER = "answer";
     AbstractPeerConnection.OFFER = "offer";
     AbstractPeerConnection.CANDIDATE = "candidate";
-})(AbstractPeerConnection || (AbstractPeerConnection = {}));
+})(AbstractPeerConnection = exports.AbstractPeerConnection || (exports.AbstractPeerConnection = {}));

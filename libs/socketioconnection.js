@@ -1,19 +1,22 @@
-const io = require('socket.io-client');
-class SocketIoConnection {
-    constructor(config) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var io = require('socket.io-client');
+var SocketIoConnection = (function () {
+    function SocketIoConnection(config) {
         this.connection = io.connect(config.url, config.socketio);
     }
-    on(ev, fn) {
+    SocketIoConnection.prototype.on = function (ev, fn) {
         this.connection.on(ev, fn);
-    }
-    emit() {
+    };
+    SocketIoConnection.prototype.emit = function () {
         this.connection.emit.apply(this.connection, arguments);
-    }
-    getSessionid() {
+    };
+    SocketIoConnection.prototype.getSessionid = function () {
         return this.connection.id;
-    }
-    disconnect() {
+    };
+    SocketIoConnection.prototype.disconnect = function () {
         return this.connection.disconnect();
-    }
-}
-export default SocketIoConnection;
+    };
+    return SocketIoConnection;
+}());
+exports.default = SocketIoConnection;

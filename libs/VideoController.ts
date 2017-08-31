@@ -1,5 +1,5 @@
 import AudioCtx from './audioCtx';
-import { AbstractMediaStream } from "../IWebRTC";
+import { AbstractMediaStream } from "../core/AbstractMediaStream";
 import { getImage } from './VideoToBlurImage';
 
 // implement from mediastream-gain lib

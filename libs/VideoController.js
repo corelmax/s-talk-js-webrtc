@@ -1,20 +1,22 @@
-import { getImage } from './VideoToBlurImage';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var VideoToBlurImage_1 = require("./VideoToBlurImage");
 // implement from mediastream-gain lib
-export class VideoController {
-    constructor(stream) {
+var VideoController = (function () {
+    function VideoController(stream) {
         this.localStream = stream;
         this.videoSource = stream.getVideoTracks()[0];
     }
-    setVideoEnabled(enabled) {
+    VideoController.prototype.setVideoEnabled = function (enabled) {
         if (!!this.videoSource) {
-            let localVideoElement = document.getElementById('localVideo');
-            if (!!localVideoElement) {
+            var localVideoElement_1 = document.getElementById('localVideo');
+            if (!!localVideoElement_1) {
                 if (enabled) {
-                    localVideoElement.srcObject = this.localStream;
+                    localVideoElement_1.srcObject = this.localStream;
                 }
                 else {
-                    getImage(localVideoElement).then((res) => {
-                        localVideoElement.srcObject = res;
+                    VideoToBlurImage_1.getImage(localVideoElement_1).then(function (res) {
+                        localVideoElement_1.srcObject = res;
                     });
                 }
             }
@@ -23,5 +25,7 @@ export class VideoController {
             //     track.enabled = !!enabled;
             // })
         }
-    }
-}
+    };
+    return VideoController;
+}());
+exports.VideoController = VideoController;

@@ -12,7 +12,7 @@ export declare class UserMedia implements AbstractMediaStream.IUserMedia {
     constructor(options: {
         debug: boolean;
     });
-    startLocalStream(mediaConstraints: MediaStreamConstraints, isFront: boolean | undefined): Promise<MediaStream>;
+    startLocalStream(mediaConstraints: MediaStreamConstraints, isFront: boolean | undefined): Promise<any>;
     setVideoEnabled(enabled: boolean): void;
     stopLocalStream(): void;
     private stopStream();

@@ -1,21 +1,23 @@
+"use strict";
 /**
  * React,React-native webrtc peer implementation...
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import { AbstractPeerConnection } from "./AbstractPeerConnection";
-export var AbstractPeer;
+Object.defineProperty(exports, "__esModule", { value: true });
+var AbstractPeerConnection_1 = require("./AbstractPeerConnection");
+var AbstractPeer;
 (function (AbstractPeer) {
-    class BasePeer {
+    var BasePeer = (function () {
         /**
          * reture PeerConnection
          * @param socket
          * @param stream
          * @param options
          */
-        constructor(config) {
+        function BasePeer(config) {
             this.enableDataChannels = true;
-            this.logError = (error) => {
+            this.logError = function (error) {
                 console.log(error);
             };
             if (!config.stream) {
@@ -28,44 +30,45 @@ export var AbstractPeer;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
         }
-        initPeerConnection(stream) { }
-        removeStream(stream) {
+        BasePeer.prototype.initPeerConnection = function (stream) { };
+        BasePeer.prototype.removeStream = function (stream) {
             this.pc.removeStream(stream);
-        }
-        addStream(stream) {
+        };
+        BasePeer.prototype.addStream = function (stream) {
             this.pc.addStream(stream);
-        }
-        onSetSessionDescriptionError(error) {
+        };
+        BasePeer.prototype.onSetSessionDescriptionError = function (error) {
             console.warn('Failed to set session description: ' + error.toString());
-        }
-        onCreateSessionDescriptionError(error) {
+        };
+        BasePeer.prototype.onCreateSessionDescriptionError = function (error) {
             console.warn('Failed to create session description: ' + error.toString());
-        }
-        createOffer() {
-            let self = this;
+        };
+        BasePeer.prototype.createOffer = function () {
+            var self = this;
             this.pc.createOffer(function (desc) {
                 if (self.debug)
                     console.log('createOffer Success');
                 self.pc.setLocalDescription(desc, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-                    self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+                    self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
-        }
-        createAnswer(message) {
-            let self = this;
+        };
+        BasePeer.prototype.createAnswer = function (message) {
+            var self = this;
             self.pc.createAnswer(function (desc) {
                 if (self.debug)
                     console.log('createAnswer Success');
                 self.pc.setLocalDescription(desc, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-                    self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
+                    self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
-        }
-        handleMessage(message) { }
-    }
+        };
+        BasePeer.prototype.handleMessage = function (message) { };
+        return BasePeer;
+    }());
     AbstractPeer.BasePeer = BasePeer;
-})(AbstractPeer || (AbstractPeer = {}));
+})(AbstractPeer = exports.AbstractPeer || (exports.AbstractPeer = {}));

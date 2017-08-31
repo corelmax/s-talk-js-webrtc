@@ -1,14 +1,16 @@
+"use strict";
 /**
  * WebRtcSiggnalling.
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-export function withExchange(webrtcObject) {
+Object.defineProperty(exports, "__esModule", { value: true });
+function withExchange(webrtcObject) {
     return function exchange(message) {
-        let self = webrtcObject;
-        const fromId = message.from;
+        var self = webrtcObject;
+        var fromId = message.from;
         // const roomType = message.roomType;
-        let peer = self.peerManager.getPeers(fromId);
+        var peer = self.peerManager.getPeers(fromId);
         if (!peer) {
             peer = self.peerManager.createPeer({
                 id: message.from,
@@ -20,13 +22,14 @@ export function withExchange(webrtcObject) {
         peer.handleMessage(message);
     };
 }
+exports.withExchange = withExchange;
 // send via signalling channel
-export function withSendMessage(webrtcObject) {
+function withSendMessage(webrtcObject) {
     return function send(messageType, payload, optional) {
-        let self = webrtcObject;
+        var self = webrtcObject;
         if (!self.signalingSocket)
             return;
-        let message = {
+        var message = {
             to: optional.to,
             // sid: self.sid,
             // broadcaster: this.broadcaster,
@@ -37,3 +40,4 @@ export function withSendMessage(webrtcObject) {
         self.signalingSocket.emit('message', message);
     };
 }
+exports.withSendMessage = withSendMessage;

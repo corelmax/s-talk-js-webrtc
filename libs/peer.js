@@ -1,7 +1,19 @@
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var util = require('util');
 var webrtcSupport = require('webrtcsupport');
 var PeerConnection = require('rtcpeerconnection');
-const WildEmitter = require('wildemitter');
+var WildEmitter = require('wildemitter');
 var FileTransfer = require('filetransfer');
 // the inband-v1 protocol is sending metadata inband in a serialized JSON object
 // followed by the actual data. Receiver closes the datachannel upon completion
@@ -13,49 +25,50 @@ function isAllTracksEnded(stream) {
     });
     return isAllTracksEnded;
 }
-class Peer extends WildEmitter {
-    constructor(options) {
-        super();
-        let self = this;
+var Peer = (function (_super) {
+    __extends(Peer, _super);
+    function Peer(options) {
+        var _this = _super.call(this) || this;
+        var self = _this;
         // call emitter constructor
-        WildEmitter.call(this);
-        this.id = options.id;
-        this.parent = options.parent;
-        this.type = options.type || 'video';
-        this.oneway = options.oneway || false;
-        this.sharemyscreen = options.sharemyscreen || false;
-        this.browserPrefix = options.prefix;
-        this.stream = options.stream;
-        this.enableDataChannels = options.enableDataChannels === undefined ? this.parent.config.enableDataChannels : options.enableDataChannels;
-        this.receiveMedia = options.receiveMedia || this.parent.config.receiveMedia;
-        this.channels = {};
-        this.sid = options.sid || Date.now().toString();
+        WildEmitter.call(_this);
+        _this.id = options.id;
+        _this.parent = options.parent;
+        _this.type = options.type || 'video';
+        _this.oneway = options.oneway || false;
+        _this.sharemyscreen = options.sharemyscreen || false;
+        _this.browserPrefix = options.prefix;
+        _this.stream = options.stream;
+        _this.enableDataChannels = options.enableDataChannels === undefined ? _this.parent.config.enableDataChannels : options.enableDataChannels;
+        _this.receiveMedia = options.receiveMedia || _this.parent.config.receiveMedia;
+        _this.channels = {};
+        _this.sid = options.sid || Date.now().toString();
         // Create an RTCPeerConnection via the polyfill
-        this.pc = new PeerConnection(this.parent.config.peerConnectionConfig, this.parent.config.peerConnectionConstraints);
-        this.pc.on('ice', this.onIceCandidate.bind(this));
-        this.pc.on('endOfCandidates', function (event) {
+        _this.pc = new PeerConnection(_this.parent.config.peerConnectionConfig, _this.parent.config.peerConnectionConstraints);
+        _this.pc.on('ice', _this.onIceCandidate.bind(_this));
+        _this.pc.on('endOfCandidates', function (event) {
             self.send('endOfCandidates', event);
         });
-        this.pc.on('offer', function (offer) {
+        _this.pc.on('offer', function (offer) {
             if (self.parent.config.nick)
                 offer.nick = self.parent.config.nick;
             self.send('offer', offer);
         });
-        this.pc.on('answer', function (answer) {
+        _this.pc.on('answer', function (answer) {
             if (self.parent.config.nick)
                 answer.nick = self.parent.config.nick;
             self.send('answer', answer);
         });
-        this.pc.on('addStream', this.handleRemoteStreamAdded.bind(this));
-        this.pc.on('addChannel', this.handleDataChannelAdded.bind(this));
-        this.pc.on('removeStream', this.handleStreamRemoved.bind(this));
+        _this.pc.on('addStream', _this.handleRemoteStreamAdded.bind(_this));
+        _this.pc.on('addChannel', _this.handleDataChannelAdded.bind(_this));
+        _this.pc.on('removeStream', _this.handleStreamRemoved.bind(_this));
         // Just fire negotiation needed events for now
         // When browser re-negotiation handling seems to work
         // we can use this as the trigger for starting the offer/answer process
         // automatically. We'll just leave it be for now while this stabalizes.
-        this.pc.on('negotiationNeeded', this.emit.bind(this, 'negotiationNeeded'));
-        this.pc.on('iceConnectionStateChange', this.emit.bind(this, 'iceConnectionStateChange'));
-        this.pc.on('iceConnectionStateChange', function () {
+        _this.pc.on('negotiationNeeded', _this.emit.bind(_this, 'negotiationNeeded'));
+        _this.pc.on('iceConnectionStateChange', _this.emit.bind(_this, 'iceConnectionStateChange'));
+        _this.pc.on('iceConnectionStateChange', function () {
             switch (self.pc.iceConnectionState) {
                 case 'failed':
                     // currently, in chrome only the initiator goes to failed
@@ -67,23 +80,23 @@ class Peer extends WildEmitter {
                     break;
             }
         });
-        this.pc.on('signalingStateChange', this.emit.bind(this, 'signalingStateChange'));
-        this.logger = this.parent.logger;
+        _this.pc.on('signalingStateChange', _this.emit.bind(_this, 'signalingStateChange'));
+        _this.logger = _this.parent.logger;
         // handle screensharing/broadcast mode
         if (options.type === 'screen') {
-            if (this.parent.localScreens && this.parent.localScreens[0] && this.sharemyscreen) {
-                this.logger.log('adding local screen stream to peer connection');
-                this.pc.addStream(this.parent.localScreens[0]);
-                this.broadcaster = options.broadcaster;
+            if (_this.parent.localScreens && _this.parent.localScreens[0] && _this.sharemyscreen) {
+                _this.logger.log('adding local screen stream to peer connection');
+                _this.pc.addStream(_this.parent.localScreens[0]);
+                _this.broadcaster = options.broadcaster;
             }
         }
         else {
-            this.parent.localStreams.forEach(function (stream) {
+            _this.parent.localStreams.forEach(function (stream) {
                 console.log('addStream');
                 self.pc.addStream(stream);
             });
         }
-        this.on('channelOpen', function (channel) {
+        _this.on('channelOpen', function (channel) {
             if (channel.protocol === INBAND_FILETRANSFER_V1) {
                 channel.onmessage = function (event) {
                     var metadata = JSON.parse(event.data);
@@ -97,11 +110,12 @@ class Peer extends WildEmitter {
             }
         });
         // proxy events to parent
-        this.on('*', function () {
+        _this.on('*', function () {
             self.parent.emit.apply(self.parent, arguments);
         });
+        return _this;
     }
-    handleMessage(message) {
+    Peer.prototype.handleMessage = function (message) {
         var self = this;
         this.logger.log('getting', message.type, message);
         if (message.prefix)
@@ -148,11 +162,11 @@ class Peer extends WildEmitter {
                 }
             });
         }
-    }
+    };
     ;
     // send via signalling channel
-    send(messageType, payload) {
-        let message = {
+    Peer.prototype.send = function (messageType, payload) {
+        var message = {
             to: this.id,
             sid: this.sid,
             broadcaster: this.broadcaster,
@@ -163,11 +177,11 @@ class Peer extends WildEmitter {
         };
         this.logger.log('sending', messageType, message);
         this.parent.emit('message', message);
-    }
+    };
     ;
     // send via data channel
     // returns true when message was sent and false if channel is not open
-    sendDirectly(channel, messageType, payload) {
+    Peer.prototype.sendDirectly = function (channel, messageType, payload) {
         var message = {
             type: messageType,
             payload: payload
@@ -178,10 +192,10 @@ class Peer extends WildEmitter {
             return false;
         dc.send(JSON.stringify(message));
         return true;
-    }
+    };
     ;
     // Internal method registering handlers for a data channel and emitting events on the peer
-    _observeDataChannel(channel) {
+    Peer.prototype._observeDataChannel = function (channel) {
         var self = this;
         channel.onclose = this.emit.bind(this, 'channelClose', channel);
         channel.onerror = this.emit.bind(this, 'channelError', channel);
@@ -189,10 +203,10 @@ class Peer extends WildEmitter {
             self.emit('channelMessage', self, channel.label, JSON.parse(event.data), channel, event);
         };
         channel.onopen = this.emit.bind(this, 'channelOpen', channel);
-    }
+    };
     ;
     // Fetch or create a data channel by the given name
-    getDataChannel(name, opts) {
+    Peer.prototype.getDataChannel = function (name, opts) {
         if (!webrtcSupport.supportDataChannel)
             return this.emit('error', new Error('createDataChannel not supported'));
         var channel = this.channels[name];
@@ -203,10 +217,10 @@ class Peer extends WildEmitter {
         channel = this.channels[name] = this.pc.createDataChannel(name, opts);
         this._observeDataChannel(channel);
         return channel;
-    }
+    };
     ;
-    onIceCandidate(candidate) {
-        let self = this;
+    Peer.prototype.onIceCandidate = function (candidate) {
+        var self = this;
         if (this.closed)
             return;
         if (candidate) {
@@ -223,9 +237,9 @@ class Peer extends WildEmitter {
         else {
             this.logger.log("End of candidates.");
         }
-    }
+    };
     ;
-    start() {
+    Peer.prototype.start = function () {
         var self = this;
         // well, the webrtc api requires that we either
         // a) create a datachannel a priori
@@ -237,22 +251,22 @@ class Peer extends WildEmitter {
         this.pc.offer(this.receiveMedia, function (err, sessionDescription) {
             //self.send('offer', sessionDescription);
         });
-    }
+    };
     ;
-    icerestart() {
+    Peer.prototype.icerestart = function () {
         var constraints = this.receiveMedia;
         constraints.mandatory.IceRestart = true;
         this.pc.offer(constraints, function (err, success) { });
-    }
+    };
     ;
-    end() {
+    Peer.prototype.end = function () {
         if (this.closed)
             return;
         this.pc.close();
         this.handleStreamRemoved();
-    }
+    };
     ;
-    handleRemoteStreamAdded(event) {
+    Peer.prototype.handleRemoteStreamAdded = function (event) {
         var self = this;
         if (this.stream) {
             this.logger.warn('Already have a remote stream');
@@ -268,23 +282,23 @@ class Peer extends WildEmitter {
             });
             this.parent.emit('peerStreamAdded', this);
         }
-    }
+    };
     ;
-    handleStreamRemoved() {
+    Peer.prototype.handleStreamRemoved = function () {
         var peerIndex = this.parent.peers.indexOf(this);
         if (peerIndex > -1) {
             this.parent.peers.splice(peerIndex, 1);
             this.closed = true;
             this.parent.emit('peerStreamRemoved', this);
         }
-    }
+    };
     ;
-    handleDataChannelAdded(channel) {
+    Peer.prototype.handleDataChannelAdded = function (channel) {
         this.channels[channel.label] = channel;
         this._observeDataChannel(channel);
-    }
+    };
     ;
-    sendFile(file) {
+    Peer.prototype.sendFile = function (file) {
         var sender = new FileTransfer.Sender();
         var dc = this.getDataChannel('filetransfer' + (new Date()).getTime(), {
             protocol: INBAND_FILETRANSFER_V1
@@ -303,8 +317,9 @@ class Peer extends WildEmitter {
             sender.emit('complete');
         };
         return sender;
-    }
+    };
     ;
-}
+    return Peer;
+}(WildEmitter));
 // util.inherits(Peer, WildEmitter);
-export default Peer;
+exports.default = Peer;

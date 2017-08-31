@@ -1,7 +1,9 @@
-import AudioCtx from './audioCtx';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var audioCtx_1 = require("./audioCtx");
 // implement from mediastream-gain lib
-export class AudioController {
-    constructor(stream) {
+var AudioController = (function () {
+    function AudioController(stream) {
         // webrtcsupport lib
         this.support = (!!(AudioContext && AudioContext.prototype.createMediaStreamSource)
             &&
@@ -9,11 +11,11 @@ export class AudioController {
         this.volume = 1;
         if (this.support) {
             // var context = this.context = AudioCtx.getInstance();
-            let context = AudioCtx.getInstance();
+            var context = audioCtx_1.default.getInstance();
             this.microphone = context.createMediaStreamSource(stream);
             this.gainFilter = context.createGain();
-            let destination = context.createMediaStreamDestination();
-            let outputStream = destination.stream;
+            var destination = context.createMediaStreamDestination();
+            var outputStream = destination.stream;
             this.microphone.connect(this.gainFilter);
             this.gainFilter.connect(destination);
             stream.addTrack(outputStream.getAudioTracks()[0]);
@@ -24,24 +26,26 @@ export class AudioController {
             console.log("Browser doesn't support adjust local microphone volume");
         }
     }
-    setVolume(volume) {
+    AudioController.prototype.setVolume = function (volume) {
         if (!this.support)
             return;
         this.gainFilter.gain.value = volume;
         this.volume = volume;
-    }
-    getVolume() {
+    };
+    AudioController.prototype.getVolume = function () {
         return this.volume;
-    }
-    mute() {
+    };
+    AudioController.prototype.mute = function () {
         this.setVolume(0);
-    }
-    unMute() {
+    };
+    AudioController.prototype.unMute = function () {
         this.setVolume(1);
-    }
-    removeAudioStream() {
+    };
+    AudioController.prototype.removeAudioStream = function () {
         !!this.audioSource && this.audioSource.stop();
         !!this.microphone && this.microphone.disconnect();
         !!this.gainFilter && this.gainFilter.disconnect();
-    }
-}
+    };
+    return AudioController;
+}());
+exports.AudioController = AudioController;
