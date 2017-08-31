@@ -17,8 +17,8 @@ import {
     getUserMedia,
 } from 'react-native-webrtc';
 
-import { AbstractWEBRTC } from "../index";
-import { withExchange, withSendMessage } from "../WebrtcSignaling";
+import { AbstractWEBRTC, IWebRTC, WebRtcConfig } from "../index";
+import { withExchange, withSendMessage } from "../core/WebrtcSignaling";
 import * as Peer from "./Peer";
 import { PeerManager } from "./PeerManager";
 import { UserMedia } from "./UserMedia";
@@ -27,7 +27,7 @@ export function logError(error) {
     console.log("logError", error);
 }
 
-export class WebRTC implements AbstractWEBRTC.IWebRTC {
+export class WebRTC implements IWebRTC {
     signalingSocket: SocketIOClient.Socket; //{ transports: ['websocket'] }
     webrtcEvents: events.EventEmitter;
     roomName: string;
@@ -35,7 +35,7 @@ export class WebRTC implements AbstractWEBRTC.IWebRTC {
     userMedia: UserMedia;
     debug: boolean = false;
 
-    constructor(configs: AbstractWEBRTC.WebRtcConfig) {
+    constructor(configs: WebRtcConfig) {
         let self = this;
         self.debug = configs.debug;
 
@@ -113,7 +113,6 @@ export class WebRTC implements AbstractWEBRTC.IWebRTC {
                                     type: type,
                                     offer: true
                                 }, self);
-                                self.webrtcEvents.emit(AbstractWEBRTC.CREATED_PEER, peer);
                             }
                         }
                     }

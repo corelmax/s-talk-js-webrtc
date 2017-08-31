@@ -7,6 +7,7 @@ import { WebRtcConfig, IWebRTC } from "./IWebRTC";
 
 export enum Platform {
     BROWSER = 0,
+    REACTNATIVE,
     NODE
 }
 
@@ -18,9 +19,9 @@ export class WebRtcFactory {
             const { WebRTC } = require("../react-webrtc/WebRTC");
             return new WebRTC(options);
         }
-        else if (platform === Platform.NODE) {
-            // const { WebRTC } = require("../rn-webrtc/WebRTC");
-            // return new WebRTC(options);
+        else if (platform === Platform.REACTNATIVE) {
+            const { WebRTC } = require("../rn-webrtc/WebRTC");
+            return new WebRTC(options);
         }
     }
 }

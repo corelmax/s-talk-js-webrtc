@@ -4,74 +4,92 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
+var events_1 = require("events");
 var react_native_webrtc_1 = require("react-native-webrtc");
-var index_1 = require("../index");
+var AbstractPeerConnection_1 = require("../core/AbstractPeerConnection");
+var AbstractPeer_1 = require("../core/AbstractPeer");
 var configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
-var Peer = (function () {
+var Peer = (function (_super) {
+    __extends(Peer, _super);
     /**
      * reture PeerConnection
      * @param socket
      * @param stream
      * @param options
      */
-    function Peer(parents) {
-        this.channels = {};
-        this.id = parents.peer_id;
-        this.pcPeers = parents.pcPeers;
-        this.parentsEmitter = parents.emitter;
-        this.send_event = parents.sendHandler;
-        this.pc = new react_native_webrtc_1.RTCPeerConnection(configuration);
-        this.debug = parents.debug;
+    function Peer(config) {
+        var _this = _super.call(this, config) || this;
+        _this.initPeerConnection(config.stream);
+        return _this;
+    }
+    Peer.prototype.initPeerConnection = function (stream) {
         var self = this;
-        var isOffer = parents.offer;
+        self.channels = {};
+        self.pcEvent = new events_1.EventEmitter();
+        this.pc = new react_native_webrtc_1.RTCPeerConnection(configuration);
         this.pc.onicecandidate = function (event) {
             if (!!event.candidate) {
-                self.send_event(index_1.AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
+                self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
             }
         };
         this.pc.onnegotiationneeded = function () {
-            if (isOffer) {
+            if (self.offer) {
                 self.createOffer();
+                self.offer = false;
             }
         };
         this.pc.oniceconnectionstatechange = function (event) {
+            var target = event.target;
             if (self.debug)
-                console.log('oniceconnectionstatechange', event.target.iceConnectionState);
-            if (event.target.iceConnectionState === 'completed') {
+                console.log('oniceconnectionstatechange', target.iceConnectionState);
+            if (target.iceConnectionState === 'completed') {
                 // setTimeout(() => {
                 //     self.getStats();
                 // }, 1000);
             }
-            if (event.target.iceConnectionState === 'connected') {
+            if (target.iceConnectionState === 'connected') {
                 self.createDataChannel();
             }
-            else if (event.target.iceConnectionState == "failed") {
-                self.parentsEmitter.emit(index_1.AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
-                self.send_event(index_1.AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
+            else if (target.iceConnectionState == "failed") {
+                self.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
+                self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
             }
         };
-        this.pc.onsignalingstatechange = function (event) {
+        this.pc.onicegatheringstatechange = function (event) {
+            var target = event.target;
             if (self.debug)
-                console.log('onsignalingstatechange', event.target.signalingState);
+                console.log("onicegatheringstatechange", target.iceGatheringState);
+            self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
+        };
+        this.pc.onsignalingstatechange = function (event) {
+            var target = event.target;
+            if (self.debug)
+                console.log('onsignalingstatechange', target.signalingState);
+            self.pcEvent.emit("onsignalingstatechange", target.signalingState);
         };
         this.pc.onaddstream = function (peer) {
             if (self.debug)
-                console.log('onaddstream', peer.stream);
-            self.parentsEmitter.emit(index_1.AbstractPeerConnection.PEER_STREAM_ADDED, peer);
+                console.log('onaddstream');
+            self.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.PEER_STREAM_ADDED, peer);
         };
         this.pc.onremovestream = function (peer) {
             if (self.debug)
                 console.log('onremovestream');
-            self.parentsEmitter.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
+            self.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
-        this.pc.addStream(parents.stream);
-    }
-    Peer.prototype.removeStream = function (stream) {
-        this.pc.removeStream(stream);
-    };
-    Peer.prototype.addStream = function (stream) {
         this.pc.addStream(stream);
+        self.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.CREATED_PEER, self);
     };
     Peer.prototype.getStats = function () {
         var self = this;
@@ -85,70 +103,31 @@ var Peer = (function () {
             }, self.logError);
         }
     };
-    Peer.prototype.onSetSessionDescriptionError = function (error) {
-        console.log('Failed to set session description: ' + error.toString());
-    };
-    Peer.prototype.onCreateSessionDescriptionError = function (error) {
-        console.log('Failed to create session description: ' + error.toString());
-    };
-    Peer.prototype.createOffer = function () {
-        var self = this;
-        this.pc.createOffer(function (desc) {
-            if (self.debug)
-                console.log('createOffer', desc);
-            self.pc.setLocalDescription(desc, function () {
-                if (self.debug)
-                    console.log('setLocalDescription', self.pc.localDescription);
-                self.send_event(index_1.AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
-            }, self.onSetSessionDescriptionError);
-        }, self.onCreateSessionDescriptionError);
-    };
-    Peer.prototype.createAnswer = function (message) {
-        var self = this;
-        self.pc.createAnswer(function (desc) {
-            if (self.debug)
-                console.log('createAnswer', desc);
-            self.pc.setLocalDescription(desc, function () {
-                if (self.debug)
-                    console.log('setLocalDescription', self.pc.localDescription);
-                self.send_event(index_1.AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
-            }, self.onSetSessionDescriptionError);
-        }, self.onCreateSessionDescriptionError);
-    };
     Peer.prototype.handleMessage = function (message) {
         var self = this;
         if (self.debug)
-            console.log('handleMessage', message.type, message);
+            console.log('handleMessage', message.type);
         if (message.prefix)
             this.browserPrefix = message.prefix;
-        if (message.type === index_1.AbstractPeerConnection.OFFER) {
+        if (message.type === AbstractPeerConnection_1.AbstractPeerConnection.OFFER) {
             if (!this.nick)
                 this.nick = message.payload.nick;
             delete message.payload.nick;
             self.pc.setRemoteDescription(new react_native_webrtc_1.RTCSessionDescription(message.payload), function () {
                 if (self.debug)
                     console.log("setRemoteDescription complete");
-                if (self.pc.remoteDescription.type == index_1.AbstractPeerConnection.OFFER) {
+                if (self.pc.remoteDescription.type == AbstractPeerConnection_1.AbstractPeerConnection.OFFER) {
                     self.createAnswer(message);
                 }
             }, self.onSetSessionDescriptionError);
         }
-        else if (message.type === index_1.AbstractPeerConnection.CANDIDATE) {
-            if (self.debug)
-                console.log('exchange candidate');
+        else if (message.type === AbstractPeerConnection_1.AbstractPeerConnection.CANDIDATE) {
             if (!message.candidate)
                 return;
-            function onAddIceCandidateSuccess() {
-                if (self.debug)
-                    console.log('addIceCandidate success');
-            }
-            function onAddIceCandidateError(error) {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
-            }
             self.pc.addIceCandidate(new react_native_webrtc_1.RTCIceCandidate(message.candidate));
         }
-        else if (message.type === index_1.AbstractPeerConnection.CONNECTIVITY_ERROR) {
-            this.parentsEmitter.emit(index_1.AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);
+        else if (message.type === AbstractPeerConnection_1.AbstractPeerConnection.CONNECTIVITY_ERROR) {
+            this.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);
         }
     };
     ;
@@ -164,7 +143,7 @@ var Peer = (function () {
             console.log("dataChannel.onmessage:", event.data);
             var message = event.data;
             if (message.type === 'connectivityError') {
-                this.parentsEmitter.emit(index_1.AbstractPeerConnection.CONNECTIVITY_ERROR, self);
+                this.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.CONNECTIVITY_ERROR, self);
             }
             else if (message.type === 'endOfCandidates') {
                 // Edge requires an end-of-candidates. Since only Edge will have mLines or tracks on the
@@ -186,5 +165,5 @@ var Peer = (function () {
         this.pc.textDataChannel = dataChannel;
     };
     return Peer;
-}());
+}(AbstractPeer_1.AbstractPeer.BasePeer));
 exports.Peer = Peer;

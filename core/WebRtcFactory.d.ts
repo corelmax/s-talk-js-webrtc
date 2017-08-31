@@ -6,7 +6,8 @@
 import { WebRtcConfig, IWebRTC } from "./IWebRTC";
 export declare enum Platform {
     BROWSER = 0,
-    NODE = 1,
+    REACTNATIVE = 1,
+    NODE = 2,
 }
 export declare class WebRtcFactory {
     static getObject(platform: Platform, options: WebRtcConfig): Promise<IWebRTC | undefined>;

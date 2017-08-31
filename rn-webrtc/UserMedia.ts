@@ -13,10 +13,9 @@ import {
     MediaStreamTrack,
     getUserMedia,
 } from 'react-native-webrtc';
-import { AbstractMediaStream } from "../index";
+import { AbstractMediaStream, IUserMedia, AudioController, VideoController } from "../index";
 
-
-export class UserMedia implements AbstractMediaStream.IUserMedia {
+export class UserMedia implements IUserMedia {
     debug: boolean = false;
     private localStream: MediaStream;
     public getLocalStream() {
@@ -45,8 +44,8 @@ export class UserMedia implements AbstractMediaStream.IUserMedia {
     }
 
     micController;
-    audioController: AbstractMediaStream.AudioController;
-    videoController: AbstractMediaStream.VideoController;
+    audioController: AudioController;
+    videoController: VideoController;
 
     constructor(options: { debug: boolean }) {
         this.debug = options.debug;

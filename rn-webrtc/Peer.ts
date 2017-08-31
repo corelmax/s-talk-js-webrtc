@@ -5,48 +5,37 @@
  */
 
 import { Platform } from 'react-native';
-import * as events from 'events';
+import { EventEmitter } from 'events';
 import {
     RTCPeerConnection,
     RTCIceCandidate,
     RTCSessionDescription,
 } from 'react-native-webrtc';
 
-import { AbstractPeerConnection } from "../index";
+import { AbstractPeerConnection, IPC_Handler, PeerConstructor } from "../core/AbstractPeerConnection";
+import { AbstractPeer } from "../core/AbstractPeer";
 
 const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
 
-export class Peer implements AbstractPeerConnection.IPC_Handler {
-    debug: boolean;
-    type: string;
-    parentsEmitter: events.EventEmitter;
-    id: string;
-    pc: RTCPeerConnection;
-    receiveChannel;
-    channels = {};
-    pcPeers;
-    browserPrefix;
-    nick;
-
-    send_event: (messageType: string, payload?: any, optional?: { to: string }) => void;
-    logError: (error) => void;
-
+export class Peer extends AbstractPeer.BasePeer {
     /**
      * reture PeerConnection
      * @param socket 
      * @param stream 
      * @param options 
      */
-    constructor(parents: AbstractPeerConnection.PeerConstructor) {
-        this.id = parents.peer_id;
-        this.pcPeers = parents.pcPeers;
-        this.parentsEmitter = parents.emitter;
-        this.send_event = parents.sendHandler;
-        this.pc = new RTCPeerConnection(configuration);
-        this.debug = parents.debug;
-        let self = this;
-        const isOffer = parents.offer;
+    constructor(config: PeerConstructor) {
+        super(config);
 
+        this.initPeerConnection(config.stream);
+    }
+
+    initPeerConnection(stream: MediaStream) {
+        let self = this;
+        self.channels = {};
+        self.pcEvent = new EventEmitter();
+
+        this.pc = new RTCPeerConnection(configuration);
         this.pc.onicecandidate = function (event) {
             if (!!event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
@@ -54,35 +43,51 @@ export class Peer implements AbstractPeerConnection.IPC_Handler {
         };
 
         this.pc.onnegotiationneeded = function () {
-            if (isOffer) {
+            if (self.offer) {
                 self.createOffer();
+                self.offer = false;
             }
         }
 
         this.pc.oniceconnectionstatechange = function (event) {
-            if (self.debug)
-                console.log('oniceconnectionstatechange', event.target.iceConnectionState);
+            let target = event.target as RTCPeerConnection;
 
-            if (event.target.iceConnectionState === 'completed') {
+            if (self.debug)
+                console.log('oniceconnectionstatechange', target.iceConnectionState);
+
+            if (target.iceConnectionState === 'completed') {
                 // setTimeout(() => {
                 //     self.getStats();
                 // }, 1000);
             }
-            if (event.target.iceConnectionState === 'connected') {
+            if (target.iceConnectionState === 'connected') {
                 self.createDataChannel();
             }
-            else if (event.target.iceConnectionState == "failed") {
+            else if (target.iceConnectionState == "failed") {
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
                 self.send_event(AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
             }
         };
-        this.pc.onsignalingstatechange = function (event) {
+
+        this.pc.onicegatheringstatechange = (event) => {
+            let target = event.target as RTCPeerConnection;
+
             if (self.debug)
-                console.log('onsignalingstatechange', event.target.signalingState);
+                console.log("onicegatheringstatechange", target.iceGatheringState);
+
+            self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
+        };
+
+        this.pc.onsignalingstatechange = function (event) {
+            let target = event.target as RTCPeerConnection;
+            if (self.debug)
+                console.log('onsignalingstatechange', target.signalingState);
+
+            self.pcEvent.emit("onsignalingstatechange", target.signalingState);
         };
         this.pc.onaddstream = function (peer) {
             if (self.debug)
-                console.log('onaddstream', peer.stream);
+                console.log('onaddstream');
 
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_ADDED, peer);
         };
@@ -93,15 +98,9 @@ export class Peer implements AbstractPeerConnection.IPC_Handler {
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
 
-        this.pc.addStream(parents.stream);
-    }
-
-    removeStream(stream: MediaStream) {
-        this.pc.removeStream(stream);
-    }
-
-    addStream(stream: MediaStream) {
         this.pc.addStream(stream);
+
+        self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
 
     getStats() {
@@ -118,49 +117,10 @@ export class Peer implements AbstractPeerConnection.IPC_Handler {
         }
     }
 
-    onSetSessionDescriptionError(error) {
-        console.log('Failed to set session description: ' + error.toString());
-    }
-    onCreateSessionDescriptionError(error) {
-        console.log('Failed to create session description: ' + error.toString());
-    }
-
-    createOffer() {
-        let self = this;
-
-        this.pc.createOffer(function (desc) {
-            if (self.debug)
-                console.log('createOffer', desc);
-
-            self.pc.setLocalDescription(desc, function () {
-                if (self.debug)
-                    console.log('setLocalDescription', self.pc.localDescription);
-
-                self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
-            },
-                self.onSetSessionDescriptionError);
-        },
-            self.onCreateSessionDescriptionError);
-    }
-    createAnswer(message) {
-        let self = this;
-        self.pc.createAnswer(function (desc) {
-            if (self.debug)
-                console.log('createAnswer', desc);
-
-            self.pc.setLocalDescription(desc, function () {
-                if (self.debug)
-                    console.log('setLocalDescription', self.pc.localDescription);
-
-                self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
-            }, self.onSetSessionDescriptionError);
-        }, self.onCreateSessionDescriptionError);
-    }
-
     handleMessage(message) {
         let self = this;
         if (self.debug)
-            console.log('handleMessage', message.type, message);
+            console.log('handleMessage', message.type);
 
         if (message.prefix)
             this.browserPrefix = message.prefix;
@@ -180,18 +140,8 @@ export class Peer implements AbstractPeerConnection.IPC_Handler {
             }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
-            if (self.debug)
-                console.log('exchange candidate');
             if (!message.candidate) return;
 
-            function onAddIceCandidateSuccess() {
-                if (self.debug)
-                    console.log('addIceCandidate success');
-            }
-
-            function onAddIceCandidateError(error) {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
-            }
             self.pc.addIceCandidate(new RTCIceCandidate(message.candidate));
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {
