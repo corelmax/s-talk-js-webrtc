@@ -1,5 +1,5 @@
 import AudioCtx from './audioCtx';
-import { AbstractMediaStream } from "../IWebRTC";
+import { AbstractMediaStream } from "../core/AbstractMediaStream";
 
 // implement from mediastream-gain lib
 export class AudioController implements AbstractMediaStream.AudioController {
