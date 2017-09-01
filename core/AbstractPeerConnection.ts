@@ -23,6 +23,8 @@ export namespace AbstractPeerConnection {
 }
 
 export interface IPC_Estabished {
+    peers: Map<string, IPC_Handler>;
+
     createPeer(options, webrtc): IPC_Handler;
     getPeers(session_id?: string): IPC_Handler | Map<string, IPC_Handler>;
     removePeers(session_id: string, webrtc);

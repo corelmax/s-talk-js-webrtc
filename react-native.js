@@ -34,37 +34,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-var Platform;
-(function (Platform) {
-    Platform[Platform["BROWSER"] = 0] = "BROWSER";
-    Platform[Platform["REACTNATIVE"] = 1] = "REACTNATIVE";
-    Platform[Platform["NODE"] = 2] = "NODE";
-})(Platform = exports.Platform || (exports.Platform = {}));
-var WebRtcFactory = (function () {
-    function WebRtcFactory() {
-    }
-    WebRtcFactory.getObject = function (platform, options) {
-        return __awaiter(this, void 0, void 0, function () {
-            var WebRTC;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!(platform === Platform.BROWSER)) return [3 /*break*/, 2];
-                        WebRTC = require("../react-webrtc/WebRTC").WebRTC;
-                        return [4 /*yield*/, new WebRTC(options)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        if (platform === Platform.REACTNATIVE) {
-                            // const { WebRTC } = require("../rn-webrtc/WebRTC");
-                            // return await new WebRTC(options);
-                        }
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
-                }
+__export(require("./core/AbstractMediaStream"));
+__export(require("./core/AbstractPeerConnection"));
+// export * from "./core/WebRtcFactory";
+__export(require("./core/WebrtcSignaling"));
+__export(require("./core/AbstractPeer"));
+__export(require("./core/AbstractWebRTC"));
+var StalkWebRtcFactory;
+(function (StalkWebRtcFactory) {
+    var WebRtcFactory = (function () {
+        function WebRtcFactory() {
+        }
+        WebRtcFactory.getObject = function (options) {
+            return __awaiter(this, void 0, void 0, function () {
+                var WebRTC;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            WebRTC = require("./rn-webrtc/WebRTC").WebRTC;
+                            return [4 /*yield*/, new WebRTC(options)];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                });
             });
-        });
-    };
-    return WebRtcFactory;
-}());
-exports.WebRtcFactory = WebRtcFactory;
+        };
+        return WebRtcFactory;
+    }());
+    StalkWebRtcFactory.WebRtcFactory = WebRtcFactory;
+})(StalkWebRtcFactory = exports.StalkWebRtcFactory || (exports.StalkWebRtcFactory = {}));

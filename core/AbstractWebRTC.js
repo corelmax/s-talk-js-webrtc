@@ -1,54 +1,42 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * React,React-native webrtc peer implementation...
- * 
+ *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import 'webrtc-adapter';
-import * as events from "events";
-import * as io from 'socket.io-client';
-
-import { IWebRTC, WebRtcConfig } from "./IWebRTC";
-import { AbstractPeerConnection, IPC_Estabished } from "./AbstractPeerConnection";
-import { IUserMedia } from "./AbstractMediaStream";
-import { withSendMessage, withExchange } from "./WebrtcSignaling";
-
-export namespace AbstractWEBRTC {
-    export const ON_CONNECTION_READY = "connectionReady";
-    export const ON_CONNECTION_CLOSE = "ON_CONNECTION_CLOSE";
-    export const JOINED_ROOM = "joinedRoom"
-    export const JOIN_ROOM_ERROR = "joinRoomError";
-    export const NOT_SUPPORT_MEDIA = "NOT_SUPPORT_MEDIA";
-
-    export abstract class BaseWebRTC implements IWebRTC {
-        signalingSocket: SocketIOClient.Socket;  //{ transports: ['websocket'] }
-        webrtcEvents = new events.EventEmitter();
-        roomName: string;
-        peerManager: IPC_Estabished;
-        userMedia: IUserMedia;
-        debug: boolean = false;
-
-        constructor(configs: WebRtcConfig) {
-            let self = this;
+require("webrtc-adapter");
+var events = require("events");
+var io = require("socket.io-client");
+var WebrtcSignaling_1 = require("./WebrtcSignaling");
+var AbstractWEBRTC;
+(function (AbstractWEBRTC) {
+    AbstractWEBRTC.ON_CONNECTION_READY = "connectionReady";
+    AbstractWEBRTC.ON_CONNECTION_CLOSE = "ON_CONNECTION_CLOSE";
+    AbstractWEBRTC.JOINED_ROOM = "joinedRoom";
+    AbstractWEBRTC.JOIN_ROOM_ERROR = "joinRoomError";
+    AbstractWEBRTC.NOT_SUPPORT_MEDIA = "NOT_SUPPORT_MEDIA";
+    var BaseWebRTC = (function () {
+        function BaseWebRTC(configs) {
+            this.webrtcEvents = new events.EventEmitter();
+            this.debug = false;
+            var self = this;
             self.debug = configs.debug;
-
             // this.signalingSocket = io.connect('https://chitchats.ga:8888', { transports: ['websocket'], 'force new connection': true });
             this.signalingSocket = io.connect(configs.signalingUrl, configs.socketOptions);
             this.send = this.send.bind(this);
             this.onDisconnect = this.onDisconnect.bind(this);
-
             self.signalingSocket.on('connect', function (data) {
                 if (self.debug)
                     console.log("SOCKET connect", self.signalingSocket.id);
-
                 self.webrtcEvents.emit(AbstractWEBRTC.ON_CONNECTION_READY, self.signalingSocket.id);
             });
             self.signalingSocket.on('message', function (data) {
-                withExchange(self)(data);
+                WebrtcSignaling_1.withExchange(self)(data);
             });
             self.signalingSocket.on('remove', function (room) {
                 if (self.debug)
                     console.log("SOCKET remove", room, self.signalingSocket.id);
-
                 if (room.id !== self.signalingSocket.id) {
                     self.peerManager.removePeers(room.id, self);
                 }
@@ -56,40 +44,35 @@ export namespace AbstractWEBRTC {
             self.signalingSocket.on('leave', function (socketId) {
                 if (self.debug)
                     console.log("SOCKET leave", socketId);
-
                 self.peerManager.removePeers(socketId, self);
             });
             self.signalingSocket.on('disconnect', this.onDisconnect);
-            self.signalingSocket.on('reconnect', (data) => {
+            self.signalingSocket.on('reconnect', function (data) {
                 console.log("SOCKET reconnect", data);
             });
-            self.signalingSocket.on('reconnectAttempt', (data) => {
+            self.signalingSocket.on('reconnectAttempt', function (data) {
                 console.log("SOCKET reconnectAttempt", data);
             });
-            self.signalingSocket.on('error', (data) => {
+            self.signalingSocket.on('error', function (data) {
                 console.log("SOCKET error", data);
             });
             self.signalingSocket.on('*', function (data) {
                 console.log("SOCKET ***", data);
             });
         }
-
-        initWebRtc() {
-
-        }
-
-        join(roomname: string) {
-            let self = this;
+        BaseWebRTC.prototype.initWebRtc = function () {
+        };
+        BaseWebRTC.prototype.join = function (roomname) {
+            var self = this;
             this.signalingSocket.emit('join', roomname, function (err, roomDescription) {
                 if (self.debug)
                     console.log('join', roomDescription);
-
                 if (err) {
                     self.webrtcEvents.emit(AbstractWEBRTC.JOIN_ROOM_ERROR, err);
                 }
                 else {
-                    let id, client, type, peer;
-                    let clients = roomDescription.clients;
+                    var id = void 0, client = void 0, type = void 0, peer = void 0;
+                    var clients = roomDescription.clients;
                     for (id in clients) {
                         if (clients.hasOwnProperty(id)) {
                             client = clients[id];
@@ -105,51 +88,50 @@ export namespace AbstractWEBRTC {
                         }
                     }
                 }
-
                 self.roomName = roomname;
                 self.webrtcEvents.emit(AbstractWEBRTC.JOINED_ROOM, roomname);
             });
-        }
-
-        leaveRoom() {
+        };
+        BaseWebRTC.prototype.leaveRoom = function () {
             if (this.roomName) {
                 this.signalingSocket.emit('leave');
                 this.roomName = "";
             }
         };
-
+        ;
         // send via signalling channel
-        send(messageType: string, payload, optional: { to: string }) {
-            withSendMessage(this)(messageType, payload, optional);
+        BaseWebRTC.prototype.send = function (messageType, payload, optional) {
+            WebrtcSignaling_1.withSendMessage(this)(messageType, payload, optional);
         };
-
-        onDisconnect(data) {
+        ;
+        BaseWebRTC.prototype.onDisconnect = function (data) {
             if (this.debug)
                 console.log("SOCKET disconnect", data);
-
             this.webrtcEvents.emit(AbstractWEBRTC.ON_CONNECTION_CLOSE, data);
             this.userMedia.stopLocalStream();
             if (this.peerManager && this.peerManager.peers.size > 0) {
-                this.peerManager.peers.forEach(peer => peer.pcEvent.removeAllListeners());
+                this.peerManager.peers.forEach(function (peer) { return peer.pcEvent.removeAllListeners(); });
             }
             delete this.peerManager;
             delete this.webrtcEvents;
             delete this.signalingSocket;
             delete this.userMedia;
-        }
-
-        disconnect() {
+        };
+        BaseWebRTC.prototype.disconnect = function () {
             if (this.signalingSocket)
                 this.signalingSocket.disconnect();
             if (this.userMedia)
                 this.userMedia.stopLocalStream();
             if (this.peerManager && this.peerManager.peers.size > 0) {
-                this.peerManager.peers.forEach(peer => peer.pcEvent.removeAllListeners());
+                this.peerManager.peers.forEach(function (peer) { return peer.pcEvent.removeAllListeners(); });
             }
             delete this.peerManager;
             delete this.webrtcEvents;
             delete this.signalingSocket;
             delete this.userMedia;
         };
-    }
-}
+        ;
+        return BaseWebRTC;
+    }());
+    AbstractWEBRTC.BaseWebRTC = BaseWebRTC;
+})(AbstractWEBRTC = exports.AbstractWEBRTC || (exports.AbstractWEBRTC = {}));

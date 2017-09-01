@@ -18,8 +18,8 @@ export class WebRtcFactory {
             return await new WebRTC(options);
         }
         else if (platform === Platform.REACTNATIVE) {
-            const { WebRTC } = require("../rn-webrtc/WebRTC");
-            return await new WebRTC(options);
+            // const { WebRTC } = require("../rn-webrtc/WebRTC");
+            // return await new WebRTC(options);
         }
     }
 }

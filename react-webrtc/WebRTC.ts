@@ -4,9 +4,8 @@ import 'webrtc-adapter';
 import * as events from "events";
 import * as io from 'socket.io-client';
 
-import { withExchange, withSendMessage, IWebRTC, WebRtcConfig } from "../index";
+import { WebRtcConfig } from "../core/IWebRTC";
 import { AbstractWEBRTC } from "../core/AbstractWebRTC";
-import * as Peer from "./Peer";
 import { PeerManager } from "./PeerManager";
 import { UserMedia } from "./UserMedia";
 
@@ -25,16 +24,12 @@ export class WebRTC extends AbstractWEBRTC.BaseWebRTC {
 
             console.warn('Your browser does not support local media capture.');
 
-            self.webrtcEvents.emit(AbstractWEBRTC.NOT_SUPPORT_MEDIA);
+            this.webrtcEvents.emit(AbstractWEBRTC.NOT_SUPPORT_MEDIA);
             return;
         }
 
-
-
-
-        this.peerManager = new PeerManager({ debug: self.debug });
-        this.userMedia = new UserMedia({ debug: self.debug });
-
+        this.peerManager = new PeerManager({ debug: this.debug });
+        this.userMedia = new UserMedia({ debug: this.debug });
     }
 
 }
