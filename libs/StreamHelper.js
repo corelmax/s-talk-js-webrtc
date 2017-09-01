@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function createStreamByText(text, mute) {
+export function createStreamByText(text, mute) {
     if (mute === void 0) { mute = false; }
     var canvas = document.createElement('canvas');
     var width = 300;
@@ -18,8 +16,7 @@ function createStreamByText(text, mute) {
     var stream = canvas.captureStream(0);
     return stream;
 }
-exports.createStreamByText = createStreamByText;
-function createDummyStream() {
+export function createDummyStream() {
     var canvas = document.createElement('canvas');
     var width = 300;
     var height = 300;
@@ -39,4 +36,3 @@ function createDummyStream() {
     // dummyStream.removeTrack(dummyStream.getTracks()[0]);
     return dummyStream;
 }
-exports.createDummyStream = createDummyStream;

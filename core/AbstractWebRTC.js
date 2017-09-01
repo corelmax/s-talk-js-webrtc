@@ -1,15 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * React,React-native webrtc peer implementation...
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-require("webrtc-adapter");
-var events = require("events");
-var io = require("socket.io-client");
-var WebrtcSignaling_1 = require("./WebrtcSignaling");
-var AbstractWEBRTC;
+import 'webrtc-adapter';
+import * as events from "events";
+import * as io from 'socket.io-client';
+import { withSendMessage, withExchange } from "./WebrtcSignaling";
+export var AbstractWEBRTC;
 (function (AbstractWEBRTC) {
     AbstractWEBRTC.ON_CONNECTION_READY = "connectionReady";
     AbstractWEBRTC.ON_CONNECTION_CLOSE = "ON_CONNECTION_CLOSE";
@@ -32,7 +30,7 @@ var AbstractWEBRTC;
                 self.webrtcEvents.emit(AbstractWEBRTC.ON_CONNECTION_READY, self.signalingSocket.id);
             });
             self.signalingSocket.on('message', function (data) {
-                WebrtcSignaling_1.withExchange(self)(data);
+                withExchange(self)(data);
             });
             self.signalingSocket.on('remove', function (room) {
                 if (self.debug)
@@ -101,7 +99,7 @@ var AbstractWEBRTC;
         ;
         // send via signalling channel
         BaseWebRTC.prototype.send = function (messageType, payload, optional) {
-            WebrtcSignaling_1.withSendMessage(this)(messageType, payload, optional);
+            withSendMessage(this)(messageType, payload, optional);
         };
         ;
         BaseWebRTC.prototype.onDisconnect = function (data) {
@@ -134,4 +132,4 @@ var AbstractWEBRTC;
         return BaseWebRTC;
     }());
     AbstractWEBRTC.BaseWebRTC = BaseWebRTC;
-})(AbstractWEBRTC = exports.AbstractWEBRTC || (exports.AbstractWEBRTC = {}));
+})(AbstractWEBRTC || (AbstractWEBRTC = {}));

@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var util = require('util');
 var webrtcSupport = require('webrtcsupport');
 var mockconsole = require('mockconsole');
-var localmedia_1 = require("./localmedia");
-var peer_1 = require("./peer");
+import localMedia from './localmedia';
+import Peer from './peer';
 function WebRTC(opts) {
     var self = this;
     var options = opts || {};
@@ -54,7 +52,7 @@ function WebRTC(opts) {
     // where we'll store our peer connections
     this.peers = [];
     // call localMedia constructor
-    localmedia_1.default.call(this, this.config);
+    localMedia.call(this, this.config);
     this.on('speaking', function () {
         if (!self.hardMuted) {
             // FIXME: should use sendDirectlyToAll, but currently has different semantics wrt payload
@@ -110,11 +108,11 @@ function WebRTC(opts) {
         });
     }
 }
-util.inherits(WebRTC, localmedia_1.default);
+util.inherits(WebRTC, localMedia);
 WebRTC.prototype.createPeer = function (opts) {
     var peer;
     opts.parent = this;
-    peer = new peer_1.default(opts);
+    peer = new Peer(opts);
     this.peers.push(peer);
     return peer;
 };
@@ -145,4 +143,4 @@ WebRTC.prototype.sendDirectlyToAll = function (channel, message, payload) {
         }
     });
 };
-exports.default = WebRTC;
+export default WebRTC;

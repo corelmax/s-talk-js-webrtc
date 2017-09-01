@@ -1,11 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Flexbox from "flexbox-react";
@@ -19,7 +11,7 @@ import { PeerStatus } from "./WithPeerStatus";
 // import { createStreamByText, createDummyStream } from '../../chitchat/stalk-js-webrtc/libs/StreamHelper';
 // import { IComponentProps } from "../../utils/IComponentProps";
 // import { SimpleToolbar } from "../../components/SimpleToolbar";
-import { AbstractWEBRTC, AbstractMediaStream, AbstractPeerConnection, WebRtcFactory, Platform } from "stalk-js-webrtc";
+import { AbstractWEBRTC, AbstractMediaStream, AbstractPeerConnection, StalkWebRtcFactory } from "stalk-js-webrtc";
 import { createDummyStream, createStreamByText } from "stalk-js-webrtc/libs/StreamHelper";
 const signalingServer = "https://chitchats.ga:8888";
 function getEl(idOrEl) {
@@ -77,38 +69,36 @@ class VideoCall extends React.Component {
                 });
             }).catch(err => {
                 console.error("LocalStream Fail", err);
-                self.setState(prev => (Object.assign({}, prev, { localStreamStatus: err })));
+                self.setState(prev => ({ ...prev, localStreamStatus: err }));
                 self.props.onError("LocalStream Fail: " + err);
             });
         });
     }
-    startWebRtc() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let rtcConfig = {
-                signalingUrl: signalingServer,
-                socketOptions: { 'force new connection': true },
-                debug: true,
-            };
-            this.webrtc = (yield WebRtcFactory.getObject(Platform.BROWSER, rtcConfig));
-            this.peerAdded = this.peerAdded.bind(this);
-            this.removeVideo = this.removeVideo.bind(this);
-            this.onStreamReady = this.onStreamReady.bind(this);
-            this.connectionReady = this.connectionReady.bind(this);
-            this.onPeerCreated = this.onPeerCreated.bind(this);
-            this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_READY, this.connectionReady);
-            this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_CLOSE, (data) => { console.log("signalling close", data); });
-            this.webrtc.webrtcEvents.on(AbstractWEBRTC.JOIN_ROOM_ERROR, (err) => console.log("joinRoom fail", err));
-            this.webrtc.webrtcEvents.on(AbstractWEBRTC.JOINED_ROOM, (roomname) => console.log("joined", roomname));
-            this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_ADDED, this.peerAdded);
-            this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_REMOVED, this.removeVideo);
-            this.webrtc.webrtcEvents.on(AbstractPeerConnection.CONNECTIVITY_ERROR, (peer) => {
-                console.log(AbstractPeerConnection.CONNECTIVITY_ERROR, peer);
-            });
-            this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, () => {
-                console.log("on ice closed");
-            });
-            this.webrtc.webrtcEvents.on(AbstractPeerConnection.CREATED_PEER, this.onPeerCreated);
+    async startWebRtc() {
+        let rtcConfig = {
+            signalingUrl: signalingServer,
+            socketOptions: { 'force new connection': true },
+            debug: true,
+        };
+        this.webrtc = await StalkWebRtcFactory.WebRtcFactory.getObject(rtcConfig);
+        this.peerAdded = this.peerAdded.bind(this);
+        this.removeVideo = this.removeVideo.bind(this);
+        this.onStreamReady = this.onStreamReady.bind(this);
+        this.connectionReady = this.connectionReady.bind(this);
+        this.onPeerCreated = this.onPeerCreated.bind(this);
+        this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_READY, this.connectionReady);
+        this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_CLOSE, (data) => { console.log("signalling close", data); });
+        this.webrtc.webrtcEvents.on(AbstractWEBRTC.JOIN_ROOM_ERROR, (err) => console.log("joinRoom fail", err));
+        this.webrtc.webrtcEvents.on(AbstractWEBRTC.JOINED_ROOM, (roomname) => console.log("joined", roomname));
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_ADDED, this.peerAdded);
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_REMOVED, this.removeVideo);
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.CONNECTIVITY_ERROR, (peer) => {
+            console.log(AbstractPeerConnection.CONNECTIVITY_ERROR, peer);
         });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, () => {
+            console.log("on ice closed");
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.CREATED_PEER, this.onPeerCreated);
     }
     connectionReady(socker_id) {
         let self = this;
@@ -125,14 +115,14 @@ class VideoCall extends React.Component {
             console.error("LocalStream Fail", err);
             // only mic
             if (err == "getUserMedia error: DevicesNotFoundError") {
-                self.webrtc.userMedia.startLocalStream(Object.assign({}, requestMedia, { video: false })).then(stream => {
+                self.webrtc.userMedia.startLocalStream({ ...requestMedia, video: false }).then(stream => {
                     self.onStreamReady(stream);
                     self.webrtc.join(roomname);
                 }).catch(err => {
                     console.error("LocalStream Fail", err);
                     // only video
                     if (err == "getUserMedia error: DevicesNotFoundError") {
-                        self.webrtc.userMedia.startLocalStream(Object.assign({}, requestMedia, { audio: false })).then(stream => {
+                        self.webrtc.userMedia.startLocalStream({ ...requestMedia, audio: false }).then(stream => {
                             self.onStreamReady(stream);
                             self.webrtc.join(roomname);
                         }).catch(err => {
@@ -145,19 +135,19 @@ class VideoCall extends React.Component {
                                 self.webrtc.join(roomname);
                             }
                             else {
-                                self.setState(prev => (Object.assign({}, prev, { localStreamStatus: err })));
+                                self.setState(prev => ({ ...prev, localStreamStatus: err }));
                                 self.props.onError("LocalStream Fail: " + err);
                             }
                         });
                     }
                     else {
-                        self.setState(prev => (Object.assign({}, prev, { localStreamStatus: err })));
+                        self.setState(prev => ({ ...prev, localStreamStatus: err }));
                         self.props.onError("LocalStream Fail: " + err);
                     }
                 });
             }
             else {
-                self.setState(prev => (Object.assign({}, prev, { localStreamStatus: err })));
+                self.setState(prev => ({ ...prev, localStreamStatus: err }));
                 self.props.onError("LocalStream Fail: " + err);
             }
         });
@@ -215,7 +205,7 @@ class VideoCall extends React.Component {
     }
     onPeerCreated(peer) {
         console.log("onPeerCreated", peer);
-        this.setState(prev => (Object.assign({}, prev, { peer: peer })));
+        this.setState(prev => ({ ...prev, peer: peer }));
     }
     componentWillUnmount() {
         if (!!this.webrtc) {

@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,18 +8,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
 // const RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription || window.msRTCSessionDescription;
 // const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.msRTCPeerConnection;
-require("webrtc-adapter");
-var AbstractWebRTC_1 = require("../core/AbstractWebRTC");
-var PeerManager_1 = require("./PeerManager");
-var UserMedia_1 = require("./UserMedia");
-function hasGetUserMedia() {
+import 'webrtc-adapter';
+import { AbstractWEBRTC } from "../core/AbstractWebRTC";
+import { PeerManager } from "./PeerManager";
+import { UserMedia } from "./UserMedia";
+export function hasGetUserMedia() {
     return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia || navigator.msGetUserMedia);
 }
-exports.hasGetUserMedia = hasGetUserMedia;
 var WebRTC = (function (_super) {
     __extends(WebRTC, _super);
     function WebRTC(configs) {
@@ -28,13 +25,13 @@ var WebRTC = (function (_super) {
         if (!hasGetUserMedia()) {
             alert('getUserMedia() is not supported in your browser');
             console.warn('Your browser does not support local media capture.');
-            _this.webrtcEvents.emit(AbstractWebRTC_1.AbstractWEBRTC.NOT_SUPPORT_MEDIA);
+            _this.webrtcEvents.emit(AbstractWEBRTC.NOT_SUPPORT_MEDIA);
             return _this;
         }
-        _this.peerManager = new PeerManager_1.PeerManager({ debug: _this.debug });
-        _this.userMedia = new UserMedia_1.UserMedia({ debug: _this.debug });
+        _this.peerManager = new PeerManager({ debug: _this.debug });
+        _this.userMedia = new UserMedia({ debug: _this.debug });
         return _this;
     }
     return WebRTC;
-}(AbstractWebRTC_1.AbstractWEBRTC.BaseWebRTC));
-exports.WebRTC = WebRTC;
+}(AbstractWEBRTC.BaseWebRTC));
+export { WebRTC };

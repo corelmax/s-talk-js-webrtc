@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var util = require('util');
 var hark = require('hark');
 var getScreenMedia = require('getscreenmedia');
 var WildEmitter = require('wildemitter');
 var mockconsole = require('mockconsole');
-var mediastream_gain_1 = require("./mediastream-gain");
+import MicGainController from './mediastream-gain';
 function isAllTracksEnded(stream) {
     return stream.getTracks().every(function (track) { return track.readyState === 'ended'; });
 }
@@ -57,7 +55,7 @@ LocalMedia.prototype.start = function (mediaConstraints, cb) {
     var constraints = mediaConstraints || this.config.media;
     this.emit('localStreamRequested', constraints);
     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-        var controllableMic = new mediastream_gain_1.default(stream);
+        var controllableMic = new MicGainController(stream);
         stream.addTrack(controllableMic.outputMic);
         self.unControllMic.push(stream.getAudioTracks()[0]);
         stream.removeTrack(stream.getAudioTracks()[0]);
@@ -290,4 +288,4 @@ LocalMedia.prototype._stopAudioMonitor = function (stream) {
         this._audioMonitors.splice(idx, 1);
     }
 };
-exports.default = LocalMedia;
+export default LocalMedia;

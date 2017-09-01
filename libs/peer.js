@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,7 +8,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
 var util = require('util');
 var webrtcSupport = require('webrtcsupport');
 var PeerConnection = require('rtcpeerconnection');
@@ -322,4 +320,4 @@ var Peer = (function (_super) {
     return Peer;
 }(WildEmitter));
 // util.inherits(Peer, WildEmitter);
-exports.default = Peer;
+export default Peer;

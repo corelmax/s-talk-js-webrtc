@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -34,17 +33,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./core/AbstractMediaStream"));
-__export(require("./core/AbstractPeerConnection"));
+export * from "./core/AbstractMediaStream";
+export * from "./core/AbstractPeerConnection";
 // export * from "./core/WebRtcFactory";
-__export(require("./core/WebrtcSignaling"));
-__export(require("./core/AbstractPeer"));
-__export(require("./core/AbstractWebRTC"));
-var StalkWebRtcFactory;
+export * from "./core/WebrtcSignaling";
+export * from "./core/AbstractPeer";
+export * from "./core/AbstractWebRTC";
+export var StalkWebRtcFactory;
 (function (StalkWebRtcFactory) {
     var WebRtcFactory = (function () {
         function WebRtcFactory() {
@@ -65,4 +60,4 @@ var StalkWebRtcFactory;
         return WebRtcFactory;
     }());
     StalkWebRtcFactory.WebRtcFactory = WebRtcFactory;
-})(StalkWebRtcFactory = exports.StalkWebRtcFactory || (exports.StalkWebRtcFactory = {}));
+})(StalkWebRtcFactory || (StalkWebRtcFactory = {}));

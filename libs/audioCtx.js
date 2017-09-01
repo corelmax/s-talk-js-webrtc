@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var AudioCtx = (function () {
     function AudioCtx() {
     }
@@ -11,4 +9,4 @@ var AudioCtx = (function () {
     };
     return AudioCtx;
 }());
-exports.default = AudioCtx;
+export default AudioCtx;

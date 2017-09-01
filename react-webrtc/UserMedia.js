@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -34,10 +33,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-require("webrtc-adapter");
-var AudioController_1 = require("../libs/AudioController");
-var VideoController_1 = require("../libs/VideoController");
+import 'webrtc-adapter';
+import { AudioController } from '../libs/AudioController';
+import { VideoController } from '../libs/VideoController';
 var UserMedia = (function () {
     function UserMedia(options) {
         this.debug = false;
@@ -84,10 +82,10 @@ var UserMedia = (function () {
                                     console.log('Local Stream active');
                             };
                             if (stream.getAudioTracks().length > 0) {
-                                self.audioController = new AudioController_1.AudioController(stream);
+                                self.audioController = new AudioController(stream);
                             }
                             if (stream.getVideoTracks().length > 0) {
-                                self.videoController = new VideoController_1.VideoController(stream);
+                                self.videoController = new VideoController(stream);
                             }
                             self.localStream = stream;
                             resolve(self.localStream);
@@ -126,4 +124,4 @@ var UserMedia = (function () {
     };
     return UserMedia;
 }());
-exports.UserMedia = UserMedia;
+export { UserMedia };
