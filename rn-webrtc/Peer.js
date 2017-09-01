@@ -65,6 +65,9 @@ var Peer = (function (_super) {
                 self.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
                 self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
             }
+            else if (target.iceConnectionState == "closed") {
+                self.parentsEmitter.emit(AbstractPeerConnection_1.AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED);
+            }
         };
         this.pc.onicegatheringstatechange = function (event) {
             var target = event.target;

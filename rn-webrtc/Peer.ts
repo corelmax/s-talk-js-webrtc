@@ -67,6 +67,9 @@ export class Peer extends AbstractPeer.BasePeer {
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
                 self.send_event(AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
             }
+            else if (target.iceConnectionState == "closed") {
+                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED);
+            }
         };
 
         this.pc.onicegatheringstatechange = (event) => {

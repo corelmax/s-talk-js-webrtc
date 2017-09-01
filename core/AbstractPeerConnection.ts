@@ -11,6 +11,7 @@ export namespace AbstractPeerConnection {
     export const PEER_STREAM_REMOVED = "peerStreamRemoved";
     export const CONNECTIVITY_ERROR = "connectivityError";
     export const ON_ICE_CONNECTION_FAILED = "iceFailed";
+    export const ON_ICE_CONNECTION_CLOSED = "iceClosed";
 
     export const PAUSE = "pause"; // for video
     export const UNPAUSE = "unpause"; // for video
