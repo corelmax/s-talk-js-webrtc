@@ -1,12 +1,10 @@
-"use strict";
 /**
  * React,React-native webrtc peer implementation...
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-var AbstractPeerConnection_1 = require("./AbstractPeerConnection");
-var AbstractPeer;
+import { AbstractPeerConnection } from "./AbstractPeerConnection";
+export var AbstractPeer;
 (function (AbstractPeer) {
     var BasePeer = (function () {
         /**
@@ -51,7 +49,7 @@ var AbstractPeer;
                 self.pc.setLocalDescription(desc, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-                    self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+                    self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         };
@@ -63,7 +61,7 @@ var AbstractPeer;
                 self.pc.setLocalDescription(desc, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-                    self.send_event(AbstractPeerConnection_1.AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
+                    self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         };
@@ -71,4 +69,4 @@ var AbstractPeer;
         return BasePeer;
     }());
     AbstractPeer.BasePeer = BasePeer;
-})(AbstractPeer = exports.AbstractPeer || (exports.AbstractPeer = {}));
+})(AbstractPeer || (AbstractPeer = {}));

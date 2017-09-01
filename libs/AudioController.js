@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var audioCtx_1 = require("./audioCtx");
+import AudioCtx from './audioCtx';
 // implement from mediastream-gain lib
 var AudioController = (function () {
     function AudioController(stream) {
@@ -11,7 +9,7 @@ var AudioController = (function () {
         this.volume = 1;
         if (this.support) {
             // var context = this.context = AudioCtx.getInstance();
-            var context = audioCtx_1.default.getInstance();
+            var context = AudioCtx.getInstance();
             this.microphone = context.createMediaStreamSource(stream);
             this.gainFilter = context.createGain();
             var destination = context.createMediaStreamDestination();
@@ -48,4 +46,4 @@ var AudioController = (function () {
     };
     return AudioController;
 }());
-exports.AudioController = AudioController;
+export { AudioController };

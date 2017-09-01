@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * React-Native webrtc interface.
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-var index_1 = require("../index");
-var Peer_1 = require("./Peer");
-var WebRTC_1 = require("./WebRTC");
+import { AbstractPeerConnection } from "../index";
+import { Peer } from "./Peer";
+import { logError } from "./WebRTC";
 var PeerManager = (function () {
     function PeerManager(options) {
         this.debug = false;
@@ -26,8 +24,8 @@ var PeerManager = (function () {
             sendHandler: webrtc.send,
             debug: self.debug
         };
-        var peer = new Peer_1.Peer(config);
-        peer.logError = WebRTC_1.logError;
+        var peer = new Peer(config);
+        peer.logError = logError;
         this.peers.set(options.id, peer);
         return peer;
     };
@@ -44,7 +42,7 @@ var PeerManager = (function () {
         var peer = this.getPeers(sessionId);
         if (peer) {
             peer.pc.close();
-            webrtc.webrtcEvents.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
+            webrtc.webrtcEvents.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
         }
         this.peers.delete(sessionId);
     };
@@ -75,4 +73,4 @@ var PeerManager = (function () {
     ;
     return PeerManager;
 }());
-exports.PeerManager = PeerManager;
+export { PeerManager };

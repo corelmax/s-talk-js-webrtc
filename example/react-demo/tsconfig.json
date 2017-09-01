@@ -2,9 +2,13 @@
     "compileOnSave": true,
     "compilerOptions": {
         "module": "es2015",
-        "target": "es2015",
+        "target": "esnext",
         "jsx": "preserve",
-        "watch": true
+        "watch": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/stalk-js-webrtc"
+        ]
     },
     "exclude": [
         "node_modules"

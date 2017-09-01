@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var VideoToBlurImage_1 = require("./VideoToBlurImage");
+import { getImage } from './VideoToBlurImage';
 // implement from mediastream-gain lib
 var VideoController = (function () {
     function VideoController(stream) {
@@ -15,7 +13,7 @@ var VideoController = (function () {
                     localVideoElement_1.srcObject = this.localStream;
                 }
                 else {
-                    VideoToBlurImage_1.getImage(localVideoElement_1).then(function (res) {
+                    getImage(localVideoElement_1).then(function (res) {
                         localVideoElement_1.srcObject = res;
                     });
                 }
@@ -28,4 +26,4 @@ var VideoController = (function () {
     };
     return VideoController;
 }());
-exports.VideoController = VideoController;
+export { VideoController };
