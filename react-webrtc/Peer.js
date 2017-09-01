@@ -1,4 +1,9 @@
 "use strict";
+/**
+ * S-TAlK webrtc peer implementation for web browser.
+ *
+ * Copyright 2017 Ahoo Studio.co.th.
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11,7 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var events_1 = require("events");
-var _1 = require("../");
+var index_1 = require("../index");
 var VideoToBlurImage_1 = require("../libs/VideoToBlurImage");
 var StreamHelper_1 = require("../libs/StreamHelper");
 // const twilioIceServers = [
@@ -39,7 +44,7 @@ var Peer = (function (_super) {
         this.pc = new RTCPeerConnection(configuration);
         this.pc.onicecandidate = function (event) {
             if (event.candidate) {
-                self.send_event(_1.AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
+                self.send_event(index_1.AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
             }
         };
         this.pc.onnegotiationneeded = function () {
@@ -63,8 +68,11 @@ var Peer = (function (_super) {
                 self.pc.ondatachannel = self.receiveChannelCallback.bind(self);
             }
             else if (target.iceConnectionState == "failed") {
-                self.parentsEmitter.emit(_1.AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
-                self.send_event(_1.AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
+                self.parentsEmitter.emit(index_1.AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
+                self.send_event(index_1.AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
+            }
+            else if (target.iceConnectionState == "closed") {
+                self.parentsEmitter.emit(index_1.AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED);
             }
         };
         this.pc.onicegatheringstatechange = function (event) {
@@ -82,15 +90,15 @@ var Peer = (function (_super) {
         this.pc.onaddstream = function (peer) {
             if (self.debug)
                 console.log('onaddstream');
-            self.parentsEmitter.emit(_1.AbstractPeerConnection.PEER_STREAM_ADDED, peer);
+            self.parentsEmitter.emit(index_1.AbstractPeerConnection.PEER_STREAM_ADDED, peer);
         };
         this.pc.onremovestream = function (peer) {
             if (self.debug)
                 console.log('onremovestream');
-            self.parentsEmitter.emit(_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
+            self.parentsEmitter.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
         this.pc.addStream(stream);
-        self.parentsEmitter.emit(_1.AbstractPeerConnection.CREATED_PEER, self);
+        self.parentsEmitter.emit(index_1.AbstractPeerConnection.CREATED_PEER, self);
     };
     Peer.prototype.getStats = function () {
         var self = this;
@@ -109,22 +117,22 @@ var Peer = (function (_super) {
             console.log('handleMessage', message.type);
         if (message.prefix)
             this.browserPrefix = message.prefix;
-        if (message.type === _1.AbstractPeerConnection.OFFER) {
+        if (message.type === index_1.AbstractPeerConnection.OFFER) {
             if (!this.nick)
                 this.nick = message.payload.nick;
             delete message.payload.nick;
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function () {
                 if (self.debug)
                     console.log("setRemoteDescription complete");
-                if (self.pc.remoteDescription.type == _1.AbstractPeerConnection.OFFER) {
+                if (self.pc.remoteDescription.type == index_1.AbstractPeerConnection.OFFER) {
                     self.createAnswer(message);
                 }
             }, self.onSetSessionDescriptionError);
         }
-        else if (message.type === _1.AbstractPeerConnection.ANSWER) {
+        else if (message.type === index_1.AbstractPeerConnection.ANSWER) {
             // @ No need this.
         }
-        else if (message.type === _1.AbstractPeerConnection.CANDIDATE) {
+        else if (message.type === index_1.AbstractPeerConnection.CANDIDATE) {
             if (!message.candidate)
                 return;
             function onAddIceCandidateSuccess() {
@@ -136,8 +144,8 @@ var Peer = (function (_super) {
             }
             self.pc.addIceCandidate(new RTCIceCandidate(message.candidate), onAddIceCandidateSuccess, onAddIceCandidateError);
         }
-        else if (message.type === _1.AbstractPeerConnection.CONNECTIVITY_ERROR) {
-            this.parentsEmitter.emit(_1.AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);
+        else if (message.type === index_1.AbstractPeerConnection.CONNECTIVITY_ERROR) {
+            this.parentsEmitter.emit(index_1.AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);
         }
         else if (message.type === 'endOfCandidates') {
             // Edge requires an end-of-candidates. Since only Edge will have mLines or tracks on the
@@ -213,22 +221,22 @@ var Peer = (function (_super) {
         var data = JSON.parse(event.data);
         var remoteVideoElement = document.getElementById('remoteVideos');
         var remoteAudioElement = document.getElementById('remoteAudio');
-        if (data.type === _1.AbstractPeerConnection.UNPAUSE) {
+        if (data.type === index_1.AbstractPeerConnection.UNPAUSE) {
             remoteVideoElement.srcObject = this.pc.getRemoteStreams()[0];
         }
-        else if (data.type === _1.AbstractPeerConnection.PAUSE) {
+        else if (data.type === index_1.AbstractPeerConnection.PAUSE) {
             remoteAudioElement.srcObject = this.pc.getRemoteStreams()[0];
             VideoToBlurImage_1.getImage(remoteVideoElement).then(function (res) {
                 console.warn('getImage', res);
                 remoteVideoElement.srcObject = res;
             });
         }
-        else if (data.type === _1.AbstractPeerConnection.DUMMY_VIDEO) {
+        else if (data.type === index_1.AbstractPeerConnection.DUMMY_VIDEO) {
             var canvasStream = StreamHelper_1.createStreamByText("NO CAMERA");
             if (!!canvasStream)
                 remoteVideoElement.srcObject = canvasStream;
         }
     };
     return Peer;
-}(_1.AbstractPeer.BasePeer));
+}(index_1.AbstractPeer.BasePeer));
 exports.Peer = Peer;

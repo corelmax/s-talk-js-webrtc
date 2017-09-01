@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var events = require("events");
 var io = require("socket.io-client");
 var index_1 = require("../index");
-var WebrtcSignaling_1 = require("../WebrtcSignaling");
+var WebrtcSignaling_1 = require("../core/WebrtcSignaling");
 var PeerManager_1 = require("./PeerManager");
 var UserMedia_1 = require("./UserMedia");
 function logError(error) {
@@ -87,7 +87,6 @@ var WebRTC = (function () {
                                     type: type,
                                     offer: true
                                 }, self);
-                                self.webrtcEvents.emit(index_1.AbstractWEBRTC.CREATED_PEER, peer);
                             }
                         }
                     }

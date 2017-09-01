@@ -1,4 +1,4 @@
-import { AbstractMediaStream } from "../IWebRTC";
+import { AbstractMediaStream } from "../core/AbstractMediaStream";
 export declare class AudioController implements AbstractMediaStream.AudioController {
     support: any;
     volume: any;

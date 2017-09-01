@@ -1,0 +1,28 @@
+{
+  "name": "react-demo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "flexbox-react": "^4.4.0",
+    "material-design-icons": "^3.0.1",
+    "material-ui": "^0.19.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.12",
+    "recompose": "^0.25.0",
+    "stalk-js-webrtc": "0.0.1-f17"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "react-scripts build && firebase deploy"
+  },
+  "devDependencies": {
+    "@types/material-ui": "^0.18.0",
+    "@types/react": "^16.0.5",
+    "@types/react-dom": "^15.5.4",
+    "@types/recompose": "^0.24.0"
+  }
+}

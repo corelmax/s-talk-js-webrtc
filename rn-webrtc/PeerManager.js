@@ -44,7 +44,7 @@ var PeerManager = (function () {
         var peer = this.getPeers(sessionId);
         if (peer) {
             peer.pc.close();
-            webrtc.webrtcEvents.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
+            webrtc.webrtcEvents.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
         }
         this.peers.delete(sessionId);
     };

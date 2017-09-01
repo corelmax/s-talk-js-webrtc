@@ -1,0 +1,12 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "es2015",
+        "target": "es2015",
+        "jsx": "preserve",
+        "watch": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

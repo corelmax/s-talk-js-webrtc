@@ -1,6 +1,12 @@
+/**
+ * S-TAlK webrtc peer implementation for web browser.
+ * 
+ * Copyright 2017 Ahoo Studio.co.th.
+ */
+
 import { EventEmitter } from "events";
 
-import { AbstractPeer, AbstractPeerConnection } from "../";
+import { AbstractPeer, PeerConstructor, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 
@@ -17,7 +23,7 @@ export class Peer extends AbstractPeer.BasePeer {
      * @param stream
      * @param options
      */
-    constructor(config: AbstractPeerConnection.PeerConstructor) {
+    constructor(config: PeerConstructor) {
         super(config);
 
         this.initPeerConnection(config.stream);
@@ -63,6 +69,9 @@ export class Peer extends AbstractPeer.BasePeer {
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
                 self.send_event(AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
             }
+            else if (target.iceConnectionState == "closed") {
+                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED);
+            }
         };
 
         this.pc.onicegatheringstatechange = (event) => {
@@ -89,6 +98,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_ADDED, peer);
         };
+
         this.pc.onremovestream = function (peer) {
             if (self.debug)
                 console.log('onremovestream');

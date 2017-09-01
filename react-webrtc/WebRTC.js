@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("webrtc-adapter");
 var io = require("socket.io-client");
 var events = require("events");
-var _1 = require("../");
+var index_1 = require("../index");
 var PeerManager_1 = require("./PeerManager");
 var UserMedia_1 = require("./UserMedia");
 function hasGetUserMedia() {
@@ -22,7 +22,7 @@ var WebRTC = (function () {
         if (!hasGetUserMedia()) {
             alert('getUserMedia() is not supported in your browser');
             console.warn('Your browser does not support local media capture.');
-            self.webrtcEvents.emit(_1.AbstractWEBRTC.NOT_SUPPORT_MEDIA);
+            self.webrtcEvents.emit(index_1.AbstractWEBRTC.NOT_SUPPORT_MEDIA);
             return;
         }
         this.signalingSocket = io.connect(configs.signalingUrl, configs.socketOptions);
@@ -33,10 +33,10 @@ var WebRTC = (function () {
         self.signalingSocket.on('connect', function (data) {
             if (self.debug)
                 console.log("SOCKET connect", self.signalingSocket.id);
-            self.webrtcEvents.emit(_1.AbstractWEBRTC.ON_CONNECTION_READY, self.signalingSocket.id);
+            self.webrtcEvents.emit(index_1.AbstractWEBRTC.ON_CONNECTION_READY, self.signalingSocket.id);
         });
         self.signalingSocket.on('message', function (data) {
-            _1.withExchange(self)(data);
+            index_1.withExchange(self)(data);
         });
         self.signalingSocket.on('remove', function (room) {
             if (self.debug)
@@ -66,7 +66,7 @@ var WebRTC = (function () {
     }
     // send via signalling channel
     WebRTC.prototype.send = function (messageType, payload, optional) {
-        _1.withSendMessage(this)(messageType, payload, optional);
+        index_1.withSendMessage(this)(messageType, payload, optional);
     };
     ;
     WebRTC.prototype.join = function (roomname) {
@@ -75,7 +75,7 @@ var WebRTC = (function () {
             if (self.debug)
                 console.log('join', roomDescription);
             if (err) {
-                self.webrtcEvents.emit(_1.AbstractWEBRTC.JOIN_ROOM_ERROR, err);
+                self.webrtcEvents.emit(index_1.AbstractWEBRTC.JOIN_ROOM_ERROR, err);
             }
             else {
                 var id = void 0, client = void 0, type = void 0, peer = void 0;
@@ -96,7 +96,7 @@ var WebRTC = (function () {
                 }
             }
             self.roomName = roomname;
-            self.webrtcEvents.emit(_1.AbstractWEBRTC.JOINED_ROOM, roomname);
+            self.webrtcEvents.emit(index_1.AbstractWEBRTC.JOINED_ROOM, roomname);
         });
     };
     WebRTC.prototype.leaveRoom = function () {
@@ -123,7 +123,7 @@ var WebRTC = (function () {
     WebRTC.prototype.onDisconnect = function (data) {
         if (this.debug)
             console.log("SOCKET disconnect", data);
-        this.webrtcEvents.emit(_1.AbstractWEBRTC.ON_CONNECTION_CLOSE, data);
+        this.webrtcEvents.emit(index_1.AbstractWEBRTC.ON_CONNECTION_CLOSE, data);
         this.userMedia.stopLocalStream();
         if (this.peerManager && this.peerManager.peers.size > 0) {
             this.peerManager.peers.forEach(function (peer) { return peer.pcEvent.removeAllListeners(); });

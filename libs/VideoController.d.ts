@@ -1,4 +1,4 @@
-import { AbstractMediaStream } from "../IWebRTC";
+import { AbstractMediaStream } from "../core/AbstractMediaStream";
 export declare class VideoController implements AbstractMediaStream.VideoController {
     localStream: any;
     videoSource: any;

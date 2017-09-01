@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * React webrtc interface.
+ * S-TAlK webrtc interface.
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-var _1 = require("../");
+var index_1 = require("../index");
 var Peer_1 = require("./Peer");
 var PeerManager = (function () {
     function PeerManager(options) {
@@ -41,7 +41,7 @@ var PeerManager = (function () {
         var peer = this.getPeers(sessionId);
         if (peer) {
             peer.pc.close();
-            webrtc.webrtcEvents.emit(_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
+            webrtc.webrtcEvents.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
         }
         this.peers.delete(sessionId);
     };
