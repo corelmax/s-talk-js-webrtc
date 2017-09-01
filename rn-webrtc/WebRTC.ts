@@ -4,7 +4,6 @@
  * Copyright 2017 Ahoo Studio.co.th.
  */
 
-import { Platform } from 'react-native';
 import * as events from 'events';
 import * as io from 'socket.io-client';
 import {
@@ -132,17 +131,31 @@ export class WebRTC implements IWebRTC {
     };
 
     disconnect() {
-        this.signalingSocket.disconnect();
-        this.userMedia.stopLocalStream();
-
+        if (this.signalingSocket)
+            this.signalingSocket.disconnect();
+        if (this.userMedia)
+            this.userMedia.stopLocalStream();
+        if (this.peerManager && this.peerManager.peers.size > 0) {
+            this.peerManager.peers.forEach(peer => peer.pcEvent.removeAllListeners());
+        }
         delete this.peerManager;
+        delete this.webrtcEvents;
         delete this.signalingSocket;
         delete this.userMedia;
     };
 
     onDisconnect(data) {
-        console.log("SOCKET disconnect", data);
+        if (this.debug)
+            console.log("SOCKET disconnect", data);
 
+        this.webrtcEvents.emit(AbstractWEBRTC.ON_CONNECTION_CLOSE, data);
         this.userMedia.stopLocalStream();
+        if (this.peerManager && this.peerManager.peers.size > 0) {
+            this.peerManager.peers.forEach(peer => peer.pcEvent.removeAllListeners());
+        }
+        delete this.peerManager;
+        delete this.webrtcEvents;
+        delete this.signalingSocket;
+        delete this.userMedia;
     }
 }
