@@ -1,5 +1,5 @@
 /**
- * React webrtc interface.
+ * S-TAlK webrtc interface.
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */

@@ -12,16 +12,14 @@ export enum Platform {
 }
 
 export class WebRtcFactory {
-    static getObject(platform: Platform, options: WebRtcConfig): Promise<IWebRTC | undefined> {
-        console.log("userAgent", global["userAgent"]);
-
+    static async getObject(platform: Platform, options: WebRtcConfig): Promise<IWebRTC | undefined> {
         if (platform === Platform.BROWSER) {
             const { WebRTC } = require("../react-webrtc/WebRTC");
-            return new WebRTC(options);
+            return await new WebRTC(options);
         }
         else if (platform === Platform.REACTNATIVE) {
             const { WebRTC } = require("../rn-webrtc/WebRTC");
-            return new WebRTC(options);
+            return await new WebRTC(options);
         }
     }
 }

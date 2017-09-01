@@ -1,3 +1,9 @@
+/**
+ * S-TAlK webrtc peer implementation for web browser.
+ * 
+ * Copyright 2017 Ahoo Studio.co.th.
+ */
+
 import { EventEmitter } from "events";
 
 import { AbstractPeer, PeerConstructor, AbstractPeerConnection } from "../index";

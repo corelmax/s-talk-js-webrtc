@@ -1,6 +1,6 @@
 "use strict";
 /**
- * React-Native webrtc peer implementation...
+ * S-TAlK React-Native webrtc peer implementation...
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
