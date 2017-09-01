@@ -1,8 +1,8 @@
 # s-talk-js-webrtc
 
 Universal javascript WebRTC implementation.
-This project has develop and maintained by AhooStudio.co.th.
-Copyright (c)2017 AhooStudio.co.th
+* This project has develop and maintained by AhooStudio.co.th.
+* Copyright (c)2017 AhooStudio.co.th
 
 ### Roadmap: 
 - [x] Browser example.
