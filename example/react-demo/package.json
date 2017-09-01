@@ -10,7 +10,7 @@
     "react-dom": "^15.6.1",
     "react-scripts": "1.0.12",
     "recompose": "^0.25.0",
-    "stalk-js-webrtc": "0.0.1-f17"
+    "stalk-js-webrtc": "0.0.1-f22"
   },
   "scripts": {
     "start": "react-scripts start",
