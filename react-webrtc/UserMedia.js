@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import 'webrtc-adapter';
 import { AudioController } from '../libs/AudioController';
 import { VideoController } from '../libs/VideoController';
-var UserMedia = (function () {
+var UserMedia = /** @class */ (function () {
     function UserMedia(options) {
         this.debug = false;
         this.debug = options.debug;

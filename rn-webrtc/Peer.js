@@ -18,7 +18,7 @@ import { RTCPeerConnection, RTCIceCandidate, RTCSessionDescription, } from 'reac
 import { AbstractPeerConnection } from "../core/AbstractPeerConnection";
 import { AbstractPeer } from "../core/AbstractPeer";
 var configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
-var Peer = (function (_super) {
+var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     /**
      * reture PeerConnection

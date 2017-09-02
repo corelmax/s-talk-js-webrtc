@@ -1,6 +1,6 @@
 import AudioCtx from './audioCtx';
 // implement from mediastream-gain lib
-var AudioController = (function () {
+var AudioController = /** @class */ (function () {
     function AudioController(stream) {
         // webrtcsupport lib
         this.support = (!!(AudioContext && AudioContext.prototype.createMediaStreamSource)

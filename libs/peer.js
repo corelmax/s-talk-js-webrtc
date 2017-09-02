@@ -23,7 +23,7 @@ function isAllTracksEnded(stream) {
     });
     return isAllTracksEnded;
 }
-var Peer = (function (_super) {
+var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     function Peer(options) {
         var _this = _super.call(this) || this;

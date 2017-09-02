@@ -14,7 +14,7 @@ export var AbstractWEBRTC;
     AbstractWEBRTC.JOINED_ROOM = "joinedRoom";
     AbstractWEBRTC.JOIN_ROOM_ERROR = "joinRoomError";
     AbstractWEBRTC.NOT_SUPPORT_MEDIA = "NOT_SUPPORT_MEDIA";
-    var BaseWebRTC = (function () {
+    var BaseWebRTC = /** @class */ (function () {
         function BaseWebRTC(configs) {
             this.webrtcEvents = new events.EventEmitter();
             this.debug = false;
@@ -58,8 +58,6 @@ export var AbstractWEBRTC;
                 console.log("SOCKET ***", data);
             });
         }
-        BaseWebRTC.prototype.initWebRtc = function () {
-        };
         BaseWebRTC.prototype.join = function (roomname) {
             var self = this;
             this.signalingSocket.emit('join', roomname, function (err, roomDescription) {

@@ -1,3 +1,8 @@
+/**
+ * React-Native webrtc interface.
+ *
+ * Copyright 2017 Ahoo Studio.co.th.
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11,7 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { AbstractWEBRTC } from "../core/AbstractWebRTC";
 import { PeerManager } from "./PeerManager";
 import { UserMedia } from "./UserMedia";
-var WebRTC = (function (_super) {
+var WebRTC = /** @class */ (function (_super) {
     __extends(WebRTC, _super);
     function WebRTC(configs) {
         var _this = _super.call(this, configs) || this;

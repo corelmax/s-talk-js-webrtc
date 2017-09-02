@@ -1,4 +1,4 @@
-var AudioCtx = (function () {
+var AudioCtx = /** @class */ (function () {
     function AudioCtx() {
     }
     AudioCtx.getInstance = function () {

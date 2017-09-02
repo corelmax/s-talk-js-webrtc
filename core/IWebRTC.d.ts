@@ -21,7 +21,6 @@ export interface IWebRTC {
     peerManager: IPC_Estabished;
     userMedia: IUserMedia;
     debug: boolean;
-    initWebRtc(): any;
     send(messageType: string, payload: any, optionals: {
         to: string;
     }): any;

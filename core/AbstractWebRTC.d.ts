@@ -24,7 +24,6 @@ export declare namespace AbstractWEBRTC {
         userMedia: IUserMedia;
         debug: boolean;
         constructor(configs: WebRtcConfig);
-        initWebRtc(): void;
         join(roomname: string): void;
         leaveRoom(): void;
         send(messageType: string, payload: any, optional: {

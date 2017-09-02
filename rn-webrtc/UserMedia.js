@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
  */
 import { Platform } from 'react-native';
 import { MediaStreamTrack, getUserMedia, } from 'react-native-webrtc';
-var UserMedia = (function () {
+var UserMedia = /** @class */ (function () {
     function UserMedia(options) {
         this.debug = false;
         this.debug = options.debug;
@@ -62,18 +62,16 @@ var UserMedia = (function () {
     UserMedia.prototype.getVideoTrack = function () {
         var videoTracks = this.localStream.getVideoTracks();
         if (videoTracks.length > 0) {
-            // console.log('Using video device: ' + videoTracks[0].label);
-            return videoTracks[0].label;
+            return videoTracks[0];
         }
-        return "";
+        return null;
     };
     UserMedia.prototype.getAudioTrack = function () {
         var audioTracks = this.localStream.getAudioTracks();
         if (audioTracks.length > 0) {
-            // console.log('Using audio device: ' + audioTracks[0].label);
-            return audioTracks[0].label;
+            return audioTracks[0];
         }
-        return "";
+        return null;
     };
     UserMedia.prototype.startLocalStream = function (mediaConstraints, isFront) {
         return __awaiter(this, void 0, void 0, function () {

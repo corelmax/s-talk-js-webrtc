@@ -6,7 +6,7 @@
 import { AbstractPeerConnection } from "./AbstractPeerConnection";
 export var AbstractPeer;
 (function (AbstractPeer) {
-    var BasePeer = (function () {
+    var BasePeer = /** @class */ (function () {
         /**
          * reture PeerConnection
          * @param socket

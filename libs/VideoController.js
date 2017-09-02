@@ -1,6 +1,6 @@
 import { getImage } from './VideoToBlurImage';
 // implement from mediastream-gain lib
-var VideoController = (function () {
+var VideoController = /** @class */ (function () {
     function VideoController(stream) {
         this.localStream = stream;
         this.videoSource = stream.getVideoTracks()[0];

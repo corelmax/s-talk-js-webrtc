@@ -1,3 +1,8 @@
+/**
+ * S-TAlK webrtc interface.
+ *
+ * Copyright 2017 Ahoo Studio.co.th.
+ */
 import 'webrtc-adapter';
 import { WebRtcConfig } from "../core/IWebRTC";
 import { AbstractWEBRTC } from "../core/AbstractWebRTC";

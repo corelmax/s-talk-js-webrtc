@@ -3,17 +3,6 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import {
-    RTCPeerConnection,
-    RTCMediaStream,
-    RTCIceCandidate,
-    RTCSessionDescription,
-    RTCView,
-    MediaStreamTrack,
-    getUserMedia,
-} from 'react-native-webrtc';
-import * as events from 'events';
-import * as io from 'socket.io-client';
 
 import { WebRtcConfig } from "../core/IWebRTC";
 import { AbstractWEBRTC } from "../core/AbstractWebRTC";

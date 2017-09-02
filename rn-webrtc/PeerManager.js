@@ -6,7 +6,7 @@
 import { AbstractPeerConnection } from "../index";
 import { Peer } from "./Peer";
 import { logError } from "./WebRTC";
-var PeerManager = (function () {
+var PeerManager = /** @class */ (function () {
     function PeerManager(options) {
         this.debug = false;
         this.peers = new Map();

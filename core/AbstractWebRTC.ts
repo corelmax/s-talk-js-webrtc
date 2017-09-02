@@ -74,10 +74,6 @@ export namespace AbstractWEBRTC {
             });
         }
 
-        initWebRtc() {
-
-        }
-
         join(roomname: string) {
             let self = this;
             this.signalingSocket.emit('join', roomname, function (err, roomDescription) {

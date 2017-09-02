@@ -14,7 +14,7 @@ var WildEmitter = require('wildemitter');
 var webrtcSupport = require('webrtcsupport');
 var attachMediaStream = require('attachmediastream');
 var mockconsole = require('mockconsole');
-var SimpleWebRTC = (function (_super) {
+var SimpleWebRTC = /** @class */ (function (_super) {
     __extends(SimpleWebRTC, _super);
     function SimpleWebRTC(opts) {
         var _this = _super.call(this) || this;

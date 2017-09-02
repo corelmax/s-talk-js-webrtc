@@ -41,7 +41,7 @@ export * from "./core/AbstractPeer";
 export * from "./core/AbstractWebRTC";
 export var StalkWebRtcFactory;
 (function (StalkWebRtcFactory) {
-    var WebRtcFactory = (function () {
+    var WebRtcFactory = /** @class */ (function () {
         function WebRtcFactory() {
         }
         WebRtcFactory.getObject = function (options) {

@@ -22,7 +22,7 @@ import { createStreamByText } from '../libs/StreamHelper';
 // ];
 // configuration.iceServers = twilioIceServers;
 var configuration = { "iceServers": [{ "urls": "stun:stun.l.google.com:19302" }] };
-var Peer = (function (_super) {
+var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     /**
      * reture PeerConnection

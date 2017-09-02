@@ -32,6 +32,7 @@ class App extends Component {
     };
     this.setRoomName = this.setRoomName.bind(this);
     this.onVideoCall = this.onVideoCall.bind(this);
+    this.endCall = this.endCall.bind(this);
   }
 
   setRoomName(roomName) {
@@ -40,6 +41,9 @@ class App extends Component {
   onVideoCall = (roomName) => {
     this.setState({ call: !this.state.call });
   };
+  endCall() {
+    this.setState(prev => ({ ...prev, call: false, roomname: "" }));
+  }
   onError(error) {
     console.log(error);
   }
@@ -74,6 +78,14 @@ class App extends Component {
               this.onError("Room name is missing")}
           >
             video_call
+      </FontIcon>
+          <FontIcon
+            className="material-icons"
+            style={{ marginRight: 24, fontSize: 48, cursor: 'pointer' }}
+            color={Colors.red500}
+            onClick={this.endCall}
+          >
+            call_end
       </FontIcon>
           {
             (this.state.call) ?

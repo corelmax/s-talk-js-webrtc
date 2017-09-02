@@ -22,7 +22,6 @@ export interface IWebRTC {
     userMedia: IUserMedia;
     debug: boolean;
 
-    initWebRtc();
     send(messageType: string, payload: any, optionals: { to: string });
     join(roomname: string);
     leaveRoom();
