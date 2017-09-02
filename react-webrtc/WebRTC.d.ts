@@ -1,24 +1,12 @@
-/// <reference types="socket.io-client" />
-/// <reference types="node" />
+/**
+ * S-TAlK webrtc interface.
+ *
+ * Copyright 2017 Ahoo Studio.co.th.
+ */
 import 'webrtc-adapter';
-import * as events from "events";
-import { IWebRTC, WebRtcConfig } from "../index";
-import { PeerManager } from "./PeerManager";
-import { UserMedia } from "./UserMedia";
+import { WebRtcConfig } from "../core/IWebRTC";
+import { AbstractWEBRTC } from "../core/AbstractWebRTC";
 export declare function hasGetUserMedia(): boolean;
-export declare class WebRTC implements IWebRTC {
-    signalingSocket: SocketIOClient.Socket;
-    webrtcEvents: events.EventEmitter;
-    roomName: string;
-    peerManager: PeerManager;
-    userMedia: UserMedia;
-    debug: boolean;
+export declare class WebRTC extends AbstractWEBRTC.BaseWebRTC {
     constructor(configs: WebRtcConfig);
-    send(messageType: string, payload: any, optional: {
-        to: string;
-    }): void;
-    join(roomname: string): void;
-    leaveRoom(): void;
-    disconnect(): void;
-    onDisconnect(data: any): void;
 }

@@ -8,13 +8,6 @@
 import { EventEmitter } from 'events';
 import { IPC_Estabished } from "./AbstractPeerConnection";
 import { IUserMedia } from "./AbstractMediaStream";
-export declare namespace AbstractWEBRTC {
-    const ON_CONNECTION_READY = "connectionReady";
-    const ON_CONNECTION_CLOSE = "ON_CONNECTION_CLOSE";
-    const JOINED_ROOM = "joinedRoom";
-    const JOIN_ROOM_ERROR = "joinRoomError";
-    const NOT_SUPPORT_MEDIA = "NOT_SUPPORT_MEDIA";
-}
 export interface WebRtcConfig {
     signalingUrl: string;
     socketOptions: any;

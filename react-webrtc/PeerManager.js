@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * S-TAlK webrtc interface.
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-var index_1 = require("../index");
-var Peer_1 = require("./Peer");
-var PeerManager = (function () {
+import { AbstractPeerConnection } from "../index";
+import { Peer } from "./Peer";
+var PeerManager = /** @class */ (function () {
     function PeerManager(options) {
         this.debug = false;
         this.peers = new Map();
@@ -24,7 +22,7 @@ var PeerManager = (function () {
             sendHandler: webrtc.send,
             debug: self.debug
         };
-        var peer = new Peer_1.Peer(config);
+        var peer = new Peer(config);
         this.peers.set(options.id, peer);
         return peer;
     };
@@ -41,7 +39,7 @@ var PeerManager = (function () {
         var peer = this.getPeers(sessionId);
         if (peer) {
             peer.pc.close();
-            webrtc.webrtcEvents.emit(index_1.AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
+            webrtc.webrtcEvents.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer);
         }
         this.peers.delete(sessionId);
     };
@@ -72,4 +70,4 @@ var PeerManager = (function () {
     ;
     return PeerManager;
 }());
-exports.PeerManager = PeerManager;
+export { PeerManager };

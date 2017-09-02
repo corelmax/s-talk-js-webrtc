@@ -27,20 +27,18 @@ export class UserMedia implements IUserMedia {
     public getVideoTrack() {
         let videoTracks = this.localStream.getVideoTracks();
         if (videoTracks.length > 0) {
-            // console.log('Using video device: ' + videoTracks[0].label);
-            return videoTracks[0].label;
+            return videoTracks[0];
         }
 
-        return "";
+        return null;
     }
     public getAudioTrack() {
         let audioTracks = this.localStream.getAudioTracks();
         if (audioTracks.length > 0) {
-            // console.log('Using audio device: ' + audioTracks[0].label);
-            return audioTracks[0].label;
+            return audioTracks[0];
         }
 
-        return "";
+        return null;
     }
 
     micController;
@@ -94,8 +92,11 @@ export class UserMedia implements IUserMedia {
         if (mediaConstraints.video != false) {
             defaultMediaConstraints = {
                 ...mediaConstraints,
-                facingMode: (isFront ? "user" : "environment"),
-                optional: (videoSourceId ? [{ sourceId: videoSourceId }] : [])
+                video: {
+                    ...mediaConstraints.video,
+                    facingMode: (isFront ? "user" : "environment"),
+                    optional: (videoSourceId ? [{ sourceId: videoSourceId }] : [])
+                }
             };
         }
         else {

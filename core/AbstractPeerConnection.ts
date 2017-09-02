@@ -10,6 +10,9 @@ export namespace AbstractPeerConnection {
     export const PEER_STREAM_ADDED = "peerStreamAdded";
     export const PEER_STREAM_REMOVED = "peerStreamRemoved";
     export const CONNECTIVITY_ERROR = "connectivityError";
+
+    export const ON_ICE_COMPLETED = "iceCompleted";
+    export const ON_ICE_CONNECTED = "iceConnected";
     export const ON_ICE_CONNECTION_FAILED = "iceFailed";
     export const ON_ICE_CONNECTION_CLOSED = "iceClosed";
 
@@ -23,6 +26,8 @@ export namespace AbstractPeerConnection {
 }
 
 export interface IPC_Estabished {
+    peers: Map<string, IPC_Handler>;
+
     createPeer(options, webrtc): IPC_Handler;
     getPeers(session_id?: string): IPC_Handler | Map<string, IPC_Handler>;
     removePeers(session_id: string, webrtc);
@@ -36,7 +41,7 @@ export interface IPC_Handler {
     pc: RTCPeerConnection;
     channels: any;
     pcEvent: EventEmitter;
-    readonly debug: boolean;
+    debug: boolean;
     readonly type: string;
     parentsEmitter: EventEmitter;
     receiveChannel;

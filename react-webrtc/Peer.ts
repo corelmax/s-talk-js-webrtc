@@ -60,17 +60,19 @@ export class Peer extends AbstractPeer.BasePeer {
                 // setTimeout(() => {
                 //     self.getStats();
                 // }, 1000);
+                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
             else if (target.iceConnectionState === 'connected') {
                 self.createDataChannel("message");
                 self.pc.ondatachannel = self.receiveChannelCallback.bind(self);
+                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTED, self.pcPeers);
             }
             else if (target.iceConnectionState == "failed") {
-                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pc);
+                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, self.pcPeers);
                 self.send_event(AbstractPeerConnection.CONNECTIVITY_ERROR, null, { to: self.id });
             }
             else if (target.iceConnectionState == "closed") {
-                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED);
+                self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, self.pcPeers);
             }
         };
 

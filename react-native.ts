@@ -16,7 +16,7 @@ import { WebRtcConfig, IWebRTC } from "./core/IWebRTC";
 export namespace StalkWebRtcFactory {
     export class WebRtcFactory {
         static async getObject(options: WebRtcConfig): Promise<IWebRTC | undefined> {
-            const { WebRTC } = require("./react-webrtc/WebRTC");
+            const { WebRTC } = require("./rn-webrtc/WebRTC");
             return await new WebRTC(options);
         }
     }

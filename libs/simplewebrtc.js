@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,14 +8,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
-var webrtc_1 = require("./webrtc");
-var socketioconnection_1 = require("./socketioconnection");
+import WebRTC from './webrtc';
+import SocketIoConnection from './socketioconnection';
 var WildEmitter = require('wildemitter');
 var webrtcSupport = require('webrtcsupport');
 var attachMediaStream = require('attachmediastream');
 var mockconsole = require('mockconsole');
-var SimpleWebRTC = (function (_super) {
+var SimpleWebRTC = /** @class */ (function (_super) {
     __extends(SimpleWebRTC, _super);
     function SimpleWebRTC(opts) {
         var _this = _super.call(this) || this;
@@ -276,7 +274,7 @@ var SimpleWebRTC = (function (_super) {
         WildEmitter.call(_this);
         // create default SocketIoConnection if it's not passed in
         if (_this.config.connection === null) {
-            connection = _this.connection = new socketioconnection_1.default(_this.config);
+            connection = _this.connection = new SocketIoConnection(_this.config);
         }
         else {
             connection = _this.connection = _this.config.connection;
@@ -334,7 +332,7 @@ var SimpleWebRTC = (function (_super) {
         // using same logger from logic here
         opts.logger = _this.logger;
         opts.debug = false;
-        _this.webrtc = new webrtc_1.default(opts);
+        _this.webrtc = new WebRTC(opts);
         // attach a few methods from underlying lib to simple.
         ['mute', 'unmute', 'pauseVideo', 'resumeVideo', 'pause', 'resume', 'sendToAll', 'sendDirectlyToAll', 'getPeers'].forEach(function (method) {
             self[method] = self.webrtc[method].bind(self.webrtc);
@@ -451,4 +449,4 @@ SimpleWebRTC.prototype = Object.create(WildEmitter.prototype, {
         value: SimpleWebRTC
     }
 });
-exports.default = SimpleWebRTC;
+export default SimpleWebRTC;

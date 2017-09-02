@@ -5,12 +5,12 @@
   "dependencies": {
     "flexbox-react": "^4.4.0",
     "material-design-icons": "^3.0.1",
-    "material-ui": "^0.19.0",
+    "material-ui": "^0.19.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-scripts": "1.0.12",
     "recompose": "^0.25.0",
-    "stalk-js-webrtc": "0.0.1-f17"
+    "stalk-js-webrtc": "0.0.1-f30"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,6 +23,6 @@
     "@types/material-ui": "^0.18.0",
     "@types/react": "^16.0.5",
     "@types/react-dom": "^15.5.4",
-    "@types/recompose": "^0.24.0"
+    "@types/recompose": "^0.24.1"
   }
 }

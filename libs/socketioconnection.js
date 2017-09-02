@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var io = require('socket.io-client');
-var SocketIoConnection = (function () {
+var SocketIoConnection = /** @class */ (function () {
     function SocketIoConnection(config) {
         this.connection = io.connect(config.url, config.socketio);
     }
@@ -19,4 +17,4 @@ var SocketIoConnection = (function () {
     };
     return SocketIoConnection;
 }());
-exports.default = SocketIoConnection;
+export default SocketIoConnection;

@@ -1,4 +1,3 @@
-"use strict";
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -42,15 +41,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * UserMedia.
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-var react_native_1 = require("react-native");
-var react_native_webrtc_1 = require("react-native-webrtc");
-var UserMedia = (function () {
+import { Platform } from 'react-native';
+import { MediaStreamTrack, getUserMedia, } from 'react-native-webrtc';
+var UserMedia = /** @class */ (function () {
     function UserMedia(options) {
         this.debug = false;
         this.debug = options.debug;
@@ -64,18 +62,16 @@ var UserMedia = (function () {
     UserMedia.prototype.getVideoTrack = function () {
         var videoTracks = this.localStream.getVideoTracks();
         if (videoTracks.length > 0) {
-            // console.log('Using video device: ' + videoTracks[0].label);
-            return videoTracks[0].label;
+            return videoTracks[0];
         }
-        return "";
+        return null;
     };
     UserMedia.prototype.getAudioTrack = function () {
         var audioTracks = this.localStream.getAudioTracks();
         if (audioTracks.length > 0) {
-            // console.log('Using audio device: ' + audioTracks[0].label);
-            return audioTracks[0].label;
+            return audioTracks[0];
         }
-        return "";
+        return null;
     };
     UserMedia.prototype.startLocalStream = function (mediaConstraints, isFront) {
         return __awaiter(this, void 0, void 0, function () {
@@ -94,13 +90,13 @@ var UserMedia = (function () {
                                 }
                             }
                         };
-                        if (!(react_native_1.Platform.OS === 'ios')) return [3 /*break*/, 4];
+                        if (!(Platform.OS === 'ios')) return [3 /*break*/, 4];
                         if (!mediaConstraints.video) return [3 /*break*/, 4];
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, new Promise(function (resolve, reject) {
-                                react_native_webrtc_1.MediaStreamTrack.getSources(function (sourceInfos) {
+                                MediaStreamTrack.getSources(function (sourceInfos) {
                                     // console.log("sourceInfos: ", sourceInfos);
                                     for (var i = 0; i < sourceInfos.length; i++) {
                                         var sourceInfo = sourceInfos[i];
@@ -120,13 +116,13 @@ var UserMedia = (function () {
                         return [3 /*break*/, 4];
                     case 4:
                         if (mediaConstraints.video != false) {
-                            defaultMediaConstraints = __assign({}, mediaConstraints, { facingMode: (isFront ? "user" : "environment"), optional: (videoSourceId ? [{ sourceId: videoSourceId }] : []) });
+                            defaultMediaConstraints = __assign({}, mediaConstraints, { video: __assign({}, mediaConstraints.video, { facingMode: (isFront ? "user" : "environment"), optional: (videoSourceId ? [{ sourceId: videoSourceId }] : []) }) });
                         }
                         else {
                             defaultMediaConstraints = __assign({}, mediaConstraints);
                         }
                         return [2 /*return*/, new Promise(function (resolve, reject) {
-                                react_native_webrtc_1.getUserMedia(defaultMediaConstraints, function (stream) {
+                                getUserMedia(defaultMediaConstraints, function (stream) {
                                     console.log('getUserMedia success');
                                     var videoTracks = stream.getVideoTracks();
                                     var audioTracks = stream.getAudioTracks();
@@ -189,4 +185,4 @@ var UserMedia = (function () {
     };
     return UserMedia;
 }());
-exports.UserMedia = UserMedia;
+export { UserMedia };

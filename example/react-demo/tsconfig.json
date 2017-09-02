@@ -2,9 +2,13 @@
     "compileOnSave": true,
     "compilerOptions": {
         "module": "es2015",
-        "target": "es2015",
+        "target": "esnext",
+        "moduleResolution": "node",
         "jsx": "preserve",
-        "watch": true
+        "watch": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ]
     },
     "exclude": [
         "node_modules"

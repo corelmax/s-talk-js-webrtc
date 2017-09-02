@@ -20,8 +20,7 @@ import { PeerStatus } from "./WithPeerStatus";
 import {
     AbstractWEBRTC, AbstractMediaStream,
     AbstractPeerConnection, IWebRTC,
-    IPC_Handler, WebRtcConfig, WebRtcFactory,
-    Platform
+    IPC_Handler, WebRtcConfig, StalkWebRtcFactory
 } from "stalk-js-webrtc";
 import { createDummyStream, createStreamByText } from "stalk-js-webrtc/libs/StreamHelper";
 const signalingServer = "https://chitchats.ga:8888";
@@ -115,12 +114,13 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
     }
 
     async startWebRtc() {
+        let self = this;
         let rtcConfig = {
             signalingUrl: signalingServer,
             socketOptions: { 'force new connection': true },
             debug: true,
         } as WebRtcConfig;
-        this.webrtc = await WebRtcFactory.getObject(Platform.BROWSER, rtcConfig) as IWebRTC;
+        this.webrtc = await StalkWebRtcFactory.WebRtcFactory.getObject(rtcConfig) as IWebRTC;
 
         this.peerAdded = this.peerAdded.bind(this);
         this.removeVideo = this.removeVideo.bind(this);
@@ -136,6 +136,18 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_REMOVED, this.removeVideo);
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.CONNECTIVITY_ERROR, (peer) => {
             console.log(AbstractPeerConnection.CONNECTIVITY_ERROR, peer);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, (peers) => {
+            console.log("on ice closed", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, (peers) => {
+            console.log("on ice fail", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_COMPLETED, (peers) => {
+            console.log("on ice completed", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTED, (peers) => {
+            console.log("on ice connected", peers);
         });
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.CREATED_PEER, this.onPeerCreated);
     }

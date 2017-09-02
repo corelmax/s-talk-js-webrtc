@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // reference
 // https://developers.google.com/web/updates/2016/10/capture-stream
 // https://tokbox.com/blog/camera-filters-in-opentok-for-web/
 // https://trackingjs.com/
 var tracking = window.tracking = {};
 require('tracking');
-function getImage(videoElement) {
+export function getImage(videoElement) {
     return new Promise(function (resolve, reject) {
         var canvas = document.createElement('canvas');
         var width = videoElement.videoWidth;
@@ -34,4 +32,3 @@ function getImage(videoElement) {
         }
     });
 }
-exports.getImage = getImage;
