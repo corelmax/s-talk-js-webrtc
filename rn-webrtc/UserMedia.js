@@ -118,7 +118,7 @@ var UserMedia = (function () {
                         return [3 /*break*/, 4];
                     case 4:
                         if (mediaConstraints.video != false) {
-                            defaultMediaConstraints = __assign({}, mediaConstraints, { facingMode: (isFront ? "user" : "environment"), optional: (videoSourceId ? [{ sourceId: videoSourceId }] : []) });
+                            defaultMediaConstraints = __assign({}, mediaConstraints, { video: __assign({}, mediaConstraints.video, { facingMode: (isFront ? "user" : "environment"), optional: (videoSourceId ? [{ sourceId: videoSourceId }] : []) }) });
                         }
                         else {
                             defaultMediaConstraints = __assign({}, mediaConstraints);

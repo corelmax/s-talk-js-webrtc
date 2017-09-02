@@ -94,8 +94,11 @@ export class UserMedia implements IUserMedia {
         if (mediaConstraints.video != false) {
             defaultMediaConstraints = {
                 ...mediaConstraints,
-                facingMode: (isFront ? "user" : "environment"),
-                optional: (videoSourceId ? [{ sourceId: videoSourceId }] : [])
+                video: {
+                    ...mediaConstraints.video,
+                    facingMode: (isFront ? "user" : "environment"),
+                    optional: (videoSourceId ? [{ sourceId: videoSourceId }] : [])
+                }
             };
         }
         else {

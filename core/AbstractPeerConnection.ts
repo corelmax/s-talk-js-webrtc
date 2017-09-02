@@ -38,7 +38,7 @@ export interface IPC_Handler {
     pc: RTCPeerConnection;
     channels: any;
     pcEvent: EventEmitter;
-    readonly debug: boolean;
+    debug: boolean;
     readonly type: string;
     parentsEmitter: EventEmitter;
     receiveChannel;
