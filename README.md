@@ -2,7 +2,8 @@
 
 Universal javascript WebRTC interface implementation.
 
-Inspire by SimpleWebRTC https://github.com/andyet/SimpleWebRTC , react-native-webrtc https://github.com/oney/react-native-webrtc
+Inspired by **SimpleWebRTC** https://github.com/andyet/SimpleWebRTC ,
+&& **react-native-webrtc** https://github.com/oney/react-native-webrtc
 * This project has develop and maintained by AhooStudio.co.th.
 * Copyright (c)2017 AhooStudio.co.th
 
