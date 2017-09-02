@@ -75,6 +75,7 @@ class VideoCall extends React.Component {
         });
     }
     async startWebRtc() {
+        let self = this;
         let rtcConfig = {
             signalingUrl: signalingServer,
             socketOptions: { 'force new connection': true },
@@ -95,8 +96,17 @@ class VideoCall extends React.Component {
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.CONNECTIVITY_ERROR, (peer) => {
             console.log(AbstractPeerConnection.CONNECTIVITY_ERROR, peer);
         });
-        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, () => {
-            console.log("on ice closed");
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, (peers) => {
+            console.log("on ice closed", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, (peers) => {
+            console.log("on ice fail", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_COMPLETED, (peers) => {
+            console.log("on ice completed", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTED, (peers) => {
+            console.log("on ice connected", peers);
         });
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.CREATED_PEER, this.onPeerCreated);
     }

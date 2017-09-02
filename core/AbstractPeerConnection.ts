@@ -10,6 +10,9 @@ export namespace AbstractPeerConnection {
     export const PEER_STREAM_ADDED = "peerStreamAdded";
     export const PEER_STREAM_REMOVED = "peerStreamRemoved";
     export const CONNECTIVITY_ERROR = "connectivityError";
+
+    export const ON_ICE_COMPLETED = "iceCompleted";
+    export const ON_ICE_CONNECTED = "iceConnected";
     export const ON_ICE_CONNECTION_FAILED = "iceFailed";
     export const ON_ICE_CONNECTION_CLOSED = "iceClosed";
 

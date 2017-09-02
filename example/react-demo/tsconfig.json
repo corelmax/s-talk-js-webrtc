@@ -3,11 +3,11 @@
     "compilerOptions": {
         "module": "es2015",
         "target": "esnext",
+        "moduleResolution": "node",
         "jsx": "preserve",
         "watch": true,
         "typeRoots": [
-            "node_modules/@types",
-            "node_modules/stalk-js-webrtc"
+            "node_modules/@types"
         ]
     },
     "exclude": [
