@@ -18,3 +18,4 @@ Inspire by SimpleWebRTC https://github.com/andyet/SimpleWebRTC , react-native-we
 - [ ] Disconnection handler.
 - [ ] Icecandidate fail handler.
 - [ ] Icecandidate timeout handler.
+- [ ] Nat traversal problem solving.
