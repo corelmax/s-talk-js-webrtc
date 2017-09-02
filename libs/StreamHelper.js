@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function createStreamByText(text, mute) {
-    if (mute === void 0) { mute = false; }
-    var canvas = document.createElement('canvas');
-    var width = 300;
-    var height = 300;
+export function createStreamByText(text, mute = false) {
+    let canvas = document.createElement('canvas');
+    let width = 300;
+    let height = 300;
     canvas.width = width;
     canvas.height = height;
-    var context = canvas.getContext('2d');
+    let context = canvas.getContext('2d');
     if (!!context) {
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -15,17 +12,16 @@ function createStreamByText(text, mute) {
         context.font = "45px Roboto";
         context.fillText(text, (width / 2), (height / 2));
     }
-    var stream = canvas.captureStream(0);
+    let stream = canvas.captureStream(0);
     return stream;
 }
-exports.createStreamByText = createStreamByText;
-function createDummyStream() {
-    var canvas = document.createElement('canvas');
-    var width = 300;
-    var height = 300;
+export function createDummyStream() {
+    let canvas = document.createElement('canvas');
+    let width = 300;
+    let height = 300;
     canvas.width = width;
     canvas.height = height;
-    var context = canvas.getContext('2d');
+    let context = canvas.getContext('2d');
     if (!!context) {
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -33,10 +29,9 @@ function createDummyStream() {
         context.font = "45px Roboto";
         context.fillText("DUMMY", (width / 2), (height / 2));
     }
-    var dummyStream = canvas.captureStream(0);
+    let dummyStream = canvas.captureStream(0);
     dummyStream.type = "dummy";
     // dummyStream.getVideoTracks()[0].muted = false;
     // dummyStream.removeTrack(dummyStream.getTracks()[0]);
     return dummyStream;
 }
-exports.createDummyStream = createDummyStream;
