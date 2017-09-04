@@ -20,8 +20,7 @@ const configuration = {
         { urls: 'stun:stun1.l.google.com:19302' },
         { urls: 'stun:stun2.l.google.com:19302' },
         { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' },
-        { urls: 'stun:numb.viagenie.ca' },
+        { urls: 'stun:stun4.l.google.com:19302' }
     ]
 };
 
@@ -49,12 +48,11 @@ export class Peer extends AbstractPeer.BasePeer {
         else
             iceServers = configuration;
 
-        this.pc = new RTCPeerConnection(iceServers);
-
         if (self.debug) {
-            console.log(iceServers);
-            console.log(this.pc.getConfiguration());
+            console.log(JSON.stringify(iceServers));
         }
+
+        this.pc = new RTCPeerConnection(iceServers);
 
         this.pc.onicecandidate = function (event) {
             if (event.candidate) {
