@@ -26,7 +26,8 @@ export class PeerManager implements IPC_Estabished {
             stream: webrtc.userMedia.getLocalStream(),
             emitter: webrtc.webrtcEvents,
             sendHandler: webrtc.send,
-            debug: self.debug
+            debug: self.debug,
+            iceConfig: webrtc.iceConfig
         } as PeerConstructor;
         let peer = new Peer(config);
         this.peers.set(options.id, peer);

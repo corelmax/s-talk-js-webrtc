@@ -12,6 +12,7 @@ export interface WebRtcConfig {
     socketOptions: any;
     debug: boolean;
     detectSpeakingEvents: boolean;
+    iceConfig: any;
 }
 
 export interface IWebRTC {
@@ -21,6 +22,7 @@ export interface IWebRTC {
     peerManager: IPC_Estabished;
     userMedia: IUserMedia;
     debug: boolean;
+    iceConfig: any;
 
     send(messageType: string, payload: any, optionals: { to: string });
     join(roomname: string);

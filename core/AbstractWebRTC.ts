@@ -26,10 +26,12 @@ export namespace AbstractWEBRTC {
         peerManager: IPC_Estabished;
         userMedia: IUserMedia;
         debug: boolean = false;
+        iceConfig: any;
 
         constructor(configs: WebRtcConfig) {
             let self = this;
             self.debug = configs.debug;
+            self.iceConfig = configs.iceConfig;
 
             // this.signalingSocket = io.connect('https://chitchats.ga:8888', { transports: ['websocket'], 'force new connection': true });
             this.signalingSocket = io.connect(configs.signalingUrl, configs.socketOptions);

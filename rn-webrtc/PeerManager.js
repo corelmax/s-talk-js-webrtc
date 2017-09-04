@@ -22,7 +22,8 @@ var PeerManager = /** @class */ (function () {
             stream: webrtc.userMedia.getLocalStream(),
             emitter: webrtc.webrtcEvents,
             sendHandler: webrtc.send,
-            debug: self.debug
+            debug: self.debug,
+            iceConfig: webrtc.iceConfig
         };
         var peer = new Peer(config);
         peer.logError = logError;
