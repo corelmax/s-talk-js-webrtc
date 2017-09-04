@@ -103,7 +103,7 @@ var Peer = /** @class */ (function (_super) {
                 console.log('onsignalingstatechange', target.signalingState);
             self.pcEvent.emit("onsignalingstatechange", target.signalingState);
         };
-        this.pc.ontrack = function (peer) {
+        this.pc.onaddstream = function (peer) {
             if (self.debug)
                 console.log('onaddstream');
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_ADDED, peer);

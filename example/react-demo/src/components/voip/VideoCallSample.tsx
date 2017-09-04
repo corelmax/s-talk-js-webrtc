@@ -119,6 +119,23 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
             signalingUrl: signalingServer,
             socketOptions: { 'force new connection': true },
             debug: true,
+            iceConfig: {
+                iceServers: [
+                    { urls: "stun:stun.l.google.com:19302" },
+                    { urls: "stun:s1.xirsys.com" },
+                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:80?transport=udp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
+                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:3478?transport=udp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
+                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:80?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
+                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:3478?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
+                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", "urls": "turns:s1.xirsys.com:443?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
+                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", "urls": "turns:s1.xirsys.com:5349?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
+                    {
+                        urls: 'turn:numb.viagenie.ca',
+                        username: 'pop@ooca.co',
+                        credential: 'uYxW3a9iLJtj4IsKD1VA',
+                    },
+                ]
+            }
         } as WebRtcConfig;
         this.webrtc = await StalkWebRtcFactory.WebRtcFactory.getObject(rtcConfig) as IWebRTC;
 
@@ -139,9 +156,19 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
         });
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_CLOSED, (peers) => {
             console.log("on ice closed", peers);
+            peers.forEach(peer => {
+                let pc = peer.pc;
+                console.log('had local relay candidate', pc.hadLocalRelayCandidate);
+                console.log('had remote relay candidate', pc.hadRemoteRelayCandidate);
+            });
         });
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTION_FAILED, (peers) => {
             console.log("on ice fail", peers);
+            peers.forEach(peer => {
+                let pc = peer.pc;
+                console.log('had local relay candidate', pc.hadLocalRelayCandidate);
+                console.log('had remote relay candidate', pc.hadRemoteRelayCandidate);
+            });
         });
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_COMPLETED, (peers) => {
             console.log("on ice completed", peers);
@@ -273,7 +300,7 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
     }
 
     onPeerCreated(peer: IPC_Handler) {
-        console.log("onPeerCreated", peer);
+        console.log("onPeerCreated", peer.id);
         this.setState(prev => ({ ...prev, peer: peer }));
     }
 

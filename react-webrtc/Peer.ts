@@ -113,7 +113,7 @@ export class Peer extends AbstractPeer.BasePeer {
             self.pcEvent.emit("onsignalingstatechange", target.signalingState);
         };
 
-        this.pc.ontrack = function (peer) {
+        this.pc.onaddstream = function (peer) {
             if (self.debug)
                 console.log('onaddstream');
 
