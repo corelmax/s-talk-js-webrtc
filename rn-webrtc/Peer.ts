@@ -15,7 +15,17 @@ import {
 import { AbstractPeerConnection, IPC_Handler, PeerConstructor } from "../core/AbstractPeerConnection";
 import { AbstractPeer } from "../core/AbstractPeer";
 
-const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
+// const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
+const configuration = {
+    iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { urls: 'stun:stun3.l.google.com:19302' },
+        { urls: 'stun:stun4.l.google.com:19302' },
+        { urls: 'stun:numb.viagenie.ca' },
+    ]
+};
 
 export class Peer extends AbstractPeer.BasePeer {
     /**
