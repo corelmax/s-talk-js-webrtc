@@ -38,18 +38,24 @@ export class Peer extends AbstractPeer.BasePeer {
         this.initPeerConnection(config.stream, config.iceConfig);
     }
 
-    initPeerConnection(stream: MediaStream, iceConfig: any) {
+    initPeerConnection(stream: MediaStream, iceConfig: RTCConfiguration) {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
 
-        let iceServers;
+        let iceServers: RTCConfiguration;
         if (!!iceConfig)
             iceServers = iceConfig;
         else
             iceServers = configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
+
+        if (self.debug) {
+            console.log(iceServers);
+            console.log(this.pc.getConfiguration());
+        }
+
         this.pc.onicecandidate = function (event) {
             if (event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
@@ -109,7 +115,7 @@ export class Peer extends AbstractPeer.BasePeer {
             self.pcEvent.emit("onsignalingstatechange", target.signalingState);
         };
 
-        this.pc.onaddstream = function (peer) {
+        this.pc.ontrack = function (peer) {
             if (self.debug)
                 console.log('onaddstream');
 

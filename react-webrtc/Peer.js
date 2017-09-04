@@ -54,6 +54,10 @@ var Peer = /** @class */ (function (_super) {
         else
             iceServers = configuration;
         this.pc = new RTCPeerConnection(iceServers);
+        if (self.debug) {
+            console.log(iceServers);
+            console.log(this.pc.getConfiguration());
+        }
         this.pc.onicecandidate = function (event) {
             if (event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
@@ -101,7 +105,7 @@ var Peer = /** @class */ (function (_super) {
                 console.log('onsignalingstatechange', target.signalingState);
             self.pcEvent.emit("onsignalingstatechange", target.signalingState);
         };
-        this.pc.onaddstream = function (peer) {
+        this.pc.ontrack = function (peer) {
             if (self.debug)
                 console.log('onaddstream');
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_ADDED, peer);

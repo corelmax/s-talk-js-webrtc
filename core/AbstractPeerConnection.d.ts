@@ -60,5 +60,5 @@ export interface PeerConstructor {
     sendHandler: any;
     offer: any;
     debug: any;
-    iceConfig: any;
+    iceConfig: RTCConfiguration;
 }
