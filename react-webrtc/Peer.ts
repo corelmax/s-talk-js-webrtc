@@ -26,15 +26,21 @@ export class Peer extends AbstractPeer.BasePeer {
     constructor(config: PeerConstructor) {
         super(config);
 
-        this.initPeerConnection(config.stream);
+        this.initPeerConnection(config.stream, config.iceConfig);
     }
 
-    initPeerConnection(stream: MediaStream) {
+    initPeerConnection(stream: MediaStream, iceConfig: any) {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
 
-        this.pc = new RTCPeerConnection(configuration);
+        let iceServers;
+        if (!!iceConfig)
+            iceServers = iceConfig;
+        else
+            iceServers = configuration;
+
+        this.pc = new RTCPeerConnection(iceServers);
         this.pc.onicecandidate = function (event) {
             if (event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });

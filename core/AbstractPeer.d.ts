@@ -12,7 +12,7 @@ export declare namespace AbstractPeer {
         pc: RTCPeerConnection;
         channels: any;
         pcEvent: EventEmitter;
-        readonly debug: boolean;
+        debug: boolean;
         readonly type: string;
         parentsEmitter: EventEmitter;
         receiveChannel: any;
@@ -32,7 +32,7 @@ export declare namespace AbstractPeer {
          * @param options
          */
         constructor(config: PeerConstructor);
-        initPeerConnection(stream: MediaStream): void;
+        initPeerConnection(stream: MediaStream, iceConfig: any): void;
         removeStream(stream: MediaStream): void;
         addStream(stream: MediaStream): void;
         onSetSessionDescriptionError(error: any): void;

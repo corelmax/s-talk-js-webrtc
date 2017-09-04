@@ -1,3 +1,4 @@
+/// <reference types="es6-shim" />
 /// <reference types="node" />
 /**
  * WebRtc Modules.
@@ -10,7 +11,10 @@ export declare namespace AbstractPeerConnection {
     const PEER_STREAM_ADDED = "peerStreamAdded";
     const PEER_STREAM_REMOVED = "peerStreamRemoved";
     const CONNECTIVITY_ERROR = "connectivityError";
+    const ON_ICE_COMPLETED = "iceCompleted";
+    const ON_ICE_CONNECTED = "iceConnected";
     const ON_ICE_CONNECTION_FAILED = "iceFailed";
+    const ON_ICE_CONNECTION_CLOSED = "iceClosed";
     const PAUSE = "pause";
     const UNPAUSE = "unpause";
     const DUMMY_VIDEO = "dummy_video";
@@ -19,6 +23,7 @@ export declare namespace AbstractPeerConnection {
     const CANDIDATE = "candidate";
 }
 export interface IPC_Estabished {
+    peers: Map<string, IPC_Handler>;
     createPeer(options: any, webrtc: any): IPC_Handler;
     getPeers(session_id?: string): IPC_Handler | Map<string, IPC_Handler>;
     removePeers(session_id: string, webrtc: any): any;
@@ -30,7 +35,7 @@ export interface IPC_Handler {
     pc: RTCPeerConnection;
     channels: any;
     pcEvent: EventEmitter;
-    readonly debug: boolean;
+    debug: boolean;
     readonly type: string;
     parentsEmitter: EventEmitter;
     receiveChannel: any;
@@ -42,7 +47,7 @@ export interface IPC_Handler {
         to: string;
     }) => void;
     logError(error: string): any;
-    initPeerConnection(stream: MediaStream): any;
+    initPeerConnection(stream: MediaStream, iceConfig: any): any;
     addStream(stream: MediaStream): any;
     removeStream(stream: MediaStream): any;
     handleMessage(message: any): any;
@@ -55,4 +60,5 @@ export interface PeerConstructor {
     sendHandler: any;
     offer: any;
     debug: any;
+    iceConfig: any;
 }

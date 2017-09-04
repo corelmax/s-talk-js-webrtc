@@ -28,7 +28,7 @@ export var AbstractPeer;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
         }
-        BasePeer.prototype.initPeerConnection = function (stream) { };
+        BasePeer.prototype.initPeerConnection = function (stream, iceConfig) { };
         BasePeer.prototype.removeStream = function (stream) {
             this.pc.removeStream(stream);
         };

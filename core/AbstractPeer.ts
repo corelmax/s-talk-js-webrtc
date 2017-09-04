@@ -47,9 +47,10 @@ export namespace AbstractPeer {
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
+
         }
 
-        initPeerConnection(stream: MediaStream) { }
+        initPeerConnection(stream: MediaStream, iceConfig: any) { }
 
         removeStream(stream: MediaStream) {
             this.pc.removeStream(stream);

@@ -8,7 +8,7 @@ export declare class Peer extends AbstractPeer.BasePeer {
      * @param options
      */
     constructor(config: PeerConstructor);
-    initPeerConnection(stream: MediaStream): void;
+    initPeerConnection(stream: MediaStream, iceConfig: any): void;
     getStats(): void;
     handleMessage(message: any): void;
     createDataChannel(): void;

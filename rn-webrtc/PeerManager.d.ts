@@ -1,3 +1,4 @@
+/// <reference types="es6-shim" />
 /**
  * React-Native webrtc interface.
  *

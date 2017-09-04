@@ -28,14 +28,19 @@ var Peer = /** @class */ (function (_super) {
      */
     function Peer(config) {
         var _this = _super.call(this, config) || this;
-        _this.initPeerConnection(config.stream);
+        _this.initPeerConnection(config.stream, config.iceConfig);
         return _this;
     }
-    Peer.prototype.initPeerConnection = function (stream) {
+    Peer.prototype.initPeerConnection = function (stream, iceConfig) {
         var self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
-        this.pc = new RTCPeerConnection(configuration);
+        var iceServers;
+        if (!!iceConfig)
+            iceServers = iceConfig;
+        else
+            iceServers = configuration;
+        this.pc = new RTCPeerConnection(iceServers);
         this.pc.onicecandidate = function (event) {
             if (!!event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });

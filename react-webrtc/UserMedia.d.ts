@@ -14,7 +14,7 @@ export declare class UserMedia implements IUserMedia {
     constructor(options: {
         debug: boolean;
     });
-    startLocalStream(mediaConstraints: MediaStreamConstraints): Promise<any>;
+    startLocalStream(mediaConstraints: MediaStreamConstraints): Promise<MediaStream>;
     stopLocalStream(): void;
     private stopStream();
 }

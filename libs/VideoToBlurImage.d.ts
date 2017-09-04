@@ -1,1 +1,1 @@
-export declare function getImage(videoElement: HTMLVideoElement): any;
+export declare function getImage(videoElement: HTMLVideoElement): Promise<{}>;

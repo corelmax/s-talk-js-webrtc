@@ -53,11 +53,18 @@ export interface IPC_Handler {
     send_event: (messageType: string, payload?: any, optional?: { to: string }) => void;
     logError(error: string);
 
-    initPeerConnection(stream: MediaStream);
+    initPeerConnection(stream: MediaStream, iceConfig: any);
     addStream(stream: MediaStream);
     removeStream(stream: MediaStream);
     handleMessage(message: any);
 }
 export interface PeerConstructor {
-    peer_id; stream; pcPeers; emitter; sendHandler; offer; debug;
+    peer_id;
+    stream;
+    pcPeers;
+    emitter;
+    sendHandler;
+    offer;
+    debug;
+    iceConfig;
 }
