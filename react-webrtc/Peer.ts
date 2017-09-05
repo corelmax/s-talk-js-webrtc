@@ -60,7 +60,7 @@ export class Peer extends AbstractPeer.BasePeer {
             }
             else {
                 //@ wait for all ice...
-                self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+                self.send_sdp_to_remote_peer();
             }
         };
 
@@ -78,6 +78,10 @@ export class Peer extends AbstractPeer.BasePeer {
                 console.log('oniceconnectionstatechange', target.iceConnectionState);
 
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
+
+            if (self.pc.iceGatheringState === 'complete') {
+                self.send_sdp_to_remote_peer();
+            }
 
             if (target.iceConnectionState === 'completed') {
                 // setTimeout(() => {

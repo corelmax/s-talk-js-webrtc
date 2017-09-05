@@ -15,6 +15,7 @@ export var AbstractPeer;
          */
         function BasePeer(config) {
             this.enableDataChannels = true;
+            this.isSdpSent = false;
             this.logError = function (error) {
                 console.log(error);
             };
@@ -67,6 +68,13 @@ export var AbstractPeer;
             }, self.onCreateSessionDescriptionError);
         };
         BasePeer.prototype.handleMessage = function (message) { };
+        BasePeer.prototype.send_sdp_to_remote_peer = function () {
+            if (this.isSdpSent)
+                return;
+            this.isSdpSent = true;
+            var sdp = this.pc.localDescription;
+            this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });
+        };
         return BasePeer;
     }());
     AbstractPeer.BasePeer = BasePeer;

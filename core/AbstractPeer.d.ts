@@ -21,6 +21,7 @@ export declare namespace AbstractPeer {
         nick: any;
         offer: boolean;
         enableDataChannels: boolean;
+        isSdpSent: boolean;
         send_event: (messageType: string, payload?: any, optional?: {
             to: string;
         }) => void;
@@ -40,5 +41,6 @@ export declare namespace AbstractPeer {
         createOffer(): void;
         createAnswer(message: any): void;
         handleMessage(message: any): void;
+        send_sdp_to_remote_peer(): void;
     }
 }

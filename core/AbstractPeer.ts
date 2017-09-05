@@ -25,6 +25,8 @@ export namespace AbstractPeer {
         offer: boolean;
 
         enableDataChannels: boolean = true;
+        isSdpSent: boolean = false;
+
         send_event: (messageType: string, payload?: any, optional?: { to: string }) => void;
         logError = (error) => {
             console.log(error);
@@ -47,7 +49,6 @@ export namespace AbstractPeer {
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
-
         }
 
         initPeerConnection(stream: MediaStream, iceConfig: any) { }
@@ -98,5 +99,14 @@ export namespace AbstractPeer {
         }
 
         handleMessage(message: any) { }
+
+        send_sdp_to_remote_peer() {
+            if (this.isSdpSent)
+                return;
+            this.isSdpSent = true;
+
+            let sdp = this.pc.localDescription;
+            this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });
+        }
     }
 }

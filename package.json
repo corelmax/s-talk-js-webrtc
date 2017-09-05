@@ -1,6 +1,6 @@
 {
   "name": "stalk-js-webrtc",
-  "version": "0.0.1-f42",
+  "version": "0.0.1-f43",
   "description": "S-Talk web-rtc javascript client implementation.",
   "main": "index.js",
   "scripts": {
