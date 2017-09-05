@@ -76,10 +76,6 @@ export class Peer extends AbstractPeer.BasePeer {
 
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
 
-            if (self.pc.iceGatheringState === 'complete') {
-                self.send_sdp_to_remote_peer();
-            }
-
             if (target.iceConnectionState === 'completed') {
                 // setTimeout(() => {
                 //     self.getStats();
@@ -104,6 +100,10 @@ export class Peer extends AbstractPeer.BasePeer {
 
             if (self.debug)
                 console.log("onicegatheringstatechange", target.iceGatheringState);
+
+            if (self.pc.iceGatheringState === 'complete') {
+                self.send_sdp_to_remote_peer();
+            }
 
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
@@ -160,14 +160,19 @@ export class Peer extends AbstractPeer.BasePeer {
                 this.nick = message.payload.nick;
             delete message.payload.nick;
 
-            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function () {
-                if (self.debug)
-                    console.log("setRemoteDescription complete");
+            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
+                .then(() => {
+                    if (self.debug)
+                        console.log("setRemoteDescription complete");
 
-                if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
-                    self.createAnswer(message);
-                }
-            }, self.onSetSessionDescriptionError);
+                    if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
+                        self.createAnswer(message);
+                    }
+                }).catch(self.onSetSessionDescriptionError);
+        }
+        else if (message.type === AbstractPeerConnection.ANSWER) {
+            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
+                .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
             if (!message.candidate) return;

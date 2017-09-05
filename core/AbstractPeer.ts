@@ -85,15 +85,15 @@ export namespace AbstractPeer {
         }
         createAnswer(message) {
             let self = this;
-            self.pc.createAnswer(function (desc) {
+            self.pc.createAnswer(function (answer) {
                 if (self.debug)
                     console.log('createAnswer Success');
 
-                self.pc.setLocalDescription(desc, function () {
+                self.pc.setLocalDescription(answer, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
 
-                    self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: message.from });
+                    self.send_event(AbstractPeerConnection.ANSWER, self.pc.localDescription, { to: message.from });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         }
