@@ -55,8 +55,12 @@ export class Peer extends AbstractPeer.BasePeer {
         this.pc = new RTCPeerConnection(iceServers);
 
         this.pc.onicecandidate = function (event) {
-            if (event.candidate) {
+            if (!!event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
+            }
+            else {
+                //@ wait for all ice...
+                self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
             }
         };
 

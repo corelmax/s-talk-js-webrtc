@@ -77,7 +77,8 @@ export namespace AbstractPeer {
                     if (self.debug)
                         console.log('setLocalDescription Success');
 
-                    self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+                    //@ wait for all ice...
+                    // self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         }

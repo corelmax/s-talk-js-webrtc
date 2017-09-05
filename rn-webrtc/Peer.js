@@ -54,6 +54,10 @@ var Peer = /** @class */ (function (_super) {
             if (!!event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
             }
+            else {
+                //@ wait for all ice...
+                self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+            }
         };
         this.pc.onnegotiationneeded = function () {
             if (self.offer) {

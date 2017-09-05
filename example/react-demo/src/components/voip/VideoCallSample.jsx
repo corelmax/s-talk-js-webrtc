@@ -74,6 +74,15 @@ class VideoCall extends React.Component {
             });
         });
     }
+    // iceServers: [
+    //     { urls: "stun:m3.xirsys.com" },
+    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:80?transport=udp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
+    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:3478?transport=udp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
+    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:80?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
+    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:3478?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
+    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turns:m3.xirsys.com:443?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
+    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turns:m3.xirsys.com:5349?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" }
+    // ]
     async startWebRtc() {
         let self = this;
         let rtcConfig = {
@@ -82,19 +91,29 @@ class VideoCall extends React.Component {
             debug: true,
             iceConfig: {
                 iceServers: [
-                    { urls: "stun:stun.l.google.com:19302" },
-                    { urls: "stun:s1.xirsys.com" },
-                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:80?transport=udp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
-                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:3478?transport=udp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
-                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:80?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
-                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", urls: "turn:s1.xirsys.com:3478?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
-                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", "urls": "turns:s1.xirsys.com:443?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
-                    { "username": "5aacf346-916c-11e7-9a70-dc74494206bb", "urls": "turns:s1.xirsys.com:5349?transport=tcp", "credential": "5aacf404-916c-11e7-a0a8-e07f50dc8e8f" },
                     {
-                        urls: 'turn:numb.viagenie.ca',
-                        username: 'pop@ooca.co',
-                        credential: 'uYxW3a9iLJtj4IsKD1VA',
+                        urls: 'turn:global.turn.twilio.com:3478?transport=udp',
+                        username: 'b23a6ac1f7f6c1ad693f4a8a2d54249c0562824d23b369e0a2d427fc08d19034',
+                        credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
                     },
+                    {
+                        urls: 'turn:global.turn.twilio.com:3478?transport=tcp',
+                        username: 'b23a6ac1f7f6c1ad693f4a8a2d54249c0562824d23b369e0a2d427fc08d19034',
+                        credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
+                    },
+                    {
+                        urls: 'turn:global.turn.twilio.com:443?transport=tcp',
+                        username: 'b23a6ac1f7f6c1ad693f4a8a2d54249c0562824d23b369e0a2d427fc08d19034',
+                        credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
+                    },
+                    {
+                        urls: ['stun:global.stun.twilio.com:3478?transport=udp',
+                            "stun:stun.l.google.com:19302",
+                            "stun:stun1.l.google.com:19302",
+                            "stun:stun2.l.google.com:19302",
+                            "stun:stun3.l.google.com:19302",
+                            "stun:stun4.l.google.com:19302"]
+                    }
                 ]
             }
         };
