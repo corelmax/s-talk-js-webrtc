@@ -147,7 +147,8 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
                         credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
                     },
                     {
-                        urls: ['stun:global.stun.twilio.com:3478?transport=udp',
+                        urls: [
+                            'stun:global.stun.twilio.com:3478?transport=udp',
                             "stun:stun.l.google.com:19302",
                             "stun:stun1.l.google.com:19302",
                             "stun:stun2.l.google.com:19302",
@@ -320,7 +321,7 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
     }
 
     onPeerCreated(peer: IPC_Handler) {
-        console.log("onPeerCreated", peer.id);
+        console.log("onPeerCreated", this.webrtc.peerManager.peers);
         this.setState(prev => ({ ...prev, peer: peer }));
     }
 

@@ -25,7 +25,6 @@ export namespace AbstractPeer {
         offer: boolean;
 
         enableDataChannels: boolean = true;
-        isSdpSent: boolean = false;
 
         send_event: (messageType: string, payload?: any, optional?: { to: string }) => void;
         logError = (error) => {
@@ -101,9 +100,11 @@ export namespace AbstractPeer {
         handleMessage(message: any) { }
 
         send_sdp_to_remote_peer() {
-            if (this.isSdpSent)
-                return;
-            this.isSdpSent = true;
+            if (this.debug)
+                console.warn("try to send_sdp_to_remote_peer", this.offer);
+
+            if (this.offer == false) return;
+            this.offer = false;
 
             let sdp = this.pc.localDescription;
             this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });

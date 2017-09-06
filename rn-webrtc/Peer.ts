@@ -64,7 +64,6 @@ export class Peer extends AbstractPeer.BasePeer {
         this.pc.onnegotiationneeded = function () {
             if (self.offer) {
                 self.createOffer();
-                self.offer = false;
             }
         }
 

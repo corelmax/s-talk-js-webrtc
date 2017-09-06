@@ -15,7 +15,6 @@ export var AbstractPeer;
          */
         function BasePeer(config) {
             this.enableDataChannels = true;
-            this.isSdpSent = false;
             this.logError = function (error) {
                 console.log(error);
             };
@@ -69,9 +68,11 @@ export var AbstractPeer;
         };
         BasePeer.prototype.handleMessage = function (message) { };
         BasePeer.prototype.send_sdp_to_remote_peer = function () {
-            if (this.isSdpSent)
+            if (this.debug)
+                console.warn("try to send_sdp_to_remote_peer", this.offer);
+            if (this.offer == false)
                 return;
-            this.isSdpSent = true;
+            this.offer = false;
             var sdp = this.pc.localDescription;
             this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });
         };

@@ -68,7 +68,6 @@ var Peer = /** @class */ (function (_super) {
         this.pc.onnegotiationneeded = function () {
             if (self.offer) {
                 self.createOffer();
-                self.offer = false;
             }
         };
         this.pc.oniceconnectionstatechange = function (event) {

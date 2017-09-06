@@ -21,7 +21,6 @@ export declare namespace AbstractPeer {
         nick: any;
         offer: boolean;
         enableDataChannels: boolean;
-        isSdpSent: boolean;
         send_event: (messageType: string, payload?: any, optional?: {
             to: string;
         }) => void;
