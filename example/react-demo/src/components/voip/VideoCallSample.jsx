@@ -92,19 +92,13 @@ class VideoCall extends React.Component {
             iceConfig: {
                 iceServers: [
                     {
-                        urls: 'turn:global.turn.twilio.com:3478?transport=udp',
-                        username: 'b23a6ac1f7f6c1ad693f4a8a2d54249c0562824d23b369e0a2d427fc08d19034',
-                        credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
-                    },
-                    {
-                        urls: 'turn:global.turn.twilio.com:3478?transport=tcp',
-                        username: 'b23a6ac1f7f6c1ad693f4a8a2d54249c0562824d23b369e0a2d427fc08d19034',
-                        credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
-                    },
-                    {
-                        urls: 'turn:global.turn.twilio.com:443?transport=tcp',
-                        username: 'b23a6ac1f7f6c1ad693f4a8a2d54249c0562824d23b369e0a2d427fc08d19034',
-                        credential: 'HAeky6heR8BsCMvjONBDs/JS0R+z0J7shcxtLu/kshQ='
+                        urls: [
+                            'turn:global.turn.twilio.com:3478?transport=udp',
+                            'turn:global.turn.twilio.com:3478?transport=tcp',
+                            'turn:global.turn.twilio.com:443?transport=tcp'
+                        ],
+                        username: '36d1723a7e0ae7db1416ce815ef2ee5d4c1d915d8a2dde6580e0f3bbe7aa57a0',
+                        credential: 'a4WmwX69zzFa4rKfCxWUDNVaW+70ArkGgyUYjhJfj+s='
                     },
                     {
                         urls: [
