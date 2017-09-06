@@ -177,6 +177,7 @@ export class Peer extends AbstractPeer.BasePeer {
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
+            if (!message.payload) return;
             self.pc.addIceCandidate(new RTCIceCandidate(message.payload));
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {

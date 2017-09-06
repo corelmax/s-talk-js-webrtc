@@ -166,6 +166,8 @@ var Peer = /** @class */ (function (_super) {
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
+            if (!message.payload)
+                return;
             var onAddIceCandidateSuccess = function () {
                 if (self.debug)
                     console.log('addIceCandidate success');

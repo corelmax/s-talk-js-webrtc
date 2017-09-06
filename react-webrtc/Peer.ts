@@ -190,6 +190,8 @@ export class Peer extends AbstractPeer.BasePeer {
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
+            if (!message.payload) return;
+
             const onAddIceCandidateSuccess = () => {
                 if (self.debug)
                     console.log('addIceCandidate success');
