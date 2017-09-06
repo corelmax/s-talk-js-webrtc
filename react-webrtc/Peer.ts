@@ -9,6 +9,7 @@ import { EventEmitter } from "events";
 import { AbstractPeer, PeerConstructor, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
+import { IMessageExchange } from "../core/WebrtcSignaling";
 import * as DetectRTC from 'detectrtc';
 
 // const twilioIceServers = [
@@ -66,9 +67,7 @@ export class Peer extends AbstractPeer.BasePeer {
         }
 
         this.pc.onicecandidate = function (event) {
-            if (!!event.candidate) {
-                self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
-            }
+            self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
         };
 
         this.pc.oniceconnectionstatechange = function (event) {
@@ -164,7 +163,7 @@ export class Peer extends AbstractPeer.BasePeer {
         }
     }
 
-    handleMessage(message) {
+    handleMessage(message: IMessageExchange) {
         let self = this;
         if (self.debug)
             console.log('handleMessage', message.type);
@@ -191,8 +190,6 @@ export class Peer extends AbstractPeer.BasePeer {
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
-            if (!message.candidate) return;
-
             const onAddIceCandidateSuccess = () => {
                 if (self.debug)
                     console.log('addIceCandidate success');
@@ -201,7 +198,7 @@ export class Peer extends AbstractPeer.BasePeer {
             const onAddIceCandidateError = (error) => {
                 console.warn('failed to add ICE Candidate: ' + error.toString());
             }
-            self.pc.addIceCandidate(new RTCIceCandidate(message.candidate), onAddIceCandidateSuccess, onAddIceCandidateError);
+            self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {
             this.parentsEmitter.emit(AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);

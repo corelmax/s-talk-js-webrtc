@@ -51,7 +51,7 @@ export var AbstractPeer;
                         console.log('setLocalDescription Success');
                     // Waiting for all ice. and then send offer.
                 }, self.onSetSessionDescriptionError);
-            }, self.onCreateSessionDescriptionError);
+            }, self.onCreateSessionDescriptionError, { iceRestart: true });
         };
         BasePeer.prototype.createAnswer = function (message) {
             var self = this;

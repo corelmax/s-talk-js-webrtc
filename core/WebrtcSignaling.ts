@@ -7,8 +7,14 @@
 import { IWebRTC } from "./IWebRTC";
 import { AbstractPeerConnection, IPC_Handler } from "./AbstractPeerConnection";
 
+export interface IMessageExchange {
+    to: string;
+    from?: string; // from server.
+    type: string;
+    payload: any;
+}
 export function withExchange(webrtcObject: IWebRTC) {
-    return function exchange(message) {
+    return function exchange(message: IMessageExchange) {
         let self = webrtcObject;
         const fromId = message.from;
         // const roomType = message.roomType;
@@ -43,7 +49,7 @@ export function withSendMessage(webrtcObject: IWebRTC) {
             type: messageType,
             payload: payload,
             // prefix: webrtcSupport.prefix
-        };
+        } as IMessageExchange;
         self.signalingSocket.emit('message', message);
     };
 }

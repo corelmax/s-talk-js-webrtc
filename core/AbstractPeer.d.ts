@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from "events";
 import { IPC_Handler, PeerConstructor } from "./AbstractPeerConnection";
+import { IMessageExchange } from "./WebrtcSignaling";
 export declare namespace AbstractPeer {
     abstract class BasePeer implements IPC_Handler {
         id: string;
@@ -40,6 +41,6 @@ export declare namespace AbstractPeer {
         createOffer(): void;
         createAnswer(message: any): void;
         sendOffer(): void;
-        handleMessage(message: any): void;
+        handleMessage(message: IMessageExchange): void;
     }
 }

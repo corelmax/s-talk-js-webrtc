@@ -4,6 +4,7 @@
  * Copyright 2017 Ahoo Studio.co.th.
  */
 import { EventEmitter } from 'events';
+import { IMessageExchange } from "./WebrtcSignaling";
 
 export namespace AbstractPeerConnection {
     export const CREATED_PEER = "createdPeer";
@@ -57,7 +58,7 @@ export interface IPC_Handler {
     initPeerConnection(stream: MediaStream, iceConfig: any);
     addStream(stream: MediaStream);
     removeStream(stream: MediaStream);
-    handleMessage(message: any);
+    handleMessage(message: IMessageExchange);
 }
 export interface PeerConstructor {
     peer_id;

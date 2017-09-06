@@ -7,6 +7,7 @@
 import { EventEmitter } from "events";
 
 import { IPC_Handler, PeerConstructor, AbstractPeerConnection } from "./AbstractPeerConnection";
+import { IMessageExchange } from "./WebrtcSignaling";
 
 export namespace AbstractPeer {
     export abstract class BasePeer implements IPC_Handler {
@@ -79,7 +80,7 @@ export namespace AbstractPeer {
 
                     // Waiting for all ice. and then send offer.
                 }, self.onSetSessionDescriptionError);
-            }, self.onCreateSessionDescriptionError);
+            }, self.onCreateSessionDescriptionError, { iceRestart: true });
         }
         createAnswer(message) {
             let self = this;
@@ -105,6 +106,6 @@ export namespace AbstractPeer {
             self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
             self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
         }
-        handleMessage(message: any) { }
+        handleMessage(message: IMessageExchange) { }
     }
 }

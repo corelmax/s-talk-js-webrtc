@@ -50,19 +50,20 @@ var Peer = /** @class */ (function (_super) {
         else
             iceServers = configuration;
         this.pc = new RTCPeerConnection(iceServers);
-        this.pc.onicecandidate = function (event) {
-            if (!!event.candidate) {
-                self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
-            }
-            else {
-                //@ wait for all ice...
-                if (self.offer) {
-                    self.createOffer();
-                }
+        if (self.debug) {
+            console.log(JSON.stringify(iceServers));
+            console.log("connection: " + this.pc.iceConnectionState + ", Gathering: " + this.pc.iceGatheringState + ", signaling: " + this.pc.signalingState);
+        }
+        this.pc.onnegotiationneeded = function () {
+            if (self.debug)
+                console.log("onnegotiationneeded");
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
+            if (self.offer) {
+                self.createOffer();
             }
         };
-        this.pc.onnegotiationneeded = function () {
-            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
+        this.pc.onicecandidate = function (event) {
+            self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
         };
         this.pc.oniceconnectionstatechange = function (event) {
             var target = event.target;
@@ -92,6 +93,9 @@ var Peer = /** @class */ (function (_super) {
             if (self.debug)
                 console.log("onicegatheringstatechange", target.iceGatheringState);
             // When iceGatheringState == complete it fire onicecandidate with null.
+            if (target.iceGatheringState == "complete") {
+                self.sendOffer();
+            }
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
         this.pc.onsignalingstatechange = function (event) {
@@ -149,9 +153,7 @@ var Peer = /** @class */ (function (_super) {
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
-            if (!message.candidate)
-                return;
-            self.pc.addIceCandidate(new RTCIceCandidate(message.candidate));
+            self.pc.addIceCandidate(new RTCIceCandidate(message.payload));
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {
             this.parentsEmitter.emit(AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);

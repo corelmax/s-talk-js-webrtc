@@ -14,6 +14,7 @@ import {
 
 import { AbstractPeerConnection, IPC_Handler, PeerConstructor } from "../core/AbstractPeerConnection";
 import { AbstractPeer } from "../core/AbstractPeer";
+import { IMessageExchange } from "../core/WebrtcSignaling";
 
 // const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
 const configuration = {
@@ -51,21 +52,23 @@ export class Peer extends AbstractPeer.BasePeer {
             iceServers = configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
-        this.pc.onicecandidate = function (event) {
-            if (!!event.candidate) {
-                self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
-            }
-            else {
-                //@ wait for all ice...
-                if (self.offer) {
-                    self.createOffer();
-                }
-            }
-        };
+        if (self.debug) {
+            console.log(JSON.stringify(iceServers));
+            console.log(`connection: ${this.pc.iceConnectionState}, Gathering: ${this.pc.iceGatheringState}, signaling: ${this.pc.signalingState}`);
+        }
 
         this.pc.onnegotiationneeded = function () {
+            if (self.debug)
+                console.log("onnegotiationneeded");
             self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
+
+            if (self.offer) {
+                self.createOffer();
+            }
         }
+        this.pc.onicecandidate = function (event) {
+            self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
+        };
 
         this.pc.oniceconnectionstatechange = function (event) {
             let target = event.target as RTCPeerConnection;
@@ -101,6 +104,9 @@ export class Peer extends AbstractPeer.BasePeer {
                 console.log("onicegatheringstatechange", target.iceGatheringState);
 
             // When iceGatheringState == complete it fire onicecandidate with null.
+            if (target.iceGatheringState == "complete") {
+                self.sendOffer();
+            }
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
 
@@ -143,7 +149,7 @@ export class Peer extends AbstractPeer.BasePeer {
         }
     }
 
-    handleMessage(message) {
+    handleMessage(message: IMessageExchange) {
         let self = this;
         if (self.debug)
             console.log('handleMessage', message.type);
@@ -171,9 +177,7 @@ export class Peer extends AbstractPeer.BasePeer {
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
-            if (!message.candidate) return;
-
-            self.pc.addIceCandidate(new RTCIceCandidate(message.candidate));
+            self.pc.addIceCandidate(new RTCIceCandidate(message.payload));
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {
             this.parentsEmitter.emit(AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);
