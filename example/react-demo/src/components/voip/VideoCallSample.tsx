@@ -160,7 +160,7 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
         } as WebRtcConfig;
         this.webrtc = await StalkWebRtcFactory.WebRtcFactory.getObject(rtcConfig) as IWebRTC;
 
-        this.peerAdded = this.peerAdded.bind(this);
+        this.streamAdded = this.streamAdded.bind(this);
         this.removeVideo = this.removeVideo.bind(this);
         this.onStreamReady = this.onStreamReady.bind(this);
         this.connectionReady = this.connectionReady.bind(this);
@@ -170,7 +170,7 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
         this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_CLOSE, (data) => { console.log("signalling close", data) });
         this.webrtc.webrtcEvents.on(AbstractWEBRTC.JOIN_ROOM_ERROR, (err) => console.log("joinRoom fail", err));
         this.webrtc.webrtcEvents.on(AbstractWEBRTC.JOINED_ROOM, (roomname: string) => console.log("joined", roomname));
-        this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_ADDED, this.peerAdded);
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_ADDED, this.streamAdded);
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STREAM_REMOVED, this.removeVideo);
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.CONNECTIVITY_ERROR, (peer) => {
             console.log(AbstractPeerConnection.CONNECTIVITY_ERROR, peer);
@@ -263,9 +263,7 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
         });
     }
 
-    peerAdded(peer) {
-        console.log("peerAdded", peer);
-
+    streamAdded(peer) {
         let remotesView = getEl(ReactDOM.findDOMNode(this.refs.remotes));
         let remotesAudio = getEl('remoteAudio');
         if (!remotesView) return;
@@ -322,6 +320,9 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
 
     onPeerCreated(peer: IPC_Handler) {
         console.log("onPeerCreated", this.webrtc.peerManager.peers);
+        peer.pcEvent.on(AbstractPeerConnection.PeerEvent, (data) => {
+            console.log("PeerEvent", data);
+        });
         this.setState(prev => ({ ...prev, peer: peer }));
     }
 

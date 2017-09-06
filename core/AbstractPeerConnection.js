@@ -14,4 +14,5 @@ export var AbstractPeerConnection;
     AbstractPeerConnection.ANSWER = "answer";
     AbstractPeerConnection.OFFER = "offer";
     AbstractPeerConnection.CANDIDATE = "candidate";
+    AbstractPeerConnection.PeerEvent = "PeerEvent";
 })(AbstractPeerConnection || (AbstractPeerConnection = {}));

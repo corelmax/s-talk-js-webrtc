@@ -23,6 +23,7 @@ export namespace AbstractPeerConnection {
     export const ANSWER = "answer";
     export const OFFER = "offer";
     export const CANDIDATE = "candidate";
+    export const PeerEvent = "PeerEvent";
 }
 
 export interface IPC_Estabished {

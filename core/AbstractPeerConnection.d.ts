@@ -21,6 +21,7 @@ export declare namespace AbstractPeerConnection {
     const ANSWER = "answer";
     const OFFER = "offer";
     const CANDIDATE = "candidate";
+    const PeerEvent = "PeerEvent";
 }
 export interface IPC_Estabished {
     peers: Map<string, IPC_Handler>;

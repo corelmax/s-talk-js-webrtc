@@ -68,6 +68,8 @@ export class Peer extends AbstractPeer.BasePeer {
             if (self.offer) {
                 self.createOffer();
             }
+
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
         }
 
         this.pc.oniceconnectionstatechange = function (event) {
@@ -125,6 +127,7 @@ export class Peer extends AbstractPeer.BasePeer {
             if (self.debug)
                 console.log('onaddstream');
 
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onaddstream");
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_ADDED, peer);
         };
 
@@ -132,6 +135,7 @@ export class Peer extends AbstractPeer.BasePeer {
             if (self.debug)
                 console.log('onremovestream');
 
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onremovestream");
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
 
@@ -183,12 +187,12 @@ export class Peer extends AbstractPeer.BasePeer {
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
             if (!message.candidate) return;
 
-            function onAddIceCandidateSuccess() {
+            const onAddIceCandidateSuccess = () => {
                 if (self.debug)
                     console.log('addIceCandidate success');
             }
 
-            function onAddIceCandidateError(error) {
+            const onAddIceCandidateError = (error) => {
                 console.warn('failed to add ICE Candidate: ' + error.toString());
             }
             self.pc.addIceCandidate(new RTCIceCandidate(message.candidate), onAddIceCandidateSuccess, onAddIceCandidateError);

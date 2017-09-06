@@ -11,9 +11,9 @@ export declare namespace AbstractPeer {
         id: string;
         pc: RTCPeerConnection;
         channels: any;
-        pcEvent: EventEmitter;
         debug: boolean;
         readonly type: string;
+        pcEvent: EventEmitter;
         parentsEmitter: EventEmitter;
         receiveChannel: any;
         pcPeers: any;

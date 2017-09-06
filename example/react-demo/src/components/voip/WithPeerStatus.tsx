@@ -1,21 +1,23 @@
 import * as React from 'react';
 import { EventEmitter } from "events";
-import { AbstractPeerConnection } from "../../chitchat/stalk-js-webrtc/index";
+import { IPC_Handler, AbstractPeerConnection } from "stalk-js-webrtc";
 
 interface IPeerStatus {
     peerIceState: string;
     peerIceGatheringState: string;
     peerSignalingState: string;
+    peerEvent: string;
 }
 export class PeerStatus extends React.Component<{ peer }, IPeerStatus> {
-    peer;
+    peer: IPC_Handler;
 
     componentWillMount() {
         this.state = {
             peerIceState: "",
             peerIceGatheringState: "",
-            peerSignalingState: ""
-        }
+            peerSignalingState: "",
+            peerEvent: ""
+        };
 
         this.peerAdded = this.peerAdded.bind(this);
     }
@@ -30,11 +32,14 @@ export class PeerStatus extends React.Component<{ peer }, IPeerStatus> {
         }
     }
 
-    peerAdded(peer: AbstractPeerConnection.IPC_Handler) {
+    peerAdded(peer: IPC_Handler) {
         let self = this;
-        self.peer = peer;
+        self.peer = peer as IPC_Handler;
 
         let peerEvent = peer.pcEvent as EventEmitter;
+        peerEvent.on(AbstractPeerConnection.PeerEvent, (data) => {
+            self.setState(prev => ({ ...prev, peerEvent: data }));
+        });
         peerEvent.on("oniceconnectionstatechange", event => {
             self.setState(prev => ({ ...prev, peerIceState: event }));
         });
@@ -49,6 +54,7 @@ export class PeerStatus extends React.Component<{ peer }, IPeerStatus> {
     render() {
         return (
             <div>
+                <p style={{ fontSize: 11 }}>iceConnectionState: {this.state.peerEvent}</p>
                 <p style={{ fontSize: 11 }}>iceConnectionState: {this.state.peerIceState}</p>
                 <p style={{ fontSize: 11 }}>iceGatheringState: {this.state.peerIceGatheringState}</p>
                 <p style={{ fontSize: 11 }}>signalingState: {this.state.peerSignalingState}</p>

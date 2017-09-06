@@ -69,6 +69,7 @@ var Peer = /** @class */ (function (_super) {
             if (self.offer) {
                 self.createOffer();
             }
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
         };
         this.pc.oniceconnectionstatechange = function (event) {
             var target = event.target;
@@ -112,11 +113,13 @@ var Peer = /** @class */ (function (_super) {
         this.pc.onaddstream = function (peer) {
             if (self.debug)
                 console.log('onaddstream');
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onaddstream");
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_ADDED, peer);
         };
         this.pc.onremovestream = function (peer) {
             if (self.debug)
                 console.log('onremovestream');
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onremovestream");
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
         this.pc.addStream(stream);
@@ -159,13 +162,13 @@ var Peer = /** @class */ (function (_super) {
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
             if (!message.candidate)
                 return;
-            function onAddIceCandidateSuccess() {
+            var onAddIceCandidateSuccess = function () {
                 if (self.debug)
                     console.log('addIceCandidate success');
-            }
-            function onAddIceCandidateError(error) {
+            };
+            var onAddIceCandidateError = function (error) {
                 console.warn('failed to add ICE Candidate: ' + error.toString());
-            }
+            };
             self.pc.addIceCandidate(new RTCIceCandidate(message.candidate), onAddIceCandidateSuccess, onAddIceCandidateError);
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {

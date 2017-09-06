@@ -14,9 +14,9 @@ export namespace AbstractPeer {
         id: string;
         pc: RTCPeerConnection;
         channels: any;
-        pcEvent: EventEmitter;
         debug: boolean;
         readonly type: string;
+        pcEvent: EventEmitter;
         parentsEmitter: EventEmitter;
         receiveChannel;
         pcPeers;
@@ -69,14 +69,15 @@ export namespace AbstractPeer {
         createOffer() {
             let self = this;
 
-            this.pc.createOffer(function (desc) {
+            this.pc.createOffer(function (offer) {
                 if (self.debug)
                     console.log('createOffer Success');
 
-                self.pc.setLocalDescription(desc, function () {
+                self.pc.setLocalDescription(offer, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
 
+                    self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
                     //@ wait for all ice...
                     // self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
                 }, self.onSetSessionDescriptionError);
@@ -92,6 +93,7 @@ export namespace AbstractPeer {
                     if (self.debug)
                         console.log('setLocalDescription Success');
 
+                    self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createAnswer Success");
                     self.send_event(AbstractPeerConnection.ANSWER, self.pc.localDescription, { to: message.from });
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
@@ -108,6 +110,7 @@ export namespace AbstractPeer {
 
             let sdp = this.pc.localDescription;
             this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });
+            this.pcEvent.emit(AbstractPeerConnection.PeerEvent, "sendOffer to remotePeer");
         }
     }
 }
