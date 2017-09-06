@@ -77,9 +77,7 @@ export namespace AbstractPeer {
                     if (self.debug)
                         console.log('setLocalDescription Success');
 
-                    self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
-                    //@ wait for all ice...
-                    // self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+                    // Waiting for all ice. and then send offer.
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         }
@@ -98,19 +96,15 @@ export namespace AbstractPeer {
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         }
+        sendOffer() {
+            let self = this;
 
-        handleMessage(message: any) { }
+            if (!self.offer) return;
+            self.offer = false;
 
-        send_sdp_to_remote_peer() {
-            if (this.debug)
-                console.warn("try to send_sdp_to_remote_peer", this.offer);
-
-            if (this.offer == false) return;
-            this.offer = false;
-
-            let sdp = this.pc.localDescription;
-            this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });
-            this.pcEvent.emit(AbstractPeerConnection.PeerEvent, "sendOffer to remotePeer");
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
+            self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
         }
+        handleMessage(message: any) { }
     }
 }

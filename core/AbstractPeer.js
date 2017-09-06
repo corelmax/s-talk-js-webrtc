@@ -49,9 +49,7 @@ export var AbstractPeer;
                 self.pc.setLocalDescription(offer, function () {
                     if (self.debug)
                         console.log('setLocalDescription Success');
-                    self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
-                    //@ wait for all ice...
-                    // self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
+                    // Waiting for all ice. and then send offer.
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         };
@@ -68,17 +66,15 @@ export var AbstractPeer;
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError);
         };
-        BasePeer.prototype.handleMessage = function (message) { };
-        BasePeer.prototype.send_sdp_to_remote_peer = function () {
-            if (this.debug)
-                console.warn("try to send_sdp_to_remote_peer", this.offer);
-            if (this.offer == false)
+        BasePeer.prototype.sendOffer = function () {
+            var self = this;
+            if (!self.offer)
                 return;
-            this.offer = false;
-            var sdp = this.pc.localDescription;
-            this.send_event(AbstractPeerConnection.OFFER, this.pc.localDescription, { to: this.id });
-            this.pcEvent.emit(AbstractPeerConnection.PeerEvent, "sendOffer to remotePeer");
+            self.offer = false;
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
+            self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
         };
+        BasePeer.prototype.handleMessage = function (message) { };
         return BasePeer;
     }());
     AbstractPeer.BasePeer = BasePeer;

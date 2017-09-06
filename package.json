@@ -1,6 +1,6 @@
 {
   "name": "stalk-js-webrtc",
-  "version": "0.0.1-f48",
+  "version": "0.0.1-f60",
   "description": "S-Talk web-rtc javascript client implementation.",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "author": "nattapon.r <nattapon.r@live.com>",
   "license": "ISC",
   "dependencies": {
+    "detectrtc": "^1.3.5",
     "events": "^1.1.1",
     "socket.io-client": "^2.0.3",
     "tracking": "^1.1.3",

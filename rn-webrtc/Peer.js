@@ -56,13 +56,13 @@ var Peer = /** @class */ (function (_super) {
             }
             else {
                 //@ wait for all ice...
-                self.send_sdp_to_remote_peer();
+                if (self.offer) {
+                    self.createOffer();
+                }
             }
         };
         this.pc.onnegotiationneeded = function () {
-            if (self.offer) {
-                self.createOffer();
-            }
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
         };
         this.pc.oniceconnectionstatechange = function (event) {
             var target = event.target;
@@ -91,9 +91,7 @@ var Peer = /** @class */ (function (_super) {
             var target = event.target;
             if (self.debug)
                 console.log("onicegatheringstatechange", target.iceGatheringState);
-            if (self.pc.iceGatheringState === 'complete') {
-                self.send_sdp_to_remote_peer();
-            }
+            // When iceGatheringState == complete it fire onicecandidate with null.
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
         this.pc.onsignalingstatechange = function (event) {

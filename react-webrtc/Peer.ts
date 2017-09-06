@@ -9,6 +9,7 @@ import { EventEmitter } from "events";
 import { AbstractPeer, PeerConstructor, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
+import * as DetectRTC from 'detectrtc';
 
 // const twilioIceServers = [
 //     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
@@ -48,29 +49,27 @@ export class Peer extends AbstractPeer.BasePeer {
         else
             iceServers = configuration;
 
+        this.pc = new RTCPeerConnection(iceServers);
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
+            console.log(`connection: ${this.pc.iceConnectionState}, Gathering: ${this.pc.iceGatheringState}, signaling: ${this.pc.signalingState}`);
         }
 
-        this.pc = new RTCPeerConnection(iceServers);
+        this.pc.onnegotiationneeded = function () {
+            if (self.debug)
+                console.log("onnegotiationneeded");
+            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
+
+            if (self.offer) {
+                self.createOffer();
+            }
+        }
 
         this.pc.onicecandidate = function (event) {
             if (!!event.candidate) {
                 self.send_event(AbstractPeerConnection.CANDIDATE, event.candidate, { to: self.id });
             }
-            else {
-                //@ wait for all ice...
-                self.send_sdp_to_remote_peer();
-            }
         };
-
-        this.pc.onnegotiationneeded = function () {
-            if (self.offer) {
-                self.createOffer();
-            }
-
-            self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onnegotiationneeded");
-        }
 
         this.pc.oniceconnectionstatechange = function (event) {
             let target = event.target as RTCPeerConnection;
@@ -106,11 +105,10 @@ export class Peer extends AbstractPeer.BasePeer {
             if (self.debug)
                 console.log("onicegatheringstatechange", target.iceGatheringState);
 
-
-            if (self.pc.iceGatheringState === 'complete') {
-                self.send_sdp_to_remote_peer();
+            // When iceGatheringState == complete it fire onicecandidate with null.
+            if (target.iceGatheringState == "complete") {
+                self.sendOffer();
             }
-
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         }
 
@@ -139,7 +137,15 @@ export class Peer extends AbstractPeer.BasePeer {
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
 
+
         this.pc.addStream(stream);
+        // if (DetectRTC.browser.isFirefox == true) {
+        //     setTimeout(self.pc.onnegotiationneeded, 1000);
+        // }
+        DetectRTC.load(function () {
+            if (self.debug)
+                console.log("DetectRTC", DetectRTC);
+        });
 
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }

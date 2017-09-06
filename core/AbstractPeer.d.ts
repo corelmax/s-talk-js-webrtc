@@ -39,7 +39,7 @@ export declare namespace AbstractPeer {
         onCreateSessionDescriptionError(error: any): void;
         createOffer(): void;
         createAnswer(message: any): void;
+        sendOffer(): void;
         handleMessage(message: any): void;
-        send_sdp_to_remote_peer(): void;
     }
 }
