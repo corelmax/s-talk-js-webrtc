@@ -20,7 +20,7 @@ export var AbstractWEBRTC;
             this.debug = false;
             var self = this;
             self.debug = configs.debug;
-            self.iceConfig = configs.iceConfig;
+            self.iceConfig = { iceServers: [] };
             // this.signalingSocket = io.connect('https://chitchats.ga:8888', { transports: ['websocket'], 'force new connection': true });
             this.signalingSocket = io.connect(configs.signalingUrl, configs.socketOptions);
             this.send = this.send.bind(this);
@@ -55,8 +55,15 @@ export var AbstractWEBRTC;
             self.signalingSocket.on('error', function (data) {
                 console.log("SOCKET error", data);
             });
-            self.signalingSocket.on('*', function (data) {
-                console.log("SOCKET ***", data);
+            self.signalingSocket.on('stunservers', function (data) {
+                if (self.debug)
+                    console.log("stunservers", data);
+                self.iceConfig.iceServers[0] = data[0];
+            });
+            self.signalingSocket.on('turnservers', function (data) {
+                if (self.debug)
+                    console.log("turnservers", data);
+                self.iceConfig.iceServers[1] = data[0];
             });
         }
         BaseWebRTC.prototype.join = function (roomname) {

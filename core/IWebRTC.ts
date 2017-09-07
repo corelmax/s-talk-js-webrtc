@@ -12,7 +12,6 @@ export interface WebRtcConfig {
     socketOptions: any;
     debug: boolean;
     detectSpeakingEvents: boolean;
-    iceConfig: RTCConfiguration;
 }
 
 export interface IWebRTC {

@@ -113,37 +113,12 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
         });
     }
 
-    // iceServers: [
-    //     { urls: "stun:m3.xirsys.com" },
-    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:80?transport=udp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
-    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:3478?transport=udp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
-    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:80?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
-    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turn:m3.xirsys.com:3478?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
-    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turns:m3.xirsys.com:443?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" },
-    //     { "username": "371d9db4-9170-11e7-9fd2-9b8d9d68c126", urls: "turns:m3.xirsys.com:5349?transport=tcp", "credential": "371d9ec2-9170-11e7-b0b5-a852db49160e" }
-    // ]
-
     async startWebRtc() {
         let self = this;
         let rtcConfig = {
             signalingUrl: signalingServer,
             socketOptions: { 'force new connection': true },
-            debug: true,
-            iceConfig: {
-                iceServers: [
-                    {
-                        urls: ['stun:global.stun.twilio.com:3478?transport=udp']
-                    },
-                    {
-                        urls: [
-                            'turn:global.turn.twilio.com:3478?transport=udp',
-                            'turn:global.turn.twilio.com:3478?transport=tcp',
-                            'turn:global.turn.twilio.com:443?transport=tcp'],
-                        username: '36d1723a7e0ae7db1416ce815ef2ee5d4c1d915d8a2dde6580e0f3bbe7aa57a0',
-                        credential: 'a4WmwX69zzFa4rKfCxWUDNVaW+70ArkGgyUYjhJfj+s='
-                    }
-                ]
-            }
+            debug: true
         } as WebRtcConfig;
         this.webrtc = await StalkWebRtcFactory.WebRtcFactory.getObject(rtcConfig) as IWebRTC;
 

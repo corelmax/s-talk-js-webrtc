@@ -162,19 +162,21 @@ export class Peer extends AbstractPeer.BasePeer {
                 this.nick = message.payload.nick;
             delete message.payload.nick;
 
-            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
-                .then(() => {
+            // Not support promise retunn type.
+            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload),
+                function success() {
                     if (self.debug)
                         console.log("setRemoteDescription complete");
 
                     if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
                         self.createAnswer(message);
                     }
-                }).catch(self.onSetSessionDescriptionError);
+                }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
-            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
-                .catch(self.onSetSessionDescriptionError);
+            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload),
+                () => { },
+                self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
             if (!message.payload) return;
