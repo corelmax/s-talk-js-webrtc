@@ -92,6 +92,9 @@ class VideoCall extends React.Component {
             iceConfig: {
                 iceServers: [
                     {
+                        urls: ['stun:global.stun.twilio.com:3478?transport=udp']
+                    },
+                    {
                         urls: [
                             'turn:global.turn.twilio.com:3478?transport=udp',
                             'turn:global.turn.twilio.com:3478?transport=tcp',
@@ -99,16 +102,6 @@ class VideoCall extends React.Component {
                         ],
                         username: '36d1723a7e0ae7db1416ce815ef2ee5d4c1d915d8a2dde6580e0f3bbe7aa57a0',
                         credential: 'a4WmwX69zzFa4rKfCxWUDNVaW+70ArkGgyUYjhJfj+s='
-                    },
-                    {
-                        urls: [
-                            'stun:global.stun.twilio.com:3478?transport=udp',
-                            "stun:stun.l.google.com:19302",
-                            "stun:stun1.l.google.com:19302",
-                            "stun:stun2.l.google.com:19302",
-                            "stun:stun3.l.google.com:19302",
-                            "stun:stun4.l.google.com:19302"
-                        ]
                     }
                 ]
             }
