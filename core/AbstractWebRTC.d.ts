@@ -5,7 +5,6 @@
  *
  * Copyright 2017 Ahoo Studio.co.th.
  */
-import 'webrtc-adapter';
 import * as events from "events";
 import { IWebRTC, WebRtcConfig } from "./IWebRTC";
 import { IPC_Estabished } from "./AbstractPeerConnection";
