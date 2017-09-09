@@ -1,0 +1,12 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "watch": true,
+        "module": "commonjs",
+        "target": "es2015",
+        "jsx": "react-native"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
