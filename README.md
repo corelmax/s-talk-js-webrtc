@@ -12,11 +12,12 @@ Inspired by **SimpleWebRTC** https://github.com/andyet/SimpleWebRTC ,
 - [ ] React-native example.
 
 ### Features:
-- [ ] Select camera.
+- [ ] Select mic && camera.
 - [ ] Select camera madatory.
 - [ ] Pause mic, camera.
 - [ ] Volume controlable.
 - [ ] Disconnection handler.
 - [ ] Icecandidate fail handler.
 - [ ] Icecandidate timeout handler.
-- [ ] Nat traversal problem solving.
+- [ ] Screen sharing.
+- [ ] File transfer.
