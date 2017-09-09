@@ -29,7 +29,7 @@ class HomeComponent extends React.Component<{ history }, { roomName: string }> {
     }
     render() {
         return (
-            <div>
+            <Flexbox height="100vh" style={{ backgroundColor: Colors.blueGrey50 }}>
                 <Flexbox flexDirection="column" alignItems="center" width="100%" flexGrow={1}>
                     <p> S-Talk Videocall experiment.</p>
                     <TextField
@@ -72,7 +72,7 @@ class HomeComponent extends React.Component<{ history }, { roomName: string }> {
             call_end
       </FontIcon> */}
                 </Flexbox>
-            </div>
+            </Flexbox>
         );
     }
 }

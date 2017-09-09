@@ -3,6 +3,7 @@ import Flexbox from 'flexbox-react';
 import { withRouter } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import * as Colors from "material-ui/styles/colors";
 class HomeComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -23,7 +24,7 @@ class HomeComponent extends React.Component {
         console.log(error);
     }
     render() {
-        return (<div>
+        return (<Flexbox height="100vh" style={{ backgroundColor: Colors.blueGrey50 }}>
                 <Flexbox flexDirection="column" alignItems="center" width="100%" flexGrow={1}>
                     <p> S-Talk Videocall experiment.</p>
                     <TextField id="text-field-controlled" hintText="Enter videocall room name" value={this.state.roomName} onChange={(event) => this.setRoomName(event.target.value)} onKeyUp={(event) => {
@@ -41,7 +42,7 @@ class HomeComponent extends React.Component {
             this.onError("Room name is missing")}/>
                     
                 </Flexbox>
-            </div>);
+            </Flexbox>);
     }
 }
 export const Home = withRouter(HomeComponent);
