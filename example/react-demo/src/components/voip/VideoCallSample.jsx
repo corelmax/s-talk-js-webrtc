@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+// import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import Flexbox from "flexbox-react";
 import * as Colors from "material-ui/styles/colors";
 import { RaisedButton, FontIcon, Slider, FlatButton } from "material-ui";
@@ -32,16 +34,13 @@ class VideoCall extends React.Component {
             isHoverPeer: false,
             localStreamStatus: ""
         };
-        this.onBackPressed = this.onBackPressed.bind(this);
-        this.onTitlePressed = this.onTitlePressed.bind(this);
+        this.onClose = this.onClose.bind(this);
         this.changeMediaContraint = this.changeMediaContraint.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.startWebRtc();
     }
-    onBackPressed() {
-        // Jump to main menu.
-    }
-    onTitlePressed() {
+    onClose() {
+        this.props.history.replace("/");
     }
     changeMediaContraint(media) {
         let self = this;
@@ -229,10 +228,6 @@ class VideoCall extends React.Component {
             this.webrtc.leaveRoom();
             this.webrtc.disconnect();
         }
-        // this.webrtc.stopLocalVideo();
-        // this.props.dispatch(calling.onVideoCallEnded());
-    }
-    componentWillReceiveProps(nextProps) {
     }
     /**
      * Set volume to html elements
@@ -370,7 +365,7 @@ class VideoCall extends React.Component {
                     this.setState({ isPauseVideo: true });
                 }}/>}
                         <span style={{ margin: 5 }}></span>
-                        <FloatingActionButton backgroundColor={Colors.red500} mini={true}>
+                        <FloatingActionButton backgroundColor={Colors.red500} mini={true} onClick={this.onClose}>
                             <FontIcon className="material-icons">close</FontIcon>
                         </FloatingActionButton>
                     </Flexbox>
@@ -378,15 +373,4 @@ class VideoCall extends React.Component {
             </MuiThemeProvider>);
     }
 }
-// const mapStateToProps = (state) => ({
-//     userReducer: state.userReducer,
-//     alertReducer: state.alertReducer,
-//     teamReducer: state.teamReducer,
-//     stalkReducer: state.stalkReducer
-// });
-// const enhance = compose(
-//     WithDialog,
-//     withRouter,
-//     connect(mapStateToProps)
-// );
-export const VideoCallSample = VideoCall;
+export const VideoCallSample = withRouter(VideoCall);

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 // import { connect } from "react-redux";
-// import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { shallowEqual, compose } from "recompose";
 import Flexbox from "flexbox-react";
 import * as Colors from "material-ui/styles/colors";
@@ -39,7 +39,7 @@ function getEl(idOrEl) {
     }
 };
 
-class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
+class VideoCall extends React.Component<{ roomname, history }, IComponentNameState> {
     webrtc: IWebRTC;
     remotesView;
     selfView;
@@ -61,19 +61,15 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
             localStreamStatus: ""
         };
 
-        this.onBackPressed = this.onBackPressed.bind(this);
-        this.onTitlePressed = this.onTitlePressed.bind(this);
+        this.onClose = this.onClose.bind(this);
 
         this.changeMediaContraint = this.changeMediaContraint.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.startWebRtc();
     }
 
-    onBackPressed() {
-        // Jump to main menu.
-    }
-
-    onTitlePressed() {
+    onClose() {
+        this.props.history.replace("/");
     }
 
     changeMediaContraint(media: MediaStreamConstraints) {
@@ -286,12 +282,6 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
             this.webrtc.leaveRoom();
             this.webrtc.disconnect();
         }
-        // this.webrtc.stopLocalVideo();
-        // this.props.dispatch(calling.onVideoCallEnded());
-    }
-
-    componentWillReceiveProps(nextProps: IComponentProps) {
-
     }
 
     /**
@@ -479,7 +469,7 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
                                     }} />
                         }
                         <span style={{ margin: 5 }}></span>
-                        <FloatingActionButton backgroundColor={Colors.red500} mini={true} >
+                        <FloatingActionButton backgroundColor={Colors.red500} mini={true} onClick={this.onClose}>
                             <FontIcon className="material-icons" >close</FontIcon>
                         </FloatingActionButton>
                     </Flexbox>
@@ -489,15 +479,4 @@ class VideoCall extends React.Component<{ roomname }, IComponentNameState> {
     }
 }
 
-// const mapStateToProps = (state) => ({
-//     userReducer: state.userReducer,
-//     alertReducer: state.alertReducer,
-//     teamReducer: state.teamReducer,
-//     stalkReducer: state.stalkReducer
-// });
-// const enhance = compose(
-//     WithDialog,
-//     withRouter,
-//     connect(mapStateToProps)
-// );
-export const VideoCallSample = VideoCall;
+export const VideoCallSample = withRouter(VideoCall);
