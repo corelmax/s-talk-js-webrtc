@@ -4,15 +4,10 @@ import Flexbox from "flexbox-react";
 import * as Colors from "material-ui/styles/colors";
 import { RaisedButton, FontIcon, Slider, FlatButton } from "material-ui";
 import { MuiThemeProvider, getMuiTheme } from "material-ui/styles";
-// import { WithDialog } from "../toolsbox/DialogBoxEnhancer";
-import { PeerStatus } from "./WithPeerStatus";
-// import { signalingServer } from "../../Chitchat";
-// import { AbstractWEBRTC, AbstractPeerConnection, AbstractMediaStream, WebRtcFactory } from "../../chitchat/stalk-js-webrtc/index";
-// import { createStreamByText, createDummyStream } from '../../chitchat/stalk-js-webrtc/libs/StreamHelper';
-// import { IComponentProps } from "../../utils/IComponentProps";
-// import { SimpleToolbar } from "../../components/SimpleToolbar";
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { AbstractWEBRTC, AbstractMediaStream, AbstractPeerConnection, StalkWebRtcFactory } from "stalk-js-webrtc";
 import { createDummyStream, createStreamByText } from "stalk-js-webrtc/libs/StreamHelper";
+import { PeerStatus } from "./WithPeerStatus";
 const signalingServer = "https://chitchats.ga:8888";
 function getEl(idOrEl) {
     if (typeof idOrEl === 'string') {
@@ -271,10 +266,10 @@ class VideoCall extends React.Component {
             }
         }
         return (<MuiThemeProvider>
-                <Flexbox flexDirection="column" style={{ backgroundColor: Colors.blueGrey50 }}>
-                    <Flexbox flexDirection="row" height="100%" justifyContent={"flex-start"}>
-                        <div ref="localContainer" style={{ position: 'relative', width: '200px', height: '100%' }}>
-                            <video style={{ background: "#000", height: "150px", width: '100%' }} className="local" id="localVideo" ref="localVideo" autoPlay={true} muted={true}>
+                <Flexbox flexDirection="column" height="100vh" style={{ backgroundColor: Colors.blueGrey50 }}>
+                    <Flexbox flexDirection="row" justifyContent={"flex-start"}>
+                        <div ref="localContainer" style={{ position: 'relative', width: '300px', height: '100%' }}>
+                            <video style={{ background: "#000", width: '100%' }} className="local" id="localVideo" ref="localVideo" autoPlay={true} muted={true}>
                             </video>
                             <Slider min={0} max={100} step={1} disabled={disabledAudioOption} defaultValue={100} sliderStyle={{
             margin: 0,
@@ -283,30 +278,7 @@ class VideoCall extends React.Component {
             this.webrtc.userMedia.audioController.setVolume(newValue / 100);
         }}/>
                             <div>{`Mic volume (${this.state.micVol}%)`}</div>
-                            {this.state.isMuteVoice ?
-            <RaisedButton secondary disabled={disabledAudioOption} icon={<FontIcon className="material-icons">mic_off</FontIcon>} onClick={() => {
-                this.webrtc.userMedia.audioController.setVolume(this.state.micVol / 100);
-                this.setState({ isMuteVoice: false });
-            }}/>
-            :
-                <RaisedButton disabled={disabledAudioOption} icon={<FontIcon className="material-icons">mic</FontIcon>} onClick={() => {
-                    this.webrtc.userMedia.audioController.setVolume(0);
-                    this.setState({ isMuteVoice: true });
-                }}/>}
-                            {this.state.isPauseVideo ?
-            <RaisedButton secondary disabled={disabledVideoOption} icon={<FontIcon className="material-icons">videocam_off</FontIcon>} onClick={() => {
-                // send to peer
-                this.sendMessage(AbstractPeerConnection.UNPAUSE);
-                this.webrtc.userMedia.videoController.setVideoEnabled(true);
-                this.setState({ isPauseVideo: false });
-            }}/>
-            :
-                <RaisedButton disabled={disabledVideoOption} icon={<FontIcon className="material-icons">videocam</FontIcon>} onClick={() => {
-                    // send to peer
-                    this.sendMessage(AbstractPeerConnection.PAUSE);
-                    this.webrtc.userMedia.videoController.setVideoEnabled(false);
-                    this.setState({ isPauseVideo: true });
-                }}/>}
+
                             <FlatButton label="HD" primary={true} onClick={() => this.changeMediaContraint(AbstractMediaStream.hdConstraints)}/>
                             <FlatButton label="VGA" primary={true} onClick={() => this.changeMediaContraint(AbstractMediaStream.vgaConstraints)}/>
                             <FlatButton label="QVGA" primary={true} onClick={() => this.changeMediaContraint(AbstractMediaStream.qvgaConstraints)}/>
@@ -369,6 +341,38 @@ class VideoCall extends React.Component {
                             </div>
                             <PeerStatus peer={this.state.peer}/>
                         </div>
+                    </Flexbox>
+                    <span style={{ margin: 5 }}></span>
+                    <Flexbox flexDirection="row" justifyContent='center' alignItems="center">
+                        {this.state.isMuteVoice ?
+            <RaisedButton secondary disabled={disabledAudioOption} icon={<FontIcon className="material-icons">mic_off</FontIcon>} onClick={() => {
+                this.webrtc.userMedia.audioController.setVolume(this.state.micVol / 100);
+                this.setState({ isMuteVoice: false });
+            }}/>
+            :
+                <RaisedButton disabled={disabledAudioOption} icon={<FontIcon className="material-icons">mic</FontIcon>} onClick={() => {
+                    this.webrtc.userMedia.audioController.setVolume(0);
+                    this.setState({ isMuteVoice: true });
+                }}/>}
+                        <span style={{ margin: 5 }}></span>
+                        {this.state.isPauseVideo ?
+            <RaisedButton secondary disabled={disabledVideoOption} icon={<FontIcon className="material-icons">videocam_off</FontIcon>} onClick={() => {
+                // send to peer
+                this.sendMessage(AbstractPeerConnection.UNPAUSE);
+                this.webrtc.userMedia.videoController.setVideoEnabled(true);
+                this.setState({ isPauseVideo: false });
+            }}/>
+            :
+                <RaisedButton disabled={disabledVideoOption} icon={<FontIcon className="material-icons">videocam</FontIcon>} onClick={() => {
+                    // send to peer
+                    this.sendMessage(AbstractPeerConnection.PAUSE);
+                    this.webrtc.userMedia.videoController.setVideoEnabled(false);
+                    this.setState({ isPauseVideo: true });
+                }}/>}
+                        <span style={{ margin: 5 }}></span>
+                        <FloatingActionButton backgroundColor={Colors.red500} mini={true}>
+                            <FontIcon className="material-icons">close</FontIcon>
+                        </FloatingActionButton>
                     </Flexbox>
                 </Flexbox>
             </MuiThemeProvider>);

@@ -17,18 +17,13 @@ class HomeComponent extends React.Component<{ history }, { roomName: string }> {
         };
         this.setRoomName = this.setRoomName.bind(this);
         this.onVideoCall = this.onVideoCall.bind(this);
-        this.endCall = this.endCall.bind(this);
     }
     setRoomName(roomName) {
         this.setState({ roomName: roomName });
     }
     onVideoCall(roomName) {
-        // this.setState({ call: !this.state.call });
         this.props.history.push(`/${this.state.roomName}`);
     };
-    endCall() {
-        this.setState(prev => ({ ...prev, call: false, roomname: "" }));
-    }
     onError(error) {
         console.log(error);
     }
