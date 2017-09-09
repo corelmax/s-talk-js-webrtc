@@ -19,10 +19,10 @@ import {
 import { createDummyStream, createStreamByText } from "stalk-js-webrtc/libs/StreamHelper";
 
 interface MyCompProps {
-    match;
-    history;
+    match?;
+    history?;
     onError;
-    onClose;
+    onClose: () => void;
     getWebRtc;
     onJoinedRoom: (roomname: string) => void;
 }

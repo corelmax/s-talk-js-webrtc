@@ -6,49 +6,10 @@ import { shallowEqual, compose } from "recompose";
 import Flexbox from "flexbox-react";
 
 import { WebRtcPage } from "./WebRtcComponent";
-import { PeerStatus } from "./WithPeerStatus";
 
-interface IComponentNameState {
-    selfViewSrc;
-    remoteSrc;
-    isMuteVoice;
-    isPauseVideo;
-    remoteVolume;
-    micVol;
-    peer;
-    isHoverPeer;
-    localStreamStatus: string;
-}
-
-
-function getEl(idOrEl) {
-    if (typeof idOrEl === 'string') {
-        return document.getElementById(idOrEl);
-    } else {
-        return idOrEl;
-    }
-};
-
-class VideoCall extends React.Component<{ roomname, history }, IComponentNameState> {
-    remotesView;
-    selfView;
-    selfAudioName: string;
-    selfVideoName: string;
-
+class VideoCall extends React.Component<{ roomname, history }, any> {
     constructor(props) {
         super(props);
-
-        this.state = {
-            isMuteVoice: false,
-            isPauseVideo: false,
-            micVol: 100,
-            selfViewSrc: null,
-            remoteSrc: null,
-            peer: null,
-            remoteVolume: 100,
-            isHoverPeer: false,
-            localStreamStatus: ""
-        };
 
         this.onClose = this.onClose.bind(this);
     }
