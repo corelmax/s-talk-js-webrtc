@@ -14,8 +14,8 @@ Inspired by **SimpleWebRTC** https://github.com/andyet/SimpleWebRTC ,
 ### Features:
 - [ ] Select mic && camera.
 - [ ] Select camera madatory.
-- [ ] Pause mic, camera.
-- [ ] Volume controlable.
+- [x] Pause mic, camera.
+- [x] Volume controlable.
 - [ ] Disconnection handler.
 - [ ] Icecandidate fail handler.
 - [ ] Icecandidate timeout handler.
