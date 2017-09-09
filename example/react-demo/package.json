@@ -8,9 +8,10 @@
     "material-ui": "^0.19.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.12",
     "recompose": "^0.25.0",
-    "stalk-js-webrtc": "0.0.1-f67"
+    "stalk-js-webrtc": "0.0.1-f68"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,6 +24,7 @@
     "@types/material-ui": "^0.18.0",
     "@types/react": "^16.0.5",
     "@types/react-dom": "^15.5.4",
+    "@types/react-router-dom": "^4.0.7",
     "@types/recompose": "^0.24.1"
   }
 }
