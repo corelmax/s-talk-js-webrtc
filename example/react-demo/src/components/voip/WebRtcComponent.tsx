@@ -10,7 +10,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import * as Colors from "material-ui/styles/colors";
 
 import { PeerStatus } from "./WithPeerStatus";
-const signalingServer = "https://chitchats.ga:8889";
+const signalingServer = "https://chitchats.ga:8888";
 import {
     AbstractWEBRTC, AbstractMediaStream,
     AbstractPeerConnection, IWebRTC,
