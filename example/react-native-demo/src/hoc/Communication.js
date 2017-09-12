@@ -131,6 +131,7 @@ export default (Comp) => {
         switchVideoType() {
             let self = this
             const isFront = !this.state.isFront;
+            self.webrtc.userMedia.stopLocalStream();
             self.setState({ isFront });
 
             let mediaContrains = {
