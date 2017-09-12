@@ -15,7 +15,8 @@ var Spinner = require('react-native-spinkit');
 const VideoCall = (props) => {
     let { communication } = props
     let { goBack } = props.navigate
-
+    let roomName = props.navigate.state.params.roomName;
+    //console.log(props);
     return (
         <Container>
             <View style={{ flex: 1 }}>
@@ -43,7 +44,7 @@ const VideoCall = (props) => {
                     time: communication.state.time
                 }} />
             </View>
-            <Loading loading={!communication.state.ready ? true : false} />
+            <Loading roomName = {roomName} loading={!communication.state.ready ? true : false} />
         </Container>
     )
 }
@@ -53,7 +54,10 @@ export default Communication(VideoCall);
 const Loading = (props) => (
     props.loading ?
         <ContainerLoading>
-            <Text style={{ color: 'white', fontSize: 18 }}>Wait for Initializing...</Text>
+            <Text style={{ color: 'white', fontSize: 18 }}>
+                {/* Wait for Initializing... */}
+                Connecting to room {props.roomName}...
+            </Text>
             <Spinner
                 style={{ marginTop: 10 }}
                 isVisible={props.loading}
