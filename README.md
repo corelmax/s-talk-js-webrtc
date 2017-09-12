@@ -5,7 +5,10 @@ Universal javascript WebRTC interface implementation.
 Inspired by **SimpleWebRTC** https://github.com/andyet/SimpleWebRTC ,
 && **react-native-webrtc** https://github.com/oney/react-native-webrtc .
 
-Signaling server base on **signalmaster** https://github.com/andyet/signalmaster
+Signaling server base on **signalmaster** https://github.com/andyet/signalmaster .
+
+For detail see https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/
+
 * This project has develop and maintained by AhooStudio.co.th.
 * Copyright (c)2017 AhooStudio.co.th
 
