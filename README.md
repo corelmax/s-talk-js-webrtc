@@ -7,6 +7,8 @@ Inspired by **SimpleWebRTC** https://github.com/andyet/SimpleWebRTC ,
 * This project has develop and maintained by AhooStudio.co.th.
 * Copyright (c)2017 AhooStudio.co.th
 
+[![https://nodei.co/npm/stalk-js-webrtc.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/stalk-js-webrtc.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/s-talk-js-webrtc)
+
 ### Roadmap: 
 - [x] Browser example.
 - [x] React-native example.
