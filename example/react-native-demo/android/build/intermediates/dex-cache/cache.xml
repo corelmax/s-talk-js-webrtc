@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.android/build-cache/9cbda0442250d0dccbb436899543830dfe225fdd/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e0d3ed952690fd8723057c00a82f5647116d58f3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/jars/libs/infer-annotations-4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9809e90be788acdb479b2b44e2112f3295a03068">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/infer-annotations-4.0_2efb376332179173ef45955291a6e121f7fe6bf6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-webrtc/android/build/intermediates/bundles/default/libs/libwebrtc.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="81ee2a1f40c6ab3759edf66344ebb5a2b24ae99a">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/8/libwebrtc_7b00bae159f335cb3b983ea446ba4ec8a11e26f3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.6.0/69edde9fc4b01c9fd51d25b83428837478c27254/okhttp-3.6.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="69edde9fc4b01c9fd51d25b83428837478c27254">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/okhttp-3.6.0_522639646df1dfdcb9fd307c2245faf1e436577f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.android/build-cache/ef526ceee6903b9e87b2f813248c3d02702efd26/output/jars/libs/internal_impl-23.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.0.1_9aa8f6a204ba8d7ae717a55a996ee678852606a1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_6a58e6c81740671d4ed5ffa87c6211119985df38/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp-urlconnection/3.6.0/3f9b16b774f2c36cfd86dd2053d0b3059531dacc/okhttp-urlconnection-3.6.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3f9b16b774f2c36cfd86dd2053d0b3059531dacc">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/okhttp-urlconnection-3.6.0_e59dab1f3e421ceb1a12c8b8484441e0504ba812/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="576b5113887747a7592650ae14d980e1c57983c4">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_805ddbb49b3dbe29f4b0acd7939ab1eeb57db628/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.0.1_6fe6d20b1eaafdd44cde86b680e12308e9a65f1a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a9283170b7305c8d92d25aff02a6ab7e45d06cbe">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/okio-1.13.0_511897be010de2f4e6b64573e3cb2e4e6f686bb0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="5664432d62c6ca40aedf1f8b8f9c01773ea19007">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_d8f66a3b25d4c24c66256fd323b99a750a13bbc9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.android/build-cache/ef526ceee6903b9e87b2f813248c3d02702efd26/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ead64df21e4b82048b013e51c601f114a05a3769/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/nattapon.r/.android/build-cache/15caad4c004fe95cf5c695a10a9df6768a4411c3/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="21c0f1b0de29bfe601028757c5cb125c343f5164">
+        <dex dex="/Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_84f82dcad91bc52b3251f519e181dd9eb309a9d1/classes.dex" />
+    </item>
+
+</items>

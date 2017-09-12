@@ -1,0 +1,5 @@
+version: "Apple Swift version 3.1 (swiftlang-802.0.53 clang-802.0.42)"
+options: "f9108b15b569f140674037fff2945b74"
+build_time: [558157858, 116524000]
+inputs:
+  "/Users/nattapon.r/Projects/projects/webrtc-rn-demo/node_modules/react-native-incall-manager/ios/RNInCallManager/RNInCallManager.swift": [555513010, 0]

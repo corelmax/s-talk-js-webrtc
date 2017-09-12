@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="react-native-0.47.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/jars/libs/infer-annotations-4.0.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../node_modules/react-native/android/com/facebook/react/react-native/0.47.2/react-native-0.47.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

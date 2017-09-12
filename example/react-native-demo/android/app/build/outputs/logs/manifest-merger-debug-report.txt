@@ -1,0 +1,102 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:1:1-32:12
+	package
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:2:5-31
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:4:5-30
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+	android:versionCode
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:3:5-28
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:1:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:6:5-67
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:6:22-64
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:7:5-77
+MERGED from [com.facebook.react:react-native:0.47.2] /Users/nattapon.r/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/AndroidManifest.xml:11:5-78
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:7:22-75
+uses-sdk
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:9:5-11:41
+MERGED from [WebRtcRNDemo:react-native-webrtc:unspecified] /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-webrtc/android/build/intermediates/bundles/default/AndroidManifest.xml:7:5-9:41
+MERGED from [WebRtcRNDemo:react-native-incall-manager:unspecified] /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-incall-manager/android/build/intermediates/bundles/default/AndroidManifest.xml:7:5-9:41
+MERGED from [WebRtcRNDemo:react-native-vector-icons:unspecified] /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-vector-icons/android/build/intermediates/bundles/default/AndroidManifest.xml:7:5-9:41
+MERGED from [WebRtcRNDemo:react-native-spinkit:unspecified] /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-spinkit/android/build/intermediates/bundles/default/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.ybq:Android-SpinKit:1.1.0] /Users/nattapon.r/.android/build-cache/15caad4c004fe95cf5c695a10a9df6768a4411c3/output/AndroidManifest.xml:6:5-8:41
+MERGED from [com.facebook.react:react-native:0.47.2] /Users/nattapon.r/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:appcompat-v7:23.0.1] /Users/nattapon.r/.android/build-cache/9cbda0442250d0dccbb436899543830dfe225fdd/output/AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-v4:23.0.1] /Users/nattapon.r/.android/build-cache/ef526ceee6903b9e87b2f813248c3d02702efd26/output/AndroidManifest.xml:20:5-43
+MERGED from [com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0] /Users/nattapon.r/.android/build-cache/bcf9720ae5d904b529a07b17fa55b487b43cfb90/output/AndroidManifest.xml:14:5-16:41
+MERGED from [com.facebook.fresco:fresco:1.0.1] /Users/nattapon.r/.android/build-cache/f91887d2e47020f1d8b3a995d2f6aa03690cbc39/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:drawee:1.0.1] /Users/nattapon.r/.android/build-cache/89e1ac96182997b948b691c77c9c88f4bb92fa0a/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.0.1] /Users/nattapon.r/.android/build-cache/53ae1ccd466680085bae477bc4202c281288fb73/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:1.0.1] /Users/nattapon.r/.android/build-cache/17bdbd5b9be07357032098a8d4e063599f566225/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:1.0.1] /Users/nattapon.r/.android/build-cache/a72f0f83dc5ed3bf657fc48422f6f7b9675c09d6/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:1.0.1] /Users/nattapon.r/.android/build-cache/4207161168266128253cb1586c979f7b4cbd06e9/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.soloader:soloader:0.1.0] /Users/nattapon.r/.android/build-cache/bb83fde989b4ab696676725af948acd538e71bb0/output/AndroidManifest.xml:2:3-70
+	android:targetSdkVersion
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:11:9-38
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:10:9-35
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml
+application
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:13:5-30:19
+MERGED from [WebRtcRNDemo:react-native-spinkit:unspecified] /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-spinkit/android/build/intermediates/bundles/default/AndroidManifest.xml:11:5-14:19
+MERGED from [com.facebook.react:react-native:0.47.2] /Users/nattapon.r/.android/build-cache/2ce718173127a976cb39cc063f53f1e5c92db1fb/output/AndroidManifest.xml:13:5-20
+MERGED from [com.android.support:appcompat-v7:23.0.1] /Users/nattapon.r/.android/build-cache/9cbda0442250d0dccbb436899543830dfe225fdd/output/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.0.1] /Users/nattapon.r/.android/build-cache/ef526ceee6903b9e87b2f813248c3d02702efd26/output/AndroidManifest.xml:22:5-20
+MERGED from [com.facebook.soloader:soloader:0.1.0] /Users/nattapon.r/.android/build-cache/bb83fde989b4ab696676725af948acd538e71bb0/output/AndroidManifest.xml:3:3-17
+MERGED from [org.webkit:android-jsc:r174650] /Users/nattapon.r/.android/build-cache/d84d2366336c1d140b7c775076a79db4803bcf67/output/AndroidManifest.xml:2:3-17
+	android:label
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:16:7-39
+	android:supportsRtl
+		ADDED from [WebRtcRNDemo:react-native-spinkit:unspecified] /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/node_modules/react-native-spinkit/android/build/intermediates/bundles/default/AndroidManifest.xml:13:9-35
+	android:allowBackup
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:15:7-33
+	android:icon
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:17:7-41
+	android:theme
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:18:7-38
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:14:7-38
+activity#com.webrtcrndemo.MainActivity
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:19:7-28:18
+	android:label
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:21:9-41
+	android:windowSoftInputMode
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:23:9-51
+	android:configChanges
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:22:9-79
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:20:9-37
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:24:9-27:25
+action#android.intent.action.MAIN
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:25:13-65
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:25:21-62
+category#android.intent.category.LAUNCHER
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:26:13-73
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:26:23-70
+activity#com.facebook.react.devsupport.DevSettingsActivity
+ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:29:7-84
+	android:name
+		ADDED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:29:17-81
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+IMPLIED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:1:1-32:12 reason: org.webkit.android_jsc has a targetSdkVersion < 4
+uses-permission#android.permission.READ_PHONE_STATE
+IMPLIED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:1:1-32:12 reason: org.webkit.android_jsc has a targetSdkVersion < 4
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+IMPLIED from /Users/nattapon.r/Projects/stalk/stalk-js-webrtc/example/react-native-demo/android/app/src/main/AndroidManifest.xml:1:1-32:12 reason: org.webkit.android_jsc requested WRITE_EXTERNAL_STORAGE
