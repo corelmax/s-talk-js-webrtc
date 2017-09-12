@@ -6,7 +6,7 @@ const WebViewComponent = (props) => {
     const { navigate } = props;
     return (
         <WebView
-            source={{ uri: 'http://localhost:8080/' }} //http://localhost:8080 'https://ooca-webrtc.firebaseapp.com'
+            source={{ uri: 'https://ooca-webrtc.firebaseapp.com' }} //http://localhost:8080 'https://ooca-webrtc.firebaseapp.com'
             javaScriptEnabled={true}
             startInLoadingState={true}
             onMessage={(event) => {
