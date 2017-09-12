@@ -38,7 +38,9 @@ export default (Comp) => {
             this.connectionClose = this.connectionClose.bind(this);
 
             let rtcConfig = {
-                signalingUrl: `https://chitchats.ga:8888`,
+                signalingUrl: 'https://sandbox.simplewebrtc.com:443',
+                // `http://chitchats.ga:8888`,
+                // 'http://192.168.1.105:8888', 
                 socketOptions: { transports: ['websocket'], 'force new connection': true },
                 debug: true
             };
@@ -48,21 +50,22 @@ export default (Comp) => {
                 if (!!self.webrtc) {
                     self.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_READY, (socker_id) => {
                         let mediaContrains = {
-                            audio: true, video: false
-                            // video: {
-                            //     mandatory: {
-                            //         minWidth: 640, // Provide your own width, height and frame rate here
-                            //         minHeight: 360,
-                            //         minFrameRate: 24,
-                            //     }
-                            // }
+                            audio: true, //video: false
+                            video: {
+                                mandatory: {
+                                    minWidth: 640, // Provide your own width, height and frame rate here
+                                    minHeight: 360,
+                                    minFrameRate: 24,
+                                }
+                            }
                         };
+                        self.webrtc.userMedia.stopLocalStream();
                         self.webrtc.userMedia.startLocalStream(mediaContrains, true)
                             .then(function (stream) {
                                 self.setState({ selfViewSrc: stream.toURL(), ready: true });
                                 self.webrtc.join(self.props.roomName || "test");
                             }).catch(error => {
-                                console.warn(error);
+                                console.warn("startLocalStream: ",error);
                                 alert(error);
                             });
                     });
@@ -143,7 +146,7 @@ export default (Comp) => {
                     }
                 }
             }
-
+            self.webrtc.userMedia.stopLocalStream();
             self.webrtc.userMedia.startLocalStream(mediaContrains, isFront).then(function (stream) {
                 let peers = self.webrtc.peerManager.getPeers();
                 self.setState({ selfViewSrc: stream.toURL() });
