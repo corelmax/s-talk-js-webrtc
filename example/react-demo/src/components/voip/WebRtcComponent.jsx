@@ -7,7 +7,7 @@ import { RaisedButton, FontIcon, Slider, FlatButton } from "material-ui";
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import * as Colors from "material-ui/styles/colors";
 import { PeerStatus } from "./WithPeerStatus";
-const signalingServer = "https://chitchats.ga:8888";
+const signalingServer = "https://chitchats.ga:8889";
 import { AbstractWEBRTC, AbstractMediaStream, AbstractPeerConnection, StalkWebRtcFactory } from "stalk-js-webrtc";
 import { createDummyStream, createStreamByText } from "stalk-js-webrtc/libs/StreamHelper";
 function getEl(idOrEl) {
