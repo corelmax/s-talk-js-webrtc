@@ -17,6 +17,9 @@ For detail see https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/
 ### Roadmap: 
 - [x] Browser example.
 - [x] React-native example.
+- [x] Chrome, Firefox
+- [ ] Edge
+- [ ] Safari 11
 
 ### Features:
 - [ ] Select mic && camera.
@@ -27,4 +30,5 @@ For detail see https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/
 - [ ] Icecandidate fail handler.
 - [ ] Icecandidate timeout handler.
 - [ ] Screen sharing.
+- [ ] Data Channel.
 - [ ] File transfer.
