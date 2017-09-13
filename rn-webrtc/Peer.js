@@ -17,16 +17,6 @@ import { EventEmitter } from 'events';
 import { RTCPeerConnection, RTCIceCandidate, RTCSessionDescription, } from 'react-native-webrtc';
 import { AbstractPeerConnection } from "../core/AbstractPeerConnection";
 import { AbstractPeer } from "../core/AbstractPeer";
-// const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
-var configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
 var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     /**
@@ -48,7 +38,7 @@ var Peer = /** @class */ (function (_super) {
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
         this.pc = new RTCPeerConnection(iceServers);
         if (self.debug) {
             console.log(JSON.stringify(iceServers));

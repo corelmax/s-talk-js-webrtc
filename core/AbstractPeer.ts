@@ -121,6 +121,7 @@ export namespace AbstractPeer {
             self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
             self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
         }
-        handleMessage(message: IMessageExchange) { }
+        abstract handleMessage(message: IMessageExchange);
+        abstract getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<any>;
     }
 }

@@ -1,6 +1,10 @@
 import { AbstractPeer, PeerConstructor } from "../index";
 import { IMessageExchange } from "../core/WebrtcSignaling";
+export declare type GetPeerStats = (track: MediaStreamTrack, cb: Function, sec_interval: number) => void;
 export declare class Peer extends AbstractPeer.BasePeer {
+    getPeerStats: GetPeerStats;
+    audioTracks: MediaStreamTrack[];
+    videoTracks: MediaStreamTrack[];
     /**
      * reture PeerConnection
      * @param socket
@@ -9,7 +13,7 @@ export declare class Peer extends AbstractPeer.BasePeer {
      */
     constructor(config: PeerConstructor);
     initPeerConnection(stream: MediaStream, iceConfig: RTCConfiguration): void;
-    getStats(): void;
+    getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<{}>;
     handleMessage(message: IMessageExchange): void;
     sendDirectly(channel: any, messageType: any, payload: any): boolean;
     getDataChannel(name: any): any;

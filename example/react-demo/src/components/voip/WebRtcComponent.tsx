@@ -116,6 +116,7 @@ class WebRtcComponent extends React.Component<MyCompProps, IComponentNameState> 
         this.onStreamReady = this.onStreamReady.bind(this);
         this.connectionReady = this.connectionReady.bind(this);
         this.onPeerCreated = this.onPeerCreated.bind(this);
+        this.onPeerStatsReady = this.onPeerStatsReady.bind(this);
 
         this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_READY, this.connectionReady);
         this.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_CLOSE, (data) => { console.log("signalling close", data) });
@@ -149,6 +150,19 @@ class WebRtcComponent extends React.Component<MyCompProps, IComponentNameState> 
         });
         this.webrtc.webrtcEvents.on(AbstractPeerConnection.ON_ICE_CONNECTED, (peers) => {
             console.log("on ice connected", peers);
+        });
+        this.webrtc.webrtcEvents.on(AbstractPeerConnection.PEER_STATS_READY, this.onPeerStatsReady);
+    }
+
+    onPeerStatsReady() {
+        console.log("PEER_STATS_READY", this.webrtc.peerManager.peers);
+
+        this.webrtc.peerManager.peers.forEach(peer => {
+            peer.getStats(2000).then(result => {
+                console.log("getStats success", result);
+            }).catch(err => {
+                console.log("getStats fail", err);
+            });
         });
     }
 

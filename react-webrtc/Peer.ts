@@ -11,9 +11,16 @@ import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 import { IMessageExchange } from "../core/WebrtcSignaling";
 import * as DetectRTC from 'detectrtc';
-import * as getStats from "getStats";
 
+export type GetPeerStats = (track: MediaStreamTrack, cb: Function, sec_interval: number) => void;
+
+const getStats = window["getStats"] as GetPeerStats
 export class Peer extends AbstractPeer.BasePeer {
+
+    getPeerStats: GetPeerStats;
+    audioTracks: MediaStreamTrack[];
+    videoTracks: MediaStreamTrack[];
+
     /**
      * reture PeerConnection
      * @param socket
@@ -22,8 +29,6 @@ export class Peer extends AbstractPeer.BasePeer {
      */
     constructor(config: PeerConstructor) {
         super(config);
-
-        console.log(getStats);
 
         this.initPeerConnection(config.stream, config.iceConfig);
     }
@@ -40,6 +45,8 @@ export class Peer extends AbstractPeer.BasePeer {
             iceServers = this.configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
+        this.pc["getPeerStats"] = getStats;
+        this.getPeerStats = self.pc["getPeerStats"];
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
             console.log(`connection: ${this.pc.iceConnectionState}, Gathering: ${this.pc.iceGatheringState}, signaling: ${this.pc.signalingState}`);
@@ -68,9 +75,7 @@ export class Peer extends AbstractPeer.BasePeer {
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
 
             if (target.iceConnectionState === 'completed') {
-                // setTimeout(() => {
-                //     self.getStats();
-                // }, 1000);
+                self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
             else if (target.iceConnectionState === 'connected') {
@@ -138,18 +143,38 @@ export class Peer extends AbstractPeer.BasePeer {
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
 
-    getStats() {
+    getStats(mediaTrack: MediaStreamTrack, secInterval: number) {
         let self = this;
-        const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
-        const pc = peer.pc as RTCPeerConnection;
+        let mediaStreams = self.pc.getRemoteStreams();
+        self.audioTracks = new Array() as MediaStreamTrack[];
+        self.videoTracks = new Array() as MediaStreamTrack[];
+        mediaStreams.map(stream => self.audioTracks.concat(stream.getAudioTracks()));
+        mediaStreams.map(stream => self.videoTracks.concat(stream.getVideoTracks()));
 
-        if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
-            const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
+        return new Promise((resolve, rejected) => {
+            try {
+                self.getPeerStats(mediaTrack, result => {
+                    if (self.debug) {
+                        console.log("getStats: ", mediaTrack.id, result);
+                    }
+                    resolve(result);
+                }, secInterval);
+            }
+            catch (ex) {
+                rejected(ex.message);
+            }
+        });
 
-            pc.getStats(track, (report) => {
-                console.log('getStats report', report);
-            }, self.logError);
-        }
+        // const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
+        // const pc = peer.pc as RTCPeerConnection;
+
+        // if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
+        //     const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
+
+        //     pc.getStats(track, (report) => {
+        //         console.log('getStats report', report);
+        //     }, self.logError);
+        // }
     }
 
     handleMessage(message: IMessageExchange) {

@@ -18,19 +18,7 @@ import { AbstractPeer, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 import * as DetectRTC from 'detectrtc';
-// const twilioIceServers = [
-//     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
-// ];
-// configuration.iceServers = twilioIceServers;
-var configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
+var getStats = window["getStats"];
 var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     /**
@@ -52,8 +40,10 @@ var Peer = /** @class */ (function (_super) {
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
         this.pc = new RTCPeerConnection(iceServers);
+        this.pc["getPeerStats"] = getStats;
+        this.getPeerStats = self.pc["getPeerStats"];
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
             console.log("connection: " + this.pc.iceConnectionState + ", Gathering: " + this.pc.iceGatheringState + ", signaling: " + this.pc.signalingState);
@@ -75,9 +65,7 @@ var Peer = /** @class */ (function (_super) {
                 console.log('oniceconnectionstatechange', target.iceConnectionState);
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
             if (target.iceConnectionState === 'completed') {
-                // setTimeout(() => {
-                //     self.getStats();
-                // }, 1000);
+                self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
             else if (target.iceConnectionState === 'connected') {
@@ -131,16 +119,34 @@ var Peer = /** @class */ (function (_super) {
         });
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     };
-    Peer.prototype.getStats = function () {
+    Peer.prototype.getStats = function (mediaTrack, secInterval) {
         var self = this;
-        var peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
-        var pc = peer.pc;
-        if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
-            var track = pc.getRemoteStreams()[0].getAudioTracks()[0];
-            pc.getStats(track, function (report) {
-                console.log('getStats report', report);
-            }, self.logError);
-        }
+        var mediaStreams = self.pc.getRemoteStreams();
+        self.audioTracks = new Array();
+        self.videoTracks = new Array();
+        mediaStreams.map(function (stream) { return self.audioTracks.concat(stream.getAudioTracks()); });
+        mediaStreams.map(function (stream) { return self.videoTracks.concat(stream.getVideoTracks()); });
+        return new Promise(function (resolve, rejected) {
+            try {
+                self.getPeerStats(mediaTrack, function (result) {
+                    if (self.debug) {
+                        console.log("getStats: ", mediaTrack.id, result);
+                    }
+                    resolve(result);
+                }, secInterval);
+            }
+            catch (ex) {
+                rejected(ex.message);
+            }
+        });
+        // const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
+        // const pc = peer.pc as RTCPeerConnection;
+        // if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
+        //     const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
+        //     pc.getStats(track, (report) => {
+        //         console.log('getStats report', report);
+        //     }, self.logError);
+        // }
     };
     Peer.prototype.handleMessage = function (message) {
         var self = this;
