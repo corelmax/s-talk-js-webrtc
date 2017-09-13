@@ -94,7 +94,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
             // When iceGatheringState == complete it fire onicecandidate with null.
             if (target.iceGatheringState == "complete") {
-                // self.sendOffer();
+                self.sendOffer();
             }
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
@@ -122,23 +122,6 @@ export class Peer extends AbstractPeer.BasePeer {
         this.pc.addStream(stream);
 
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
-    }
-
-    createOffer() {
-        let self = this;
-
-        this.pc.createOffer(function (offer) {
-            if (self.debug)
-                console.log('createOffer Success');
-
-            self.pc.setLocalDescription(offer, function () {
-                if (self.debug)
-                    console.log('setLocalDescription Success');
-
-                // Waiting for all ice. and then send offer.
-                self.sendOffer();
-            }, self.onSetSessionDescriptionError);
-        }, self.onCreateSessionDescriptionError, { iceRestart: true });
     }
 
     getStats() {

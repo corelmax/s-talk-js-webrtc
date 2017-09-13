@@ -10,7 +10,6 @@ export declare class Peer extends AbstractPeer.BasePeer {
      */
     constructor(config: PeerConstructor);
     initPeerConnection(stream: MediaStream, iceConfig: RTCConfiguration): void;
-    createOffer(): void;
     getStats(): void;
     handleMessage(message: IMessageExchange): void;
     createDataChannel(): void;

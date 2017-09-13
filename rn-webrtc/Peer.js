@@ -84,7 +84,7 @@ var Peer = /** @class */ (function (_super) {
                 console.log("onicegatheringstatechange", target.iceGatheringState);
             // When iceGatheringState == complete it fire onicecandidate with null.
             if (target.iceGatheringState == "complete") {
-                // self.sendOffer();
+                self.sendOffer();
             }
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
@@ -106,19 +106,6 @@ var Peer = /** @class */ (function (_super) {
         };
         this.pc.addStream(stream);
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
-    };
-    Peer.prototype.createOffer = function () {
-        var self = this;
-        this.pc.createOffer(function (offer) {
-            if (self.debug)
-                console.log('createOffer Success');
-            self.pc.setLocalDescription(offer, function () {
-                if (self.debug)
-                    console.log('setLocalDescription Success');
-                // Waiting for all ice. and then send offer.
-                self.sendOffer();
-            }, self.onSetSessionDescriptionError);
-        }, self.onCreateSessionDescriptionError, { iceRestart: true });
     };
     Peer.prototype.getStats = function () {
         var self = this;
