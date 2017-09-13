@@ -11,7 +11,6 @@ import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 import { IMessageExchange } from "../core/WebrtcSignaling";
 import * as DetectRTC from 'detectrtc';
-import * as getStats from "getStats";
 
 export class Peer extends AbstractPeer.BasePeer {
     /**
@@ -22,8 +21,6 @@ export class Peer extends AbstractPeer.BasePeer {
      */
     constructor(config: PeerConstructor) {
         super(config);
-
-        console.log(getStats);
 
         this.initPeerConnection(config.stream, config.iceConfig);
     }
@@ -127,9 +124,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
 
         this.pc.addStream(stream);
-        // if (DetectRTC.browser.isFirefox == true) {
-        //     setTimeout(self.pc.onnegotiationneeded, 1000);
-        // }
+
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
@@ -187,7 +182,8 @@ export class Peer extends AbstractPeer.BasePeer {
             }
 
             const onAddIceCandidateError = (error) => {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
+                if (self.debug)
+                    console.warn('failed to add ICE Candidate: ' + error.toString());
             }
             self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
         }

@@ -18,19 +18,6 @@ import { AbstractPeer, AbstractPeerConnection } from "../index";
 import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 import * as DetectRTC from 'detectrtc';
-// const twilioIceServers = [
-//     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
-// ];
-// configuration.iceServers = twilioIceServers;
-var configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
 var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     /**
@@ -52,7 +39,7 @@ var Peer = /** @class */ (function (_super) {
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
         this.pc = new RTCPeerConnection(iceServers);
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
@@ -122,9 +109,6 @@ var Peer = /** @class */ (function (_super) {
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
         this.pc.addStream(stream);
-        // if (DetectRTC.browser.isFirefox == true) {
-        //     setTimeout(self.pc.onnegotiationneeded, 1000);
-        // }
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
@@ -173,7 +157,8 @@ var Peer = /** @class */ (function (_super) {
                     console.log('addIceCandidate success');
             };
             var onAddIceCandidateError = function (error) {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
+                if (self.debug)
+                    console.warn('failed to add ICE Candidate: ' + error.toString());
             };
             self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
         }

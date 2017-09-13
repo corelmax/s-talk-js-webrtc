@@ -97,7 +97,7 @@ export namespace AbstractPeer {
                 }, self.onSetSessionDescriptionError);
             }, self.onCreateSessionDescriptionError, { iceRestart: true });
         }
-        createAnswer(message) {
+        createAnswer(message: IMessageExchange) {
             let self = this;
             self.pc.createAnswer(function (answer) {
                 if (self.debug)

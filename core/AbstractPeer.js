@@ -14,6 +14,21 @@ export var AbstractPeer;
          * @param options
          */
         function BasePeer(config) {
+            // const twilioIceServers = [
+            //     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
+            // ];
+            // configuration.iceServers = twilioIceServers;
+            this.configuration = {
+                iceServers: [
+                    {
+                        urls: ["stun:stun.l.google.com:19302",
+                            'stun:stun1.l.google.com:19302',
+                            'stun:stun2.l.google.com:19302',
+                            'stun:stun3.l.google.com:19302',
+                            'stun:stun4.l.google.com:19302']
+                    },
+                ]
+            };
             this.enableDataChannels = true;
             this.logError = function (error) {
                 console.log(error);

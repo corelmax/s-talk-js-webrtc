@@ -29,7 +29,7 @@ export class Peer extends AbstractPeer.BasePeer {
         this.initPeerConnection(config.stream, config.iceConfig);
     }
 
-    initPeerConnection(stream: MediaStream, iceConfig: any) {
+    initPeerConnection(stream: MediaStream, iceConfig: RTCConfiguration) {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
@@ -94,7 +94,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
             // When iceGatheringState == complete it fire onicecandidate with null.
             if (target.iceGatheringState == "complete") {
-                self.sendOffer();
+                // self.sendOffer();
             }
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
@@ -124,6 +124,23 @@ export class Peer extends AbstractPeer.BasePeer {
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
 
+    createOffer() {
+        let self = this;
+
+        this.pc.createOffer(function (offer) {
+            if (self.debug)
+                console.log('createOffer Success');
+
+            self.pc.setLocalDescription(offer, function () {
+                if (self.debug)
+                    console.log('setLocalDescription Success');
+
+                // Waiting for all ice. and then send offer.
+                self.sendOffer();
+            }, self.onSetSessionDescriptionError);
+        }, self.onCreateSessionDescriptionError, { iceRestart: true });
+    }
+
     getStats() {
         let self = this;
         const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
@@ -151,7 +168,7 @@ export class Peer extends AbstractPeer.BasePeer {
                 this.nick = message.payload.nick;
             delete message.payload.nick;
 
-            // Not support promise retunn type.
+            // Not support promise return type.
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload),
                 function success() {
                     if (self.debug)
@@ -163,8 +180,12 @@ export class Peer extends AbstractPeer.BasePeer {
                 }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
+            // Not support promise return type.
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload),
-                () => { },
+                () => {
+                    if (self.debug)
+                        console.log("setRemoteDescription complete");
+                },
                 self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {

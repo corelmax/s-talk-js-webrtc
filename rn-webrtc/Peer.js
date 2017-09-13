@@ -17,16 +17,6 @@ import { EventEmitter } from 'events';
 import { RTCPeerConnection, RTCIceCandidate, RTCSessionDescription, } from 'react-native-webrtc';
 import { AbstractPeerConnection } from "../core/AbstractPeerConnection";
 import { AbstractPeer } from "../core/AbstractPeer";
-// const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
-var configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
 var Peer = /** @class */ (function (_super) {
     __extends(Peer, _super);
     /**
@@ -48,7 +38,7 @@ var Peer = /** @class */ (function (_super) {
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
         this.pc = new RTCPeerConnection(iceServers);
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
@@ -94,7 +84,7 @@ var Peer = /** @class */ (function (_super) {
                 console.log("onicegatheringstatechange", target.iceGatheringState);
             // When iceGatheringState == complete it fire onicecandidate with null.
             if (target.iceGatheringState == "complete") {
-                self.sendOffer();
+                // self.sendOffer();
             }
             self.pcEvent.emit("onicegatheringstatechange", target.iceGatheringState);
         };
@@ -116,6 +106,19 @@ var Peer = /** @class */ (function (_super) {
         };
         this.pc.addStream(stream);
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
+    };
+    Peer.prototype.createOffer = function () {
+        var self = this;
+        this.pc.createOffer(function (offer) {
+            if (self.debug)
+                console.log('createOffer Success');
+            self.pc.setLocalDescription(offer, function () {
+                if (self.debug)
+                    console.log('setLocalDescription Success');
+                // Waiting for all ice. and then send offer.
+                self.sendOffer();
+            }, self.onSetSessionDescriptionError);
+        }, self.onCreateSessionDescriptionError, { iceRestart: true });
     };
     Peer.prototype.getStats = function () {
         var self = this;
@@ -139,7 +142,7 @@ var Peer = /** @class */ (function (_super) {
             if (!this.nick)
                 this.nick = message.payload.nick;
             delete message.payload.nick;
-            // Not support promise retunn type.
+            // Not support promise return type.
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function success() {
                 if (self.debug)
                     console.log("setRemoteDescription complete");
@@ -149,7 +152,11 @@ var Peer = /** @class */ (function (_super) {
             }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
-            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function () { }, self.onSetSessionDescriptionError);
+            // Not support promise return type.
+            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function () {
+                if (self.debug)
+                    console.log("setRemoteDescription complete");
+            }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
             if (!message.payload)
