@@ -10,7 +10,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import * as Colors from "material-ui/styles/colors";
 
 import { PeerStatus } from "./WithPeerStatus";
-const signalingServer = "https://chitchats.ga:8888";
+const config = require("../../config.json");
 import {
     AbstractWEBRTC, AbstractMediaStream,
     AbstractPeerConnection, IWebRTC,
@@ -103,8 +103,9 @@ class WebRtcComponent extends React.Component<MyCompProps, IComponentNameState> 
     }
 
     async startWebRtc() {
+        let _config = JSON.parse(JSON.stringify(config));
         let rtcConfig = {
-            signalingUrl: signalingServer,
+            signalingUrl: _config.signalingServer,
             socketOptions: { 'force new connection': true, transports: ['websocket'] },
             debug: true,
         } as WebRtcConfig;
