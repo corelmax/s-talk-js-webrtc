@@ -11,20 +11,7 @@ import { getImage } from '../libs/VideoToBlurImage';
 import { createStreamByText } from '../libs/StreamHelper';
 import { IMessageExchange } from "../core/WebrtcSignaling";
 import * as DetectRTC from 'detectrtc';
-
-// const twilioIceServers = [
-//     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
-// ];
-// configuration.iceServers = twilioIceServers;
-const configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
+import * as getStats from "getStats";
 
 export class Peer extends AbstractPeer.BasePeer {
     /**
@@ -35,6 +22,8 @@ export class Peer extends AbstractPeer.BasePeer {
      */
     constructor(config: PeerConstructor) {
         super(config);
+
+        console.log(getStats);
 
         this.initPeerConnection(config.stream, config.iceConfig);
     }
@@ -48,7 +37,7 @@ export class Peer extends AbstractPeer.BasePeer {
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
         if (self.debug) {

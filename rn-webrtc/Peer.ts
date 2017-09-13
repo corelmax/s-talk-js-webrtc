@@ -16,17 +16,6 @@ import { AbstractPeerConnection, IPC_Handler, PeerConstructor } from "../core/Ab
 import { AbstractPeer } from "../core/AbstractPeer";
 import { IMessageExchange } from "../core/WebrtcSignaling";
 
-// const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
-const configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
-
 export class Peer extends AbstractPeer.BasePeer {
     /**
      * reture PeerConnection
@@ -49,7 +38,7 @@ export class Peer extends AbstractPeer.BasePeer {
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
         if (self.debug) {
