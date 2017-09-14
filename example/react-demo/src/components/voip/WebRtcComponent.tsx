@@ -57,10 +57,6 @@ class WebRtcComponent extends React.Component<MyCompProps, IComponentNameState> 
 
         let peers = this.webrtc.peerManager.getPeers() as Map<string, IPC_Handler>;
         self.webrtc.userMedia.stopLocalStream();
-        peers.forEach(peer => {
-            peer.offer = true;
-            peer.removeStream(self.webrtc.userMedia.getLocalStream())
-        });
 
         process.nextTick(() => {
             let requestMedia = {
@@ -69,6 +65,7 @@ class WebRtcComponent extends React.Component<MyCompProps, IComponentNameState> 
             } as MediaStreamConstraints;
             self.webrtc.userMedia.startLocalStream(requestMedia).then(function (stream) {
                 self.onStreamReady(stream);
+
                 peers.forEach(peer => {
                     peer.offer = true;
                     peer.addStream(stream);
@@ -158,11 +155,7 @@ class WebRtcComponent extends React.Component<MyCompProps, IComponentNameState> 
         console.log("PEER_STATS_READY", this.webrtc.peerManager.peers);
 
         this.webrtc.peerManager.peers.forEach(peer => {
-            peer.getStats(2000).then(result => {
-                console.log("getStats success", result);
-            }).catch(err => {
-                console.log("getStats fail", err);
-            });
+            peer.getStats(null, 5000);
         });
     }
 

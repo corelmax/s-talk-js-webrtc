@@ -24,10 +24,6 @@ class WebRtcComponent extends React.Component {
         let self = this;
         let peers = this.webrtc.peerManager.getPeers();
         self.webrtc.userMedia.stopLocalStream();
-        peers.forEach(peer => {
-            peer.offer = true;
-            peer.removeStream(self.webrtc.userMedia.getLocalStream());
-        });
         process.nextTick(() => {
             let requestMedia = {
                 video: media.video,
@@ -114,11 +110,7 @@ class WebRtcComponent extends React.Component {
     onPeerStatsReady() {
         console.log("PEER_STATS_READY", this.webrtc.peerManager.peers);
         this.webrtc.peerManager.peers.forEach(peer => {
-            peer.getStats(2000).then(result => {
-                console.log("getStats success", result);
-            }).catch(err => {
-                console.log("getStats fail", err);
-            });
+            peer.getStats(null, 5000);
         });
     }
     connectionReady(socker_id) {
