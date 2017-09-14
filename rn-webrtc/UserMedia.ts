@@ -112,7 +112,7 @@ export class UserMedia implements IUserMedia {
         return new Promise((resolve: (stream: MediaStream) => void, reject) => {
             getUserMedia(defaultMediaConstraints, function (stream) {
                 console.log('getUserMedia success');
-
+                self.setLocalStream(stream);
                 let videoTracks = stream.getVideoTracks();
                 let audioTracks = stream.getAudioTracks();
                 if (videoTracks.length > 0) {
@@ -150,14 +150,14 @@ export class UserMedia implements IUserMedia {
     }
     applyStreamIncomeVolume(volume){
         let audioTrack : MediaStreamTrack = this.getAudioTrack();
-        if(!audioTrack)
+        if ( audioTrack == undefined )
             return;
         this.applyVolumeToAudioTrack(audioTrack);
     }
     
     applyVolumeToAudioTrack(audioTrack = undefined){
         console.log("[Pre] apply volume to audio track");
-        if(!audioTrack)
+        if (audioTrack == undefined )
             return;
         let curVolume = this.volumeController.getVolume();
         let constraints : MediaTrackConstraints = audioTrack.getConstraints();
