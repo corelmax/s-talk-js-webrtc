@@ -17,8 +17,6 @@ export type GetPeerStats = (track: MediaStreamTrack, cb: Function, sec_interval:
 const getStats = window["getStats"] as GetPeerStats
 export class Peer extends AbstractPeer.BasePeer {
 
-    getPeerStats: GetPeerStats;
-
     startTime;
 
     /**
@@ -46,8 +44,7 @@ export class Peer extends AbstractPeer.BasePeer {
             iceServers = this.configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
-        this.pc["getPeerStats"] = getStats;
-        this.getPeerStats = self.pc["getPeerStats"];
+        this.pc.getPeerStats = getStats;
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
             console.log(`connection: ${this.pc.iceConnectionState}, Gathering: ${this.pc.iceGatheringState}, signaling: ${this.pc.signalingState}`);
@@ -152,17 +149,13 @@ export class Peer extends AbstractPeer.BasePeer {
         let self = this;
 
         return new Promise((resolve, rejected) => {
-            try {
-                self.getPeerStats(mediaTrack, result => {
-                    if (self.debug) {
-                        console.log("getStats: ", mediaTrack.id, result);
-                    }
-                    resolve(result);
-                }, secInterval);
-            }
-            catch (ex) {
-                rejected(ex.message);
-            }
+            self.pc.getPeerStats(mediaTrack, result => {
+                if (self.debug) {
+                    console.log("getStats: ", mediaTrack.id, result);
+                }
+
+                resolve(result);
+            }, secInterval);
         });
 
         // const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
