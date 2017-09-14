@@ -14,7 +14,7 @@ import {
     getUserMedia,
 } from 'react-native-webrtc';
 import { AbstractMediaStream, IUserMedia, AudioController, VideoController } from "../index";
-import NativeAudioController from '../libs/NativeAudioController';
+import NativeVolumeController from '../libs/native/NativeVolumeController';
 
 export class UserMedia implements IUserMedia {
     debug: boolean = false;
@@ -45,9 +45,10 @@ export class UserMedia implements IUserMedia {
     micController;
     audioController: AudioController;
     videoController: VideoController;
-
+    volumeController: NativeVolumeController;
     constructor(options: { debug: boolean }) {
         this.debug = options.debug;
+        this.volumeController = new NativeVolumeController();
     }
 
     async  startLocalStream(mediaConstraints: MediaStreamConstraints, isFront: boolean | undefined) {
@@ -115,7 +116,6 @@ export class UserMedia implements IUserMedia {
                 }
                 if (audioTracks.length > 0) {
                     console.log('Using audio device: ' + audioTracks[0].label);
-                    this.audioController = new NativeAudioController(audioTracks[0]);
                 }
 
                 stream.oninactive = function () {

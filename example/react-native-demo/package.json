@@ -15,7 +15,7 @@
 		"react-native-webrtc": "^1.58.2",
 		"react-navigation": "^1.0.0-beta.11",
 		"stalk-js": "0.0.3-f21",
-		"stalk-js-webrtc": "0.0.1-f71",
+		"stalk-js-webrtc": "git+https://github.com/mzget/s-talk-js-webrtc.git#feature/native-voice",
 		"styled-components": "^2.1.2"
 	},
 	"devDependencies": {

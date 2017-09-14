@@ -133,6 +133,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-volume')
     compile project(':react-native-webrtc')
     compile project(':react-native-incall-manager')
     compile project(':react-native-vector-icons')

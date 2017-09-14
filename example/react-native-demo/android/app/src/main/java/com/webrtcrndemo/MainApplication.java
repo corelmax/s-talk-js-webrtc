@@ -3,6 +3,7 @@ package com.webrtcrndemo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNVolumePackage;
 import com.oney.WebRTCModule.WebRTCModulePackage;
 import com.zxcpoiu.incallmanager.InCallManagerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNVolumePackage(),
             new WebRTCModulePackage(),
             new InCallManagerPackage(),
             new VectorIconsPackage(),

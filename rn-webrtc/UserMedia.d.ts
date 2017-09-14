@@ -1,4 +1,5 @@
 import { IUserMedia, AudioController, VideoController } from "../index";
+import NativeVolumeController from '../libs/native/NativeVolumeController';
 export declare class UserMedia implements IUserMedia {
     debug: boolean;
     private localStream;
@@ -9,6 +10,7 @@ export declare class UserMedia implements IUserMedia {
     micController: any;
     audioController: AudioController;
     videoController: VideoController;
+    volumeController: NativeVolumeController;
     constructor(options: {
         debug: boolean;
     });
