@@ -66,6 +66,11 @@ var Peer = /** @class */ (function (_super) {
                 console.log('oniceconnectionstatechange', target.iceConnectionState);
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
             if (target.iceConnectionState === 'completed') {
+                var mediaStreams = self.pc.getRemoteStreams();
+                self.audioTracks = new Array();
+                self.videoTracks = new Array();
+                mediaStreams.map(function (stream) { return self.audioTracks.concat(stream.getAudioTracks()); });
+                mediaStreams.map(function (stream) { return self.videoTracks.concat(stream.getVideoTracks()); });
                 self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
@@ -119,11 +124,6 @@ var Peer = /** @class */ (function (_super) {
     };
     Peer.prototype.getStats = function (mediaTrack, secInterval) {
         var self = this;
-        var mediaStreams = self.pc.getRemoteStreams();
-        self.audioTracks = new Array();
-        self.videoTracks = new Array();
-        mediaStreams.map(function (stream) { return self.audioTracks.concat(stream.getAudioTracks()); });
-        mediaStreams.map(function (stream) { return self.videoTracks.concat(stream.getVideoTracks()); });
         return new Promise(function (resolve, rejected) {
             try {
                 self.getPeerStats(mediaTrack, function (result) {

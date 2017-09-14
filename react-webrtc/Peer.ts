@@ -76,6 +76,12 @@ export class Peer extends AbstractPeer.BasePeer {
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
 
             if (target.iceConnectionState === 'completed') {
+                let mediaStreams = self.pc.getRemoteStreams();
+                self.audioTracks = new Array() as MediaStreamTrack[];
+                self.videoTracks = new Array() as MediaStreamTrack[];
+                mediaStreams.map(stream => self.audioTracks.concat(stream.getAudioTracks()));
+                mediaStreams.map(stream => self.videoTracks.concat(stream.getVideoTracks()));
+
                 self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
@@ -144,11 +150,6 @@ export class Peer extends AbstractPeer.BasePeer {
 
     getStats(mediaTrack: MediaStreamTrack, secInterval: number) {
         let self = this;
-        let mediaStreams = self.pc.getRemoteStreams();
-        self.audioTracks = new Array() as MediaStreamTrack[];
-        self.videoTracks = new Array() as MediaStreamTrack[];
-        mediaStreams.map(stream => self.audioTracks.concat(stream.getAudioTracks()));
-        mediaStreams.map(stream => self.videoTracks.concat(stream.getVideoTracks()));
 
         return new Promise((resolve, rejected) => {
             try {
