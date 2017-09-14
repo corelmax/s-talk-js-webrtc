@@ -56,17 +56,26 @@ export var AbstractPeer;
         BasePeer.prototype.onCreateSessionDescriptionError = function (error) {
             console.warn('Failed to create session description: ' + error.toString());
         };
+        // Simulate an ice restart.
+        BasePeer.prototype.restartIce = function () {
+            if (this.debug)
+                console.log('pc createOffer restart');
+            var offerOptions = { iceRestart: true };
+            this.pc.createOffer(this.onCreateOfferSuccess, this.onCreateSessionDescriptionError, offerOptions);
+        };
+        BasePeer.prototype.onCreateOfferSuccess = function (desc) {
+            var self = this;
+            if (self.debug)
+                console.log('createOffer Success');
+            self.pc.setLocalDescription(desc, function () {
+                if (self.debug)
+                    console.log('setLocalDescription Success');
+                // Waiting for all ice. and then send offer.
+            }, self.onSetSessionDescriptionError);
+        };
         BasePeer.prototype.createOffer = function () {
             var self = this;
-            this.pc.createOffer(function (offer) {
-                if (self.debug)
-                    console.log('createOffer Success');
-                self.pc.setLocalDescription(offer, function () {
-                    if (self.debug)
-                        console.log('setLocalDescription Success');
-                    // Waiting for all ice. and then send offer.
-                }, self.onSetSessionDescriptionError);
-            }, self.onCreateSessionDescriptionError, { iceRestart: true });
+            this.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError);
         };
         BasePeer.prototype.createAnswer = function (message) {
             var self = this;

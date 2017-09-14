@@ -59,6 +59,7 @@ export interface IPC_Handler {
     addStream(stream: MediaStream);
     removeStream(stream: MediaStream);
     handleMessage(message: IMessageExchange);
+    restartIce();
 }
 export interface PeerConstructor {
     peer_id;

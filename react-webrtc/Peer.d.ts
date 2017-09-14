@@ -1,6 +1,7 @@
 import { AbstractPeer, PeerConstructor } from "../index";
 import { IMessageExchange } from "../core/WebrtcSignaling";
 export declare class Peer extends AbstractPeer.BasePeer {
+    startTime: any;
     /**
      * reture PeerConnection
      * @param socket

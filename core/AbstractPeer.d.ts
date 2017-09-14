@@ -43,6 +43,8 @@ export declare namespace AbstractPeer {
         addStream(stream: MediaStream): void;
         onSetSessionDescriptionError(error: any): void;
         onCreateSessionDescriptionError(error: any): void;
+        restartIce(): void;
+        onCreateOfferSuccess(desc: RTCSessionDescription): void;
         createOffer(): void;
         createAnswer(message: IMessageExchange): void;
         sendOffer(): void;

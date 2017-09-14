@@ -13,6 +13,8 @@ import { IMessageExchange } from "../core/WebrtcSignaling";
 import * as DetectRTC from 'detectrtc';
 
 export class Peer extends AbstractPeer.BasePeer {
+    startTime;
+
     /**
      * reture PeerConnection
      * @param socket
@@ -29,6 +31,7 @@ export class Peer extends AbstractPeer.BasePeer {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
+        self.startTime = window.performance.now();
 
         let iceServers: RTCConfiguration;
         if (!!iceConfig)

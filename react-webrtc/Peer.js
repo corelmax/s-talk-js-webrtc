@@ -35,6 +35,7 @@ var Peer = /** @class */ (function (_super) {
         var self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
+        self.startTime = window.performance.now();
         var iceServers;
         if (!!iceConfig)
             iceServers = iceConfig;
