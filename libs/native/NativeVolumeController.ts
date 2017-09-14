@@ -1,4 +1,4 @@
-import { getVolume,  setVolume, onVolumeChange } from 'react-native-volume';
+import RNVolume from 'react-native-volume';
 export default class NativeVolumeController{
         /**
          * Volume of running device, must apply only when onVolumeChanged callback;
@@ -6,17 +6,17 @@ export default class NativeVolumeController{
         private volume = 0;
         isMute = false;
         constructor(){
-                console.log("getVolume is ",getVolume);
-                console.log("setVolume is ",setVolume);
-                console.log("onVolumeChange is ",onVolumeChange);
-                getVolume(this.getVolumnCallback.bind(this));
+                console.log("getVolume is ",RNVolume.getVolume);
+                console.log("setVolume is ",RNVolume.setVolume);
+                console.log("onVolumeChange is ",RNVolume.onVolumeChange);
+                RNVolume.getVolume(this.getVolumnCallback.bind(this));
                 this.debuglog("Created object.");
         }
         /**
          * Set the volume to zero.
          */
         mute() {
-                setVolume(0);
+                RNVolume.setVolume(0);
                 this.isMute = true;
                 this.debuglog("mute is called");
         }
@@ -25,7 +25,7 @@ export default class NativeVolumeController{
          */
         unMute() {
                 this.isMute = false;
-                setVolume(this.volume);
+                RNVolume.setVolume(this.volume);
                 this.debuglog("unMute is called");
         }
         /**
@@ -33,7 +33,7 @@ export default class NativeVolumeController{
          * @param volume 
          */
         setVolume(volume: number) {
-                setVolume(this.volume);
+                RNVolume.setVolume(this.volume);
         }
         /**
          * Get device volume.

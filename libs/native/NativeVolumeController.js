@@ -1,4 +1,4 @@
-import { getVolume, setVolume, onVolumeChange } from 'react-native-volume';
+import RNVolume from 'react-native-volume';
 var NativeVolumeController = /** @class */ (function () {
     function NativeVolumeController() {
         /**
@@ -6,17 +6,17 @@ var NativeVolumeController = /** @class */ (function () {
          */
         this.volume = 0;
         this.isMute = false;
-        console.log("getVolume is ", getVolume);
-        console.log("setVolume is ", setVolume);
-        console.log("onVolumeChange is ", onVolumeChange);
-        getVolume(this.getVolumnCallback.bind(this));
+        console.log("getVolume is ", RNVolume.getVolume);
+        console.log("setVolume is ", RNVolume.setVolume);
+        console.log("onVolumeChange is ", RNVolume.onVolumeChange);
+        RNVolume.getVolume(this.getVolumnCallback.bind(this));
         this.debuglog("Created object.");
     }
     /**
      * Set the volume to zero.
      */
     NativeVolumeController.prototype.mute = function () {
-        setVolume(0);
+        RNVolume.setVolume(0);
         this.isMute = true;
         this.debuglog("mute is called");
     };
@@ -25,7 +25,7 @@ var NativeVolumeController = /** @class */ (function () {
      */
     NativeVolumeController.prototype.unMute = function () {
         this.isMute = false;
-        setVolume(this.volume);
+        RNVolume.setVolume(this.volume);
         this.debuglog("unMute is called");
     };
     /**
@@ -33,7 +33,7 @@ var NativeVolumeController = /** @class */ (function () {
      * @param volume
      */
     NativeVolumeController.prototype.setVolume = function (volume) {
-        setVolume(this.volume);
+        RNVolume.setVolume(this.volume);
     };
     /**
      * Get device volume.
