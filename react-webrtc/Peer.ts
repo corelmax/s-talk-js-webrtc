@@ -154,7 +154,7 @@ export class Peer extends AbstractPeer.BasePeer {
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
         });
     }
-    getStats(mediaTrack: MediaStreamTrack, secInterval: number) {
+    getStats(mediaTrack?: MediaStreamTrack, secInterval: number) {
         let self = this;
 
         self.pc.getPeerStats(mediaTrack, result => {
