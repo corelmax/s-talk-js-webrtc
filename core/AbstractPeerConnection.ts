@@ -61,6 +61,7 @@ export interface IPC_Handler {
     removeStream(stream: MediaStream);
     handleMessage(message: IMessageExchange);
     getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<any>;
+    restartIce();
 }
 export interface PeerConstructor {
     peer_id;

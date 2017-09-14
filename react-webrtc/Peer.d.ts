@@ -5,6 +5,7 @@ export declare class Peer extends AbstractPeer.BasePeer {
     getPeerStats: GetPeerStats;
     audioTracks: MediaStreamTrack[];
     videoTracks: MediaStreamTrack[];
+    startTime: any;
     /**
      * reture PeerConnection
      * @param socket

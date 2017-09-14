@@ -38,13 +38,15 @@ export declare namespace AbstractPeer {
          * @param options
          */
         constructor(config: PeerConstructor);
-        initPeerConnection(stream: MediaStream, iceConfig: any): void;
+        abstract initPeerConnection(stream: MediaStream, iceConfig: any): any;
         removeStream(stream: MediaStream): void;
         addStream(stream: MediaStream): void;
         onSetSessionDescriptionError(error: any): void;
         onCreateSessionDescriptionError(error: any): void;
+        restartIce(): void;
+        onCreateOfferSuccess(desc: RTCSessionDescription): void;
         createOffer(): void;
-        createAnswer(message: any): void;
+        createAnswer(message: IMessageExchange): void;
         sendOffer(): void;
         abstract handleMessage(message: IMessageExchange): any;
         abstract getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<any>;

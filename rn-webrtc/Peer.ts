@@ -29,7 +29,7 @@ export class Peer extends AbstractPeer.BasePeer {
         this.initPeerConnection(config.stream, config.iceConfig);
     }
 
-    initPeerConnection(stream: MediaStream, iceConfig: any) {
+    initPeerConnection(stream: MediaStream, iceConfig: RTCConfiguration) {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
@@ -151,7 +151,7 @@ export class Peer extends AbstractPeer.BasePeer {
                 this.nick = message.payload.nick;
             delete message.payload.nick;
 
-            // Not support promise retunn type.
+            // Not support promise return type.
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload),
                 function success() {
                     if (self.debug)
@@ -163,8 +163,12 @@ export class Peer extends AbstractPeer.BasePeer {
                 }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
+            // Not support promise return type.
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload),
-                () => { },
+                () => {
+                    if (self.debug)
+                        console.log("setRemoteDescription complete");
+                },
                 self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {

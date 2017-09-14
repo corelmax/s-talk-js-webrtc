@@ -64,9 +64,12 @@ export namespace AbstractPeer {
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
+
+            this.restartIce = this.restartIce.bind(this);
+            this.onCreateOfferSuccess = this.onCreateOfferSuccess.bind(this);
         }
 
-        initPeerConnection(stream: MediaStream, iceConfig: any) { }
+        abstract initPeerConnection(stream: MediaStream, iceConfig: any);
 
         removeStream(stream: MediaStream) {
             this.pc.removeStream(stream);
@@ -82,22 +85,35 @@ export namespace AbstractPeer {
         onCreateSessionDescriptionError(error) {
             console.warn('Failed to create session description: ' + error.toString());
         }
+
+        // Simulate an ice restart.
+        restartIce() {
+            let self = this;
+            if (self.debug)
+                console.log('pc createOffer restart');
+
+            self.offer = true;
+            let offerOptions = { iceRestart: true };
+            self.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError, offerOptions);
+        }
+        onCreateOfferSuccess(desc: RTCSessionDescription) {
+            let self = this;
+            if (self.debug)
+                console.log('createOffer Success');
+
+            self.pc.setLocalDescription(desc, function () {
+                if (self.debug)
+                    console.log('setLocalDescription Success');
+
+                // Waiting for all ice. and then send offer.
+            }, self.onSetSessionDescriptionError);
+        }
         createOffer() {
             let self = this;
 
-            this.pc.createOffer(function (offer) {
-                if (self.debug)
-                    console.log('createOffer Success');
-
-                self.pc.setLocalDescription(offer, function () {
-                    if (self.debug)
-                        console.log('setLocalDescription Success');
-
-                    // Waiting for all ice. and then send offer.
-                }, self.onSetSessionDescriptionError);
-            }, self.onCreateSessionDescriptionError, { iceRestart: true });
+            this.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError);
         }
-        createAnswer(message) {
+        createAnswer(message: IMessageExchange) {
             let self = this;
             self.pc.createAnswer(function (answer) {
                 if (self.debug)

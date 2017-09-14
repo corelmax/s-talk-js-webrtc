@@ -36,6 +36,7 @@ var Peer = /** @class */ (function (_super) {
         var self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
+        self.startTime = window.performance.now();
         var iceServers;
         if (!!iceConfig)
             iceServers = iceConfig;
@@ -110,9 +111,6 @@ var Peer = /** @class */ (function (_super) {
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
         this.pc.addStream(stream);
-        // if (DetectRTC.browser.isFirefox == true) {
-        //     setTimeout(self.pc.onnegotiationneeded, 1000);
-        // }
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
@@ -179,7 +177,8 @@ var Peer = /** @class */ (function (_super) {
                     console.log('addIceCandidate success');
             };
             var onAddIceCandidateError = function (error) {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
+                if (self.debug)
+                    console.warn('failed to add ICE Candidate: ' + error.toString());
             };
             self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
         }

@@ -21,6 +21,8 @@ export class Peer extends AbstractPeer.BasePeer {
     audioTracks: MediaStreamTrack[];
     videoTracks: MediaStreamTrack[];
 
+    startTime;
+
     /**
      * reture PeerConnection
      * @param socket
@@ -37,6 +39,7 @@ export class Peer extends AbstractPeer.BasePeer {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
+        self.startTime = window.performance.now();
 
         let iceServers: RTCConfiguration;
         if (!!iceConfig)
@@ -132,9 +135,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
 
         this.pc.addStream(stream);
-        // if (DetectRTC.browser.isFirefox == true) {
-        //     setTimeout(self.pc.onnegotiationneeded, 1000);
-        // }
+
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
@@ -212,7 +213,8 @@ export class Peer extends AbstractPeer.BasePeer {
             }
 
             const onAddIceCandidateError = (error) => {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
+                if (self.debug)
+                    console.warn('failed to add ICE Candidate: ' + error.toString());
             }
             self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
         }

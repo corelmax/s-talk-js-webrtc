@@ -129,7 +129,7 @@ var Peer = /** @class */ (function (_super) {
             if (!this.nick)
                 this.nick = message.payload.nick;
             delete message.payload.nick;
-            // Not support promise retunn type.
+            // Not support promise return type.
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function success() {
                 if (self.debug)
                     console.log("setRemoteDescription complete");
@@ -139,7 +139,11 @@ var Peer = /** @class */ (function (_super) {
             }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
-            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function () { }, self.onSetSessionDescriptionError);
+            // Not support promise return type.
+            self.pc.setRemoteDescription(new RTCSessionDescription(message.payload), function () {
+                if (self.debug)
+                    console.log("setRemoteDescription complete");
+            }, self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
             if (!message.payload)
