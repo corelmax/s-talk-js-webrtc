@@ -53,7 +53,7 @@ var UserMedia = /** @class */ (function () {
     function UserMedia(options) {
         this.debug = false;
         this.debug = options.debug;
-        this.volumeController = new NativeVolumeController();
+        this.volumeController = new NativeVolumeController(this.applyStreamIncomeVolume.bind(this));
     }
     UserMedia.prototype.getLocalStream = function () {
         return this.localStream;
@@ -160,6 +160,9 @@ var UserMedia = /** @class */ (function () {
                 }
             });
         });
+    };
+    UserMedia.prototype.applyStreamIncomeVolume = function (volume) {
+        var audioTrack = this.getAudioTrack();
     };
     UserMedia.prototype.setVideoEnabled = function (enabled) {
         if (!!this.localStream) {

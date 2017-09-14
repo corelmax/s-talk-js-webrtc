@@ -3,8 +3,9 @@ export default class NativeVolumeController {
      * Volume of running device, must apply only when onVolumeChanged callback;
      */
     private volume;
+    private onVolumeChangedCallback;
     isMute: boolean;
-    constructor();
+    constructor(onVolumeChangedCallback?: any);
     /**
      * Set the volume to zero.
      */

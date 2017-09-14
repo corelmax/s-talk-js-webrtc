@@ -15,6 +15,7 @@ export declare class UserMedia implements IUserMedia {
         debug: boolean;
     });
     startLocalStream(mediaConstraints: MediaStreamConstraints, isFront: boolean | undefined): Promise<MediaStream>;
+    applyStreamIncomeVolume(volume: any): void;
     setVideoEnabled(enabled: boolean): void;
     stopLocalStream(): void;
     private stopStream();

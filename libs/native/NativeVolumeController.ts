@@ -4,8 +4,10 @@ export default class NativeVolumeController{
          * Volume of running device, must apply only when onVolumeChanged callback;
          */
         private volume = 0;
+        private onVolumeChangedCallback = undefined;
         isMute = false;
-        constructor(){
+        constructor(onVolumeChangedCallback = undefined){
+                this.onVolumeChangedCallback = onVolumeChangedCallback;
                 RNVolume.getVolume(this.getVolumnCallback.bind(this));
                 RNVolume.onVolumeChange(this.onVolumeChanged.bind(this));
                 this.debuglog("Created object.");
@@ -53,6 +55,9 @@ export default class NativeVolumeController{
          */
         protected onVolumeChanged(volume){
                 this.volume = volume;
+                if(this.onVolumeChangedCallback){
+                        this.onVolumeChangedCallback(volume);
+                }
                 this.debuglog("Volume was change to: ", volume);
         }
 

@@ -11,6 +11,7 @@ import {
     RTCSessionDescription,
     RTCView,
     MediaStreamTrack,
+    MediaStreamConstraints,
     getUserMedia,
 } from 'react-native-webrtc';
 import { AbstractMediaStream, IUserMedia, AudioController, VideoController } from "../index";
@@ -46,9 +47,12 @@ export class UserMedia implements IUserMedia {
     audioController: AudioController;
     videoController: VideoController;
     volumeController: NativeVolumeController;
+    
     constructor(options: { debug: boolean }) {
         this.debug = options.debug;
-        this.volumeController = new NativeVolumeController();
+        this.volumeController = new NativeVolumeController(
+            this.applyStreamIncomeVolume.bind(this)
+        );
     }
 
     async  startLocalStream(mediaConstraints: MediaStreamConstraints, isFront: boolean | undefined) {
@@ -116,6 +120,7 @@ export class UserMedia implements IUserMedia {
                 }
                 if (audioTracks.length > 0) {
                     console.log('Using audio device: ' + audioTracks[0].label);
+                    self.applyVolumeToAudioTrack(audioTracks[0]);
                 }
 
                 stream.oninactive = function () {
@@ -141,6 +146,28 @@ export class UserMedia implements IUserMedia {
                     reject('getUserMedia error: ' + error.name);
                 }
             });
+        });
+    }
+    applyStreamIncomeVolume(volume){
+        let audioTrack : MediaStreamTrack = this.getAudioTrack();
+        if(!audioTrack)
+            return;
+        this.applyVolumeToAudioTrack(audioTrack);
+    }
+    
+    applyVolumeToAudioTrack(audioTrack = undefined){
+        console.log("[Pre] apply volume to audio track");
+        if(!audioTrack)
+            return;
+        let curVolume = this.volumeController.getVolume();
+        let constraints : MediaTrackConstraints = audioTrack.getConstraints();
+        let advSets :  MediaTrackConstraintSet[] = constraints.advanced;
+        for (let i = 0; i < advSets.length; i++) {
+            let set : MediaTrackConstraintSet  = advSets[i];
+            set.volume = curVolume;
+        }
+        audioTrack.applyConstraints(constraints).then(res=>{
+            console.log("[Done] apply volume to audio track: ",res);
         });
     }
 
