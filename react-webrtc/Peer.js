@@ -147,8 +147,6 @@ var Peer = /** @class */ (function (_super) {
     };
     Peer.prototype.handleMessage = function (message) {
         var self = this;
-        if (self.debug)
-            console.log('handleMessage', message.type);
         if (message.prefix)
             this.browserPrefix = message.prefix;
         if (message.type === AbstractPeerConnection.OFFER) {
@@ -172,8 +170,8 @@ var Peer = /** @class */ (function (_super) {
             if (!message.payload)
                 return;
             var onAddIceCandidateSuccess = function () {
-                if (self.debug)
-                    console.log('addIceCandidate success');
+                // if (self.debug)
+                //     console.log('addIceCandidate success');
             };
             var onAddIceCandidateError = function (error) {
                 if (self.debug)

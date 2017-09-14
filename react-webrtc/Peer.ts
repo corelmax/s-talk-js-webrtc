@@ -179,8 +179,6 @@ export class Peer extends AbstractPeer.BasePeer {
 
     handleMessage(message: IMessageExchange) {
         let self = this;
-        if (self.debug)
-            console.log('handleMessage', message.type);
 
         if (message.prefix)
             this.browserPrefix = message.prefix;
@@ -207,8 +205,8 @@ export class Peer extends AbstractPeer.BasePeer {
             if (!message.payload) return;
 
             const onAddIceCandidateSuccess = () => {
-                if (self.debug)
-                    console.log('addIceCandidate success');
+                // if (self.debug)
+                //     console.log('addIceCandidate success');
             }
 
             const onAddIceCandidateError = (error) => {
