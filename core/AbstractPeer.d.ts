@@ -9,6 +9,11 @@ import { IPC_Handler, PeerConstructor } from "./AbstractPeerConnection";
 import { IMessageExchange } from "./WebrtcSignaling";
 export declare namespace AbstractPeer {
     abstract class BasePeer implements IPC_Handler {
+        configuration: {
+            iceServers: {
+                urls: string[];
+            }[];
+        };
         id: string;
         pc: RTCPeerConnection;
         channels: any;
@@ -21,6 +26,8 @@ export declare namespace AbstractPeer {
         browserPrefix: string;
         nick: any;
         offer: boolean;
+        audioTracks: MediaStreamTrack[];
+        videoTracks: MediaStreamTrack[];
         enableDataChannels: boolean;
         send_event: (messageType: string, payload?: any, optional?: {
             to: string;
@@ -33,14 +40,17 @@ export declare namespace AbstractPeer {
          * @param options
          */
         constructor(config: PeerConstructor);
-        initPeerConnection(stream: MediaStream, iceConfig: any): void;
+        abstract initPeerConnection(stream: MediaStream, iceConfig: any): any;
         removeStream(stream: MediaStream): void;
         addStream(stream: MediaStream): void;
         onSetSessionDescriptionError(error: any): void;
         onCreateSessionDescriptionError(error: any): void;
+        restartIce(): void;
+        onCreateOfferSuccess(desc: RTCSessionDescription): void;
         createOffer(): void;
-        createAnswer(message: any): void;
+        createAnswer(message: IMessageExchange): void;
         sendOffer(): void;
-        handleMessage(message: IMessageExchange): void;
+        abstract handleMessage(message: IMessageExchange): any;
+        abstract getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<any>;
     }
 }

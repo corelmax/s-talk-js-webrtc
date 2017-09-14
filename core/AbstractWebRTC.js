@@ -20,7 +20,7 @@ export var AbstractWEBRTC;
             var self = this;
             self.debug = configs.debug;
             self.iceConfig = { iceServers: [] };
-            // this.signalingSocket = io.connect('https://chitchats.ga:8888', { transports: ['websocket'], 'force new connection': true });
+            // this.signalingSocket = io.connect('https://sandbox.simplewebrtc.com:443/', { transports: ['websocket'], 'force new connection': true });
             this.signalingSocket = io.connect(configs.signalingUrl, configs.socketOptions);
             this.send = this.send.bind(this);
             this.onDisconnect = this.onDisconnect.bind(this);
@@ -46,13 +46,24 @@ export var AbstractWEBRTC;
             });
             self.signalingSocket.on('disconnect', this.onDisconnect);
             self.signalingSocket.on('reconnect', function (data) {
-                console.log("SOCKET reconnect", data);
+                if (self.debug)
+                    console.log("SOCKET reconnect", data);
             });
             self.signalingSocket.on('reconnectAttempt', function (data) {
-                console.log("SOCKET reconnectAttempt", data);
+                if (self.debug)
+                    console.log("SOCKET reconnectAttempt", data);
             });
             self.signalingSocket.on('error', function (data) {
-                console.log("SOCKET error", data);
+                if (self.debug)
+                    console.log("SOCKET error", data);
+            });
+            self.signalingSocket.on('connect_error', function (error) {
+                if (self.debug)
+                    console.log("SOCKET connect_error", error);
+            });
+            self.signalingSocket.on('connect_timeout', function (timeout) {
+                if (self.debug)
+                    console.log("SOCKET connect_timeout", timeout);
             });
             self.signalingSocket.on('stunservers', function (data) {
                 if (self.debug)

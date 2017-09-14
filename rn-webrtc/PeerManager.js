@@ -5,7 +5,6 @@
  */
 import { AbstractPeerConnection } from "../index";
 import { Peer } from "./Peer";
-import { logError } from "./WebRTC";
 var PeerManager = /** @class */ (function () {
     function PeerManager(options) {
         this.debug = false;
@@ -26,7 +25,6 @@ var PeerManager = /** @class */ (function () {
             iceConfig: webrtc.iceConfig
         };
         var peer = new Peer(config);
-        peer.logError = logError;
         this.peers.set(options.id, peer);
         return peer;
     };

@@ -12,6 +12,8 @@ export declare namespace AbstractPeerConnection {
     const PEER_STREAM_ADDED = "peerStreamAdded";
     const PEER_STREAM_REMOVED = "peerStreamRemoved";
     const CONNECTIVITY_ERROR = "connectivityError";
+    const PEER_STATS_READY = "PEER_STATS_READY";
+    const PEER_STAT = "PEER_STAT";
     const ON_ICE_COMPLETED = "iceCompleted";
     const ON_ICE_CONNECTED = "iceConnected";
     const ON_ICE_CONNECTION_FAILED = "iceFailed";
@@ -45,6 +47,8 @@ export interface IPC_Handler {
     browserPrefix: string;
     nick: any;
     offer: boolean;
+    audioTracks: MediaStreamTrack[];
+    videoTracks: MediaStreamTrack[];
     send_event: (messageType: string, payload?: any, optional?: {
         to: string;
     }) => void;
@@ -53,6 +57,8 @@ export interface IPC_Handler {
     addStream(stream: MediaStream): any;
     removeStream(stream: MediaStream): any;
     handleMessage(message: IMessageExchange): any;
+    getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<any>;
+    restartIce(): any;
 }
 export interface PeerConstructor {
     peer_id: any;

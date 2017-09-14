@@ -13,13 +13,10 @@ export default (Comp) => {
         static navigationOptions = {
             header: null,
         }
-
         constructor(props) {
             super(props);
-
-            let self = this;
-
             this.state = {
+                ...this.props.navigation.state.params,
                 ready: false,
                 isFront: true,
                 mute: false,
@@ -29,6 +26,7 @@ export default (Comp) => {
                 showSelfView: true,
                 time: 0,
             }
+            console.log(this.state);
             this.toggleLoudspeaker = this.toggleLoudspeaker.bind(this)
             this.switchVideoType = this.switchVideoType.bind(this)
             this.toggleSelfCamera = this.toggleSelfCamera.bind(this)
@@ -36,9 +34,15 @@ export default (Comp) => {
             this.disconnect = this.disconnect.bind(this);
             this.onPeerCreated = this.onPeerCreated.bind(this);
             this.connectionClose = this.connectionClose.bind(this);
-
+            this.initSocket();
+        }
+        initSocket(){
+            let self = this;
             let rtcConfig = {
-                signalingUrl: `https://chitchats.ga:8888`,
+                signalingUrl: 
+                //'https://sandbox.simplewebrtc.com:443',
+                `https://chitchats.ga:8888`,
+                // 'http://192.168.1.105:8888', 
                 socketOptions: { transports: ['websocket'], 'force new connection': true },
                 debug: true
             };
@@ -48,21 +52,22 @@ export default (Comp) => {
                 if (!!self.webrtc) {
                     self.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_READY, (socker_id) => {
                         let mediaContrains = {
-                            audio: true, video: false
-                            // video: {
-                            //     mandatory: {
-                            //         minWidth: 640, // Provide your own width, height and frame rate here
-                            //         minHeight: 360,
-                            //         minFrameRate: 24,
-                            //     }
-                            // }
+                            audio: true, //video: false
+                            video: {
+                                mandatory: {
+                                    minWidth: 640, // Provide your own width, height and frame rate here
+                                    minHeight: 360,
+                                    minFrameRate: 24,
+                                }
+                            }
                         };
+                        self.webrtc.userMedia.stopLocalStream();
                         self.webrtc.userMedia.startLocalStream(mediaContrains, true)
                             .then(function (stream) {
                                 self.setState({ selfViewSrc: stream.toURL(), ready: true });
-                                self.webrtc.join(self.props.roomName || "test");
+                                self.webrtc.join(self.state.roomName || "test");
                             }).catch(error => {
-                                console.warn(error);
+                                console.warn("startLocalStream: ",error);
                                 alert(error);
                             });
                     });
@@ -85,14 +90,13 @@ export default (Comp) => {
                     });
                     self.webrtc.webrtcEvents.on(AbstractWEBRTC.JOIN_ROOM_ERROR, (err) => console.log("joinRoom fail", err));
                     self.webrtc.webrtcEvents.on(AbstractWEBRTC.JOINED_ROOM, (roomName) => console.log("joinedRoom", roomName));
-                    self.webrtc.webrtcEvents.on(AbstractPeerConnection.CREATED_PEER, this.onPeerCreated);
+                    self.webrtc.webrtcEvents.on(AbstractPeerConnection.CREATED_PEER, self.onPeerCreated);
                     self.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_CLOSE, self.connectionClose);
                 }
             }).catch(err => {
                 console.warn("Fuck!", err);
             });
         }
-
         clearTimer() {
             clearInterval(this.timer)
             this.setState({ time: 0 })
@@ -131,6 +135,7 @@ export default (Comp) => {
         switchVideoType() {
             let self = this
             const isFront = !this.state.isFront;
+            self.webrtc.userMedia.stopLocalStream();
             self.setState({ isFront });
 
             let mediaContrains = {
@@ -143,7 +148,7 @@ export default (Comp) => {
                     }
                 }
             }
-
+            self.webrtc.userMedia.stopLocalStream();
             self.webrtc.userMedia.startLocalStream(mediaContrains, isFront).then(function (stream) {
                 let peers = self.webrtc.peerManager.getPeers();
                 self.setState({ selfViewSrc: stream.toURL() });
@@ -163,8 +168,8 @@ export default (Comp) => {
 
         connectionClose() {
             console.log("connection close");
-
-            this.webView.postMessage("Post message from react native");
+            if(this.webView)
+                this.webView.postMessage("Post message from react native");
         }
 
         render() {

@@ -14,6 +14,21 @@ export var AbstractPeer;
          * @param options
          */
         function BasePeer(config) {
+            // const twilioIceServers = [
+            //     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
+            // ];
+            // configuration.iceServers = twilioIceServers;
+            this.configuration = {
+                iceServers: [
+                    {
+                        urls: ["stun:stun.l.google.com:19302",
+                            'stun:stun1.l.google.com:19302',
+                            'stun:stun2.l.google.com:19302',
+                            'stun:stun3.l.google.com:19302',
+                            'stun:stun4.l.google.com:19302']
+                    },
+                ]
+            };
             this.enableDataChannels = true;
             this.logError = function (error) {
                 console.log(error);
@@ -27,8 +42,9 @@ export var AbstractPeer;
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
+            this.restartIce = this.restartIce.bind(this);
+            this.onCreateOfferSuccess = this.onCreateOfferSuccess.bind(this);
         }
-        BasePeer.prototype.initPeerConnection = function (stream, iceConfig) { };
         BasePeer.prototype.removeStream = function (stream) {
             this.pc.removeStream(stream);
         };
@@ -41,17 +57,31 @@ export var AbstractPeer;
         BasePeer.prototype.onCreateSessionDescriptionError = function (error) {
             console.warn('Failed to create session description: ' + error.toString());
         };
+        // Simulate an ice restart.
+        BasePeer.prototype.restartIce = function () {
+            var self = this;
+            if (self.debug)
+                console.log('pc createOffer restart');
+            self.offer = true;
+            var offerOptions = { iceRestart: true };
+            self.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError, offerOptions);
+        };
+        BasePeer.prototype.onCreateOfferSuccess = function (desc) {
+            var self = this;
+            if (self.debug)
+                console.log('createOffer Success');
+            self.pc.setLocalDescription(desc, function () {
+                if (self.debug)
+                    console.log('setLocalDescription Success');
+                // Waiting for all ice. and then send offer.
+                if (self.pc.iceGatheringState == "complete") {
+                    self.sendOffer();
+                }
+            }, self.onSetSessionDescriptionError);
+        };
         BasePeer.prototype.createOffer = function () {
             var self = this;
-            this.pc.createOffer(function (offer) {
-                if (self.debug)
-                    console.log('createOffer Success');
-                self.pc.setLocalDescription(offer, function () {
-                    if (self.debug)
-                        console.log('setLocalDescription Success');
-                    // Waiting for all ice. and then send offer.
-                }, self.onSetSessionDescriptionError);
-            }, self.onCreateSessionDescriptionError, { iceRestart: true });
+            this.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError);
         };
         BasePeer.prototype.createAnswer = function (message) {
             var self = this;
@@ -74,7 +104,6 @@ export var AbstractPeer;
             self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
             self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
         };
-        BasePeer.prototype.handleMessage = function (message) { };
         return BasePeer;
     }());
     AbstractPeer.BasePeer = BasePeer;

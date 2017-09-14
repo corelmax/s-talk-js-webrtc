@@ -11,6 +11,21 @@ import { IMessageExchange } from "./WebrtcSignaling";
 
 export namespace AbstractPeer {
     export abstract class BasePeer implements IPC_Handler {
+        // const twilioIceServers = [
+        //     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
+        // ];
+        // configuration.iceServers = twilioIceServers;
+        configuration = {
+            iceServers: [
+                {
+                    urls: ["stun:stun.l.google.com:19302"
+                        , 'stun:stun1.l.google.com:19302',
+                        'stun:stun2.l.google.com:19302',
+                        'stun:stun3.l.google.com:19302',
+                        'stun:stun4.l.google.com:19302']
+                },
+            ]
+        };
 
         id: string;
         pc: RTCPeerConnection;
@@ -24,6 +39,8 @@ export namespace AbstractPeer {
         browserPrefix: string;
         nick;
         offer: boolean;
+        audioTracks: MediaStreamTrack[];
+        videoTracks: MediaStreamTrack[];
 
         enableDataChannels: boolean = true;
 
@@ -49,9 +66,12 @@ export namespace AbstractPeer {
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
+
+            this.restartIce = this.restartIce.bind(this);
+            this.onCreateOfferSuccess = this.onCreateOfferSuccess.bind(this);
         }
 
-        initPeerConnection(stream: MediaStream, iceConfig: any) { }
+        abstract initPeerConnection(stream: MediaStream, iceConfig: any);
 
         removeStream(stream: MediaStream) {
             this.pc.removeStream(stream);
@@ -67,22 +87,38 @@ export namespace AbstractPeer {
         onCreateSessionDescriptionError(error) {
             console.warn('Failed to create session description: ' + error.toString());
         }
+
+        // Simulate an ice restart.
+        restartIce() {
+            let self = this;
+            if (self.debug)
+                console.log('pc createOffer restart');
+
+            self.offer = true;
+            let offerOptions = { iceRestart: true };
+            self.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError, offerOptions);
+        }
+        onCreateOfferSuccess(desc: RTCSessionDescription) {
+            let self = this;
+            if (self.debug)
+                console.log('createOffer Success');
+
+            self.pc.setLocalDescription(desc, function () {
+                if (self.debug)
+                    console.log('setLocalDescription Success');
+
+                // Waiting for all ice. and then send offer.
+                if (self.pc.iceGatheringState == "complete") {
+                    self.sendOffer();
+                }
+            }, self.onSetSessionDescriptionError);
+        }
         createOffer() {
             let self = this;
 
-            this.pc.createOffer(function (offer) {
-                if (self.debug)
-                    console.log('createOffer Success');
-
-                self.pc.setLocalDescription(offer, function () {
-                    if (self.debug)
-                        console.log('setLocalDescription Success');
-
-                    // Waiting for all ice. and then send offer.
-                }, self.onSetSessionDescriptionError);
-            }, self.onCreateSessionDescriptionError, { iceRestart: true });
+            this.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError);
         }
-        createAnswer(message) {
+        createAnswer(message: IMessageExchange) {
             let self = this;
             self.pc.createAnswer(function (answer) {
                 if (self.debug)
@@ -106,6 +142,7 @@ export namespace AbstractPeer {
             self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "createOffer Success");
             self.send_event(AbstractPeerConnection.OFFER, self.pc.localDescription, { to: self.id });
         }
-        handleMessage(message: IMessageExchange) { }
+        abstract handleMessage(message: IMessageExchange);
+        abstract getStats(mediaTrack: MediaStreamTrack, secInterval: number): Promise<any>;
     }
 }

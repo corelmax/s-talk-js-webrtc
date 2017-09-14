@@ -12,21 +12,13 @@ import { createStreamByText } from '../libs/StreamHelper';
 import { IMessageExchange } from "../core/WebrtcSignaling";
 import * as DetectRTC from 'detectrtc';
 
-// const twilioIceServers = [
-//     { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
-// ];
-// configuration.iceServers = twilioIceServers;
-const configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
-    ]
-};
+export type GetPeerStats = (track: MediaStreamTrack, cb: Function, sec_interval: number) => void;
 
+const getStats = window["getStats"] as GetPeerStats
 export class Peer extends AbstractPeer.BasePeer {
+
+    startTime;
+
     /**
      * reture PeerConnection
      * @param socket
@@ -36,6 +28,8 @@ export class Peer extends AbstractPeer.BasePeer {
     constructor(config: PeerConstructor) {
         super(config);
 
+        this.getRemoteStreamTracks = this.getRemoteStreamTracks.bind(this);
+
         this.initPeerConnection(config.stream, config.iceConfig);
     }
 
@@ -43,14 +37,16 @@ export class Peer extends AbstractPeer.BasePeer {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
+        self.startTime = window.performance.now();
 
         let iceServers: RTCConfiguration;
         if (!!iceConfig)
             iceServers = iceConfig;
         else
-            iceServers = configuration;
+            iceServers = this.configuration;
 
         this.pc = new RTCPeerConnection(iceServers);
+        this.pc.getPeerStats = getStats;
         if (self.debug) {
             console.log(JSON.stringify(iceServers));
             console.log(`connection: ${this.pc.iceConnectionState}, Gathering: ${this.pc.iceGatheringState}, signaling: ${this.pc.signalingState}`);
@@ -79,9 +75,7 @@ export class Peer extends AbstractPeer.BasePeer {
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
 
             if (target.iceConnectionState === 'completed') {
-                // setTimeout(() => {
-                //     self.getStats();
-                // }, 1000);
+                self.getRemoteStreamTracks();
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
             else if (target.iceConnectionState === 'connected') {
@@ -138,9 +132,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
 
         this.pc.addStream(stream);
-        // if (DetectRTC.browser.isFirefox == true) {
-        //     setTimeout(self.pc.onnegotiationneeded, 1000);
-        // }
+
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
@@ -149,24 +141,44 @@ export class Peer extends AbstractPeer.BasePeer {
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
 
-    getStats() {
+    getRemoteStreamTracks() {
         let self = this;
-        const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
-        const pc = peer.pc as RTCPeerConnection;
 
-        if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
-            const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
+        let mediaStreams = self.pc.getRemoteStreams();
+        self.audioTracks = new Array() as MediaStreamTrack[];
+        self.videoTracks = new Array() as MediaStreamTrack[];
+        mediaStreams.map(stream => self.audioTracks.concat(stream.getAudioTracks()));
+        mediaStreams.map(stream => self.videoTracks.concat(stream.getVideoTracks()));
 
-            pc.getStats(track, (report) => {
-                console.log('getStats report', report);
-            }, self.logError);
-        }
+        process.nextTick(() => {
+            self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
+        });
+    }
+    getStats(mediaTrack?: MediaStreamTrack, secInterval: number) {
+        let self = this;
+
+        self.pc.getPeerStats(mediaTrack, result => {
+            if (self.debug) {
+                console.log("getStats: ", result);
+            }
+
+            self.parentsEmitter.emit(AbstractPeerConnection.PEER_STAT, result);
+        }, secInterval);
+
+        // const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
+        // const pc = peer.pc as RTCPeerConnection;
+
+        // if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
+        //     const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
+
+        //     pc.getStats(track, (report) => {
+        //         console.log('getStats report', report);
+        //     }, self.logError);
+        // }
     }
 
     handleMessage(message: IMessageExchange) {
         let self = this;
-        if (self.debug)
-            console.log('handleMessage', message.type);
 
         if (message.prefix)
             this.browserPrefix = message.prefix;
@@ -193,12 +205,13 @@ export class Peer extends AbstractPeer.BasePeer {
             if (!message.payload) return;
 
             const onAddIceCandidateSuccess = () => {
-                if (self.debug)
-                    console.log('addIceCandidate success');
+                // if (self.debug)
+                //     console.log('addIceCandidate success');
             }
 
             const onAddIceCandidateError = (error) => {
-                console.warn('failed to add ICE Candidate: ' + error.toString());
+                if (self.debug)
+                    console.warn('failed to add ICE Candidate: ' + error.toString());
             }
             self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
         }
