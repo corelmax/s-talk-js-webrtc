@@ -74,6 +74,9 @@ export var AbstractPeer;
                 if (self.debug)
                     console.log('setLocalDescription Success');
                 // Waiting for all ice. and then send offer.
+                if (self.pc.iceGatheringState == "complete") {
+                    self.sendOffer();
+                }
             }, self.onSetSessionDescriptionError);
         };
         BasePeer.prototype.createOffer = function () {

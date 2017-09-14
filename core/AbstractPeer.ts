@@ -108,6 +108,9 @@ export namespace AbstractPeer {
                     console.log('setLocalDescription Success');
 
                 // Waiting for all ice. and then send offer.
+                if (self.pc.iceGatheringState == "complete") {
+                    self.sendOffer();
+                }
             }, self.onSetSessionDescriptionError);
         }
         createOffer() {
