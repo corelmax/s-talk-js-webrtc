@@ -6,10 +6,8 @@ var NativeVolumeController = /** @class */ (function () {
          */
         this.volume = 0;
         this.isMute = false;
-        console.log("getVolume is ", RNVolume.getVolume);
-        console.log("setVolume is ", RNVolume.setVolume);
-        console.log("onVolumeChange is ", RNVolume.onVolumeChange);
         RNVolume.getVolume(this.getVolumnCallback.bind(this));
+        RNVolume.onVolumeChange(this.onVolumeChanged.bind(this));
         this.debuglog("Created object.");
     }
     /**
@@ -55,13 +53,14 @@ var NativeVolumeController = /** @class */ (function () {
      */
     NativeVolumeController.prototype.onVolumeChanged = function (volume) {
         this.volume = volume;
+        this.debuglog("Volume was change to: ", volume);
     };
     NativeVolumeController.prototype.debuglog = function () {
         var msg = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             msg[_i] = arguments[_i];
         }
-        console.log("[NativeAudioController] > ", msg);
+        console.log("[NativeAudioController] > ", msg.join(" "));
     };
     return NativeVolumeController;
 }());

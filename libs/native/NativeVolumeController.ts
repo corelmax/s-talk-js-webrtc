@@ -6,10 +6,8 @@ export default class NativeVolumeController{
         private volume = 0;
         isMute = false;
         constructor(){
-                console.log("getVolume is ",RNVolume.getVolume);
-                console.log("setVolume is ",RNVolume.setVolume);
-                console.log("onVolumeChange is ",RNVolume.onVolumeChange);
                 RNVolume.getVolume(this.getVolumnCallback.bind(this));
+                RNVolume.onVolumeChange(this.onVolumeChanged.bind(this));
                 this.debuglog("Created object.");
         }
         /**
@@ -55,9 +53,10 @@ export default class NativeVolumeController{
          */
         protected onVolumeChanged(volume){
                 this.volume = volume;
+                this.debuglog("Volume was change to: ", volume);
         }
 
         private debuglog(...msg){
-                console.log("[NativeAudioController] > ", msg);
+                console.log("[NativeAudioController] > ", msg.join(" "));
         }
 }
