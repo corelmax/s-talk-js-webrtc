@@ -18,8 +18,6 @@ const getStats = window["getStats"] as GetPeerStats
 export class Peer extends AbstractPeer.BasePeer {
 
     getPeerStats: GetPeerStats;
-    audioTracks: MediaStreamTrack[];
-    videoTracks: MediaStreamTrack[];
 
     startTime;
 

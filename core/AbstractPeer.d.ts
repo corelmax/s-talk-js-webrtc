@@ -26,6 +26,8 @@ export declare namespace AbstractPeer {
         browserPrefix: string;
         nick: any;
         offer: boolean;
+        audioTracks: MediaStreamTrack[];
+        videoTracks: MediaStreamTrack[];
         enableDataChannels: boolean;
         send_event: (messageType: string, payload?: any, optional?: {
             to: string;

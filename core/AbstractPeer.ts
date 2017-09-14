@@ -39,6 +39,8 @@ export namespace AbstractPeer {
         browserPrefix: string;
         nick;
         offer: boolean;
+        audioTracks: MediaStreamTrack[];
+        videoTracks: MediaStreamTrack[];
 
         enableDataChannels: boolean = true;
 

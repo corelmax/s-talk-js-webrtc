@@ -3,8 +3,6 @@ import { IMessageExchange } from "../core/WebrtcSignaling";
 export declare type GetPeerStats = (track: MediaStreamTrack, cb: Function, sec_interval: number) => void;
 export declare class Peer extends AbstractPeer.BasePeer {
     getPeerStats: GetPeerStats;
-    audioTracks: MediaStreamTrack[];
-    videoTracks: MediaStreamTrack[];
     startTime: any;
     /**
      * reture PeerConnection
