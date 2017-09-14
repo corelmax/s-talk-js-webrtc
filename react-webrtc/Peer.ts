@@ -159,7 +159,7 @@ export class Peer extends AbstractPeer.BasePeer {
 
         self.pc.getPeerStats(mediaTrack, result => {
             if (self.debug) {
-                console.log("getStats: ", mediaTrack.id, result);
+                console.log("getStats: ", result);
             }
 
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STAT, result);

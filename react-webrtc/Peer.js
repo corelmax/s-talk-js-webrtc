@@ -132,7 +132,7 @@ var Peer = /** @class */ (function (_super) {
         var self = this;
         self.pc.getPeerStats(mediaTrack, function (result) {
             if (self.debug) {
-                console.log("getStats: ", mediaTrack.id, result);
+                console.log("getStats: ", result);
             }
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STAT, result);
         }, secInterval);
