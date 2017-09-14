@@ -80,7 +80,7 @@
 		D8E6852F811B4AC6A22EE260 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B274AF9E148409385E999CF /* Entypo.ttf */; };
 		E9ACB417822C43E19814D85D /* Prompt-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E7E497C7D714EBF8FA90A07 /* Prompt-ThinItalic.ttf */; };
 		F27F5E4E6CC94BB1860F49A8 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 372B9B7F669449B7A4C0817A /* Foundation.ttf */; };
-		83C2C641D95046B69E8D5B8D /* libRNVolume.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDFCBD4FC2014C8F9215509F /* libRNVolume.a */; };
+		2662C3DB7E464B4E9305F6DB /* libRNVolume.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 913FCEABC7944CE681A40071 /* libRNVolume.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -417,8 +417,8 @@
 		DE6AD53ECBE84D4D8C859BB9 /* Prompt-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-ExtraBold.ttf"; path = "../assets/fonts/Prompt-ExtraBold.ttf"; sourceTree = "<group>"; };
 		E7EE2CCECC7C4F26BF1901E4 /* Prompt-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-LightItalic.ttf"; path = "../assets/fonts/Prompt-LightItalic.ttf"; sourceTree = "<group>"; };
 		EF0DE8D0F48044BEBE53F1D9 /* Prompt-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-SemiBoldItalic.ttf"; path = "../assets/fonts/Prompt-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
-		1CD36C0CEAB44536A3791C27 /* RNVolume.xcodeproj */ = {isa = PBXFileReference; name = "RNVolume.xcodeproj"; path = "../node_modules/react-native-volume/ios/RNVolume.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		FDFCBD4FC2014C8F9215509F /* libRNVolume.a */ = {isa = PBXFileReference; name = "libRNVolume.a"; path = "libRNVolume.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		74F514E03B514E719BFF8153 /* RNVolume.xcodeproj */ = {isa = PBXFileReference; name = "RNVolume.xcodeproj"; path = "../node_modules/react-native-volume/ios/RNVolume.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		913FCEABC7944CE681A40071 /* libRNVolume.a */ = {isa = PBXFileReference; name = "libRNVolume.a"; path = "libRNVolume.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,7 +459,7 @@
 				2D954B931F593E3400F13357 /* WebRTC.framework in Frameworks */,
 				0BFFDD4D86884299ACB7689F /* libRNSpinkit.a in Frameworks */,
 				C724F54219244AFF95ED485E /* libRNVectorIcons.a in Frameworks */,
-				83C2C641D95046B69E8D5B8D /* libRNVolume.a in Frameworks */,
+				2662C3DB7E464B4E9305F6DB /* libRNVolume.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -722,7 +722,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				C8EB88D5342340E2934E59F9 /* RNSpinkit.xcodeproj */,
 				353168AC0D894A288239B46C /* RNVectorIcons.xcodeproj */,
-				1CD36C0CEAB44536A3791C27 /* RNVolume.xcodeproj */,
+				74F514E03B514E719BFF8153 /* RNVolume.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1361,8 +1361,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1392,8 +1390,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1493,8 +1489,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1531,8 +1525,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1562,8 +1554,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WebRtcRNDemo-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1588,8 +1578,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WebRtcRNDemo-tvOSTests";

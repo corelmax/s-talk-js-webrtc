@@ -6,6 +6,9 @@ export default class NativeVolumeController{
         private volume = 0;
         isMute = false;
         constructor(){
+                console.log("getVolume is ",getVolume);
+                console.log("setVolume is ",setVolume);
+                console.log("onVolumeChange is ",onVolumeChange);
                 getVolume(this.getVolumnCallback.bind(this));
                 this.debuglog("Created object.");
         }

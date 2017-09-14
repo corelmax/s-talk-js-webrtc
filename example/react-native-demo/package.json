@@ -12,6 +12,7 @@
 		"react-native-incall-manager": "^2.2.0",
 		"react-native-spinkit": "^1.1.1",
 		"react-native-vector-icons": "^4.3.0",
+		"react-native-volume": "git+https://github.com/nuke99/react-native-volume.git",
 		"react-native-webrtc": "^1.58.2",
 		"react-navigation": "^1.0.0-beta.11",
 		"stalk-js": "0.0.3-f21",

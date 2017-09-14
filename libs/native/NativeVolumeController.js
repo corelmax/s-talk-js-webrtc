@@ -1,4 +1,4 @@
-import { getVolume, setVolume } from 'react-native-volume';
+import { getVolume, setVolume, onVolumeChange } from 'react-native-volume';
 var NativeVolumeController = /** @class */ (function () {
     function NativeVolumeController() {
         /**
@@ -6,6 +6,9 @@ var NativeVolumeController = /** @class */ (function () {
          */
         this.volume = 0;
         this.isMute = false;
+        console.log("getVolume is ", getVolume);
+        console.log("setVolume is ", setVolume);
+        console.log("onVolumeChange is ", onVolumeChange);
         getVolume(this.getVolumnCallback.bind(this));
         this.debuglog("Created object.");
     }
