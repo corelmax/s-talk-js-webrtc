@@ -52,6 +52,8 @@ export interface IPC_Handler {
     browserPrefix: string;
     nick;
     offer: boolean;
+    audioTracks: MediaStreamTrack[];
+    videoTracks: MediaStreamTrack[];
 
     send_event: (messageType: string, payload?: any, optional?: { to: string }) => void;
     logError(error: string);
