@@ -130,14 +130,12 @@ var Peer = /** @class */ (function (_super) {
     };
     Peer.prototype.getStats = function (mediaTrack, secInterval) {
         var self = this;
-        return new Promise(function (resolve, rejected) {
-            self.pc.getPeerStats(mediaTrack, function (result) {
-                if (self.debug) {
-                    console.log("getStats: ", mediaTrack.id, result);
-                }
-                resolve(result);
-            }, secInterval);
-        });
+        self.pc.getPeerStats(mediaTrack, function (result) {
+            if (self.debug) {
+                console.log("getStats: ", mediaTrack.id, result);
+            }
+            self.parentsEmitter.emit(AbstractPeerConnection.PEER_STAT, result);
+        }, secInterval);
         // const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
         // const pc = peer.pc as RTCPeerConnection;
         // if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {

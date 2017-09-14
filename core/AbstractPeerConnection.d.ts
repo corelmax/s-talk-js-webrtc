@@ -13,6 +13,7 @@ export declare namespace AbstractPeerConnection {
     const PEER_STREAM_REMOVED = "peerStreamRemoved";
     const CONNECTIVITY_ERROR = "connectivityError";
     const PEER_STATS_READY = "PEER_STATS_READY";
+    const PEER_STAT = "PEER_STAT";
     const ON_ICE_COMPLETED = "iceCompleted";
     const ON_ICE_CONNECTED = "iceConnected";
     const ON_ICE_CONNECTION_FAILED = "iceFailed";

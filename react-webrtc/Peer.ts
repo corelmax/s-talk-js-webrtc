@@ -157,15 +157,13 @@ export class Peer extends AbstractPeer.BasePeer {
     getStats(mediaTrack: MediaStreamTrack, secInterval: number) {
         let self = this;
 
-        return new Promise((resolve, rejected) => {
-            self.pc.getPeerStats(mediaTrack, result => {
-                if (self.debug) {
-                    console.log("getStats: ", mediaTrack.id, result);
-                }
+        self.pc.getPeerStats(mediaTrack, result => {
+            if (self.debug) {
+                console.log("getStats: ", mediaTrack.id, result);
+            }
 
-                resolve(result);
-            }, secInterval);
-        });
+            self.parentsEmitter.emit(AbstractPeerConnection.PEER_STAT, result);
+        }, secInterval);
 
         // const peer = this.pcPeers[Object.keys(this.pcPeers)[0]];
         // const pc = peer.pc as RTCPeerConnection;
