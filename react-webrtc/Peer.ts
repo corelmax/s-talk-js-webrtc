@@ -28,6 +28,8 @@ export class Peer extends AbstractPeer.BasePeer {
     constructor(config: PeerConstructor) {
         super(config);
 
+        this.getRemoteStreamTracks = this.getRemoteStreamTracks.bind(this);
+
         this.initPeerConnection(config.stream, config.iceConfig);
     }
 
@@ -73,13 +75,7 @@ export class Peer extends AbstractPeer.BasePeer {
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
 
             if (target.iceConnectionState === 'completed') {
-                let mediaStreams = self.pc.getRemoteStreams();
-                self.audioTracks = new Array() as MediaStreamTrack[];
-                self.videoTracks = new Array() as MediaStreamTrack[];
-                mediaStreams.map(stream => self.audioTracks.concat(stream.getAudioTracks()));
-                mediaStreams.map(stream => self.videoTracks.concat(stream.getVideoTracks()));
-
-                self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
+                self.getRemoteStreamTracks();
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
             else if (target.iceConnectionState === 'connected') {
@@ -145,6 +141,19 @@ export class Peer extends AbstractPeer.BasePeer {
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
 
+    getRemoteStreamTracks() {
+        let self = this;
+
+        let mediaStreams = self.pc.getRemoteStreams();
+        self.audioTracks = new Array() as MediaStreamTrack[];
+        self.videoTracks = new Array() as MediaStreamTrack[];
+        mediaStreams.map(stream => self.audioTracks.concat(stream.getAudioTracks()));
+        mediaStreams.map(stream => self.videoTracks.concat(stream.getVideoTracks()));
+
+        process.nextTick(() => {
+            self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
+        });
+    }
     getStats(mediaTrack: MediaStreamTrack, secInterval: number) {
         let self = this;
 

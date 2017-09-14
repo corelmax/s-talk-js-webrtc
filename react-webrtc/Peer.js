@@ -29,6 +29,7 @@ var Peer = /** @class */ (function (_super) {
      */
     function Peer(config) {
         var _this = _super.call(this, config) || this;
+        _this.getRemoteStreamTracks = _this.getRemoteStreamTracks.bind(_this);
         _this.initPeerConnection(config.stream, config.iceConfig);
         return _this;
     }
@@ -65,12 +66,7 @@ var Peer = /** @class */ (function (_super) {
                 console.log('oniceconnectionstatechange', target.iceConnectionState);
             self.pcEvent.emit("oniceconnectionstatechange", target.iceConnectionState);
             if (target.iceConnectionState === 'completed') {
-                var mediaStreams = self.pc.getRemoteStreams();
-                self.audioTracks = new Array();
-                self.videoTracks = new Array();
-                mediaStreams.map(function (stream) { return self.audioTracks.concat(stream.getAudioTracks()); });
-                mediaStreams.map(function (stream) { return self.videoTracks.concat(stream.getVideoTracks()); });
-                self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
+                self.getRemoteStreamTracks();
                 self.parentsEmitter.emit(AbstractPeerConnection.ON_ICE_COMPLETED, self.pcPeers);
             }
             else if (target.iceConnectionState === 'connected') {
@@ -120,6 +116,17 @@ var Peer = /** @class */ (function (_super) {
                 console.log("DetectRTC", DetectRTC);
         });
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
+    };
+    Peer.prototype.getRemoteStreamTracks = function () {
+        var self = this;
+        var mediaStreams = self.pc.getRemoteStreams();
+        self.audioTracks = new Array();
+        self.videoTracks = new Array();
+        mediaStreams.map(function (stream) { return self.audioTracks.concat(stream.getAudioTracks()); });
+        mediaStreams.map(function (stream) { return self.videoTracks.concat(stream.getVideoTracks()); });
+        process.nextTick(function () {
+            self.parentsEmitter.emit(AbstractPeerConnection.PEER_STATS_READY);
+        });
     };
     Peer.prototype.getStats = function (mediaTrack, secInterval) {
         var self = this;
