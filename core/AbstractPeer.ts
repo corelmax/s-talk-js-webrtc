@@ -64,9 +64,12 @@ export namespace AbstractPeer {
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
+
+            this.restartIce = this.restartIce.bind(this);
+            this.onCreateOfferSuccess = this.onCreateOfferSuccess.bind(this);
         }
 
-        initPeerConnection(stream: MediaStream, iceConfig: any) { }
+        abstract initPeerConnection(stream: MediaStream, iceConfig: any);
 
         removeStream(stream: MediaStream) {
             this.pc.removeStream(stream);
@@ -85,11 +88,13 @@ export namespace AbstractPeer {
 
         // Simulate an ice restart.
         restartIce() {
-            if (this.debug)
+            let self = this;
+            if (self.debug)
                 console.log('pc createOffer restart');
 
+            self.offer = true;
             let offerOptions = { iceRestart: true };
-            this.pc.createOffer(this.onCreateOfferSuccess, this.onCreateSessionDescriptionError, offerOptions);
+            self.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError, offerOptions);
         }
         onCreateOfferSuccess(desc: RTCSessionDescription) {
             let self = this;

@@ -42,8 +42,9 @@ export var AbstractPeer;
             this.parentsEmitter = config.emitter;
             this.send_event = config.sendHandler;
             this.offer = config.offer;
+            this.restartIce = this.restartIce.bind(this);
+            this.onCreateOfferSuccess = this.onCreateOfferSuccess.bind(this);
         }
-        BasePeer.prototype.initPeerConnection = function (stream, iceConfig) { };
         BasePeer.prototype.removeStream = function (stream) {
             this.pc.removeStream(stream);
         };
@@ -58,10 +59,12 @@ export var AbstractPeer;
         };
         // Simulate an ice restart.
         BasePeer.prototype.restartIce = function () {
-            if (this.debug)
+            var self = this;
+            if (self.debug)
                 console.log('pc createOffer restart');
+            self.offer = true;
             var offerOptions = { iceRestart: true };
-            this.pc.createOffer(this.onCreateOfferSuccess, this.onCreateSessionDescriptionError, offerOptions);
+            self.pc.createOffer(self.onCreateOfferSuccess, self.onCreateSessionDescriptionError, offerOptions);
         };
         BasePeer.prototype.onCreateOfferSuccess = function (desc) {
             var self = this;

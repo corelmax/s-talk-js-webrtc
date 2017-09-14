@@ -38,7 +38,7 @@ export declare namespace AbstractPeer {
          * @param options
          */
         constructor(config: PeerConstructor);
-        initPeerConnection(stream: MediaStream, iceConfig: any): void;
+        abstract initPeerConnection(stream: MediaStream, iceConfig: any): any;
         removeStream(stream: MediaStream): void;
         addStream(stream: MediaStream): void;
         onSetSessionDescriptionError(error: any): void;
