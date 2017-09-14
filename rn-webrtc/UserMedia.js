@@ -48,6 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
  */
 import { Platform } from 'react-native';
 import { MediaStreamTrack, getUserMedia, } from 'react-native-webrtc';
+import NativeAudioController from '../libs/NativeAudioController';
 var UserMedia = /** @class */ (function () {
     function UserMedia(options) {
         this.debug = false;
@@ -131,6 +132,7 @@ var UserMedia = /** @class */ (function () {
                                     }
                                     if (audioTracks.length > 0) {
                                         console.log('Using audio device: ' + audioTracks[0].label);
+                                        this.audioController = new NativeAudioController(audioTracks[0]);
                                     }
                                     stream.oninactive = function () {
                                         console.log('Stream inactive');
