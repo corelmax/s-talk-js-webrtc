@@ -126,6 +126,7 @@ var UserMedia = /** @class */ (function () {
                         return [2 /*return*/, new Promise(function (resolve, reject) {
                                 getUserMedia(defaultMediaConstraints, function (stream) {
                                     console.log('getUserMedia success');
+                                    self.setLocalStream(stream);
                                     var videoTracks = stream.getVideoTracks();
                                     var audioTracks = stream.getAudioTracks();
                                     if (videoTracks.length > 0) {
@@ -133,6 +134,7 @@ var UserMedia = /** @class */ (function () {
                                     }
                                     if (audioTracks.length > 0) {
                                         console.log('Using audio device: ' + audioTracks[0].label);
+                                        self.applyVolumeToAudioTrack(audioTracks[0]);
                                     }
                                     stream.oninactive = function () {
                                         console.log('Stream inactive');
@@ -163,6 +165,25 @@ var UserMedia = /** @class */ (function () {
     };
     UserMedia.prototype.applyStreamIncomeVolume = function (volume) {
         var audioTrack = this.getAudioTrack();
+        if (audioTrack == undefined)
+            return;
+        this.applyVolumeToAudioTrack(audioTrack);
+    };
+    UserMedia.prototype.applyVolumeToAudioTrack = function (audioTrack) {
+        if (audioTrack === void 0) { audioTrack = undefined; }
+        console.log("[Pre] apply volume to audio track");
+        if (audioTrack == undefined)
+            return;
+        var curVolume = this.volumeController.getVolume();
+        var constraints = audioTrack.getConstraints();
+        var advSets = constraints.advanced;
+        for (var i = 0; i < advSets.length; i++) {
+            var set = advSets[i];
+            set.volume = curVolume;
+        }
+        audioTrack.applyConstraints(constraints).then(function (res) {
+            console.log("[Done] apply volume to audio track: ", res);
+        });
     };
     UserMedia.prototype.setVideoEnabled = function (enabled) {
         if (!!this.localStream) {

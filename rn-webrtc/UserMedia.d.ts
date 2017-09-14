@@ -1,3 +1,4 @@
+import { MediaStreamConstraints } from 'react-native-webrtc';
 import { IUserMedia, AudioController, VideoController } from "../index";
 import NativeVolumeController from '../libs/native/NativeVolumeController';
 export declare class UserMedia implements IUserMedia {
@@ -16,6 +17,7 @@ export declare class UserMedia implements IUserMedia {
     });
     startLocalStream(mediaConstraints: MediaStreamConstraints, isFront: boolean | undefined): Promise<MediaStream>;
     applyStreamIncomeVolume(volume: any): void;
+    applyVolumeToAudioTrack(audioTrack?: any): void;
     setVideoEnabled(enabled: boolean): void;
     stopLocalStream(): void;
     private stopStream();
