@@ -1,4 +1,4 @@
-import RNVolume from 'react-native-volume';
+import RNVolume from 'react-native-stream-volume';
 var NativeVolumeController = /** @class */ (function () {
     function NativeVolumeController(onVolumeChangedCallback) {
         if (onVolumeChangedCallback === void 0) { onVolumeChangedCallback = undefined; }
@@ -9,8 +9,11 @@ var NativeVolumeController = /** @class */ (function () {
         this.onVolumeChangedCallback = undefined;
         this.isMute = false;
         this.onVolumeChangedCallback = onVolumeChangedCallback;
-        RNVolume.getVolume(this.getVolumnCallback.bind(this));
-        RNVolume.onVolumeChange(this.onVolumeChanged.bind(this));
+        var self = this;
+        RNVolume.adjustVolume(function () {
+            RNVolume.getVolume(self.getVolumnCallback.bind(self));
+            RNVolume.onVolumeChange(self.onVolumeChanged.bind(self));
+        });
         this.debuglog("Created object.");
     }
     /**
