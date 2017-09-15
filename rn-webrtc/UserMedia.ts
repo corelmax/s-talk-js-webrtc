@@ -120,7 +120,7 @@ export class UserMedia implements IUserMedia {
                 }
                 if (audioTracks.length > 0) {
                     console.log('Using audio device: ' + audioTracks[0].label);
-                    self.applyVolumeToAudioTrack(audioTracks[0]);
+                    //self.applyVolumeToAudioTrack(audioTracks[0]);
                 }
 
                 stream.oninactive = function () {
@@ -148,11 +148,12 @@ export class UserMedia implements IUserMedia {
             });
         });
     }
+    //Temperary disable.
     applyStreamIncomeVolume(volume){
-        let audioTrack : MediaStreamTrack = this.getAudioTrack();
-        if ( audioTrack == undefined )
-            return;
-        this.applyVolumeToAudioTrack(audioTrack);
+        // let audioTrack : MediaStreamTrack = this.getAudioTrack();
+        // if ( audioTrack == undefined )
+        //     return;
+        // this.applyVolumeToAudioTrack(audioTrack);
     }
     
     applyVolumeToAudioTrack(audioTrack = undefined){

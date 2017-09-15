@@ -134,7 +134,7 @@ var UserMedia = /** @class */ (function () {
                                     }
                                     if (audioTracks.length > 0) {
                                         console.log('Using audio device: ' + audioTracks[0].label);
-                                        self.applyVolumeToAudioTrack(audioTracks[0]);
+                                        //self.applyVolumeToAudioTrack(audioTracks[0]);
                                     }
                                     stream.oninactive = function () {
                                         console.log('Stream inactive');
@@ -163,11 +163,12 @@ var UserMedia = /** @class */ (function () {
             });
         });
     };
+    //Temperary disable.
     UserMedia.prototype.applyStreamIncomeVolume = function (volume) {
-        var audioTrack = this.getAudioTrack();
-        if (audioTrack == undefined)
-            return;
-        this.applyVolumeToAudioTrack(audioTrack);
+        // let audioTrack : MediaStreamTrack = this.getAudioTrack();
+        // if ( audioTrack == undefined )
+        //     return;
+        // this.applyVolumeToAudioTrack(audioTrack);
     };
     UserMedia.prototype.applyVolumeToAudioTrack = function (audioTrack) {
         if (audioTrack === void 0) { audioTrack = undefined; }
