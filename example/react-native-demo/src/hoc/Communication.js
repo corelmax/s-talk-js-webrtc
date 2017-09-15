@@ -51,16 +51,17 @@ export default (Comp) => {
 
                 if (!!self.webrtc) {
                     self.webrtc.webrtcEvents.on(AbstractWEBRTC.ON_CONNECTION_READY, (socker_id) => {
-                        let mediaContrains = {
-                            audio: true, //video: false
-                            video: {
-                                mandatory: {
-                                    minWidth: 640, // Provide your own width, height and frame rate here
-                                    minHeight: 360,
-                                    minFrameRate: 24,
-                                }
-                            }
-                        };
+                        let mediaContrains = self.getMediaConstraint(self.webrtc.userMedia);
+                        // {
+                        //     audio: true, //video: false
+                        //     video: {
+                        //         mandatory: {
+                        //             minWidth: 640, // Provide your own width, height and frame rate here
+                        //             minHeight: 360,
+                        //             minFrameRate: 24,
+                        //         }
+                        //     }
+                        // };
                         self.webrtc.userMedia.stopLocalStream();
                         self.webrtc.userMedia.startLocalStream(mediaContrains, true)
                             .then(function (stream) {
@@ -101,7 +102,24 @@ export default (Comp) => {
             clearInterval(this.timer)
             this.setState({ time: 0 })
         }
-
+        getMediaConstraint(userMedia =undefined){
+            let mediaConst = {
+                audio: {
+                    volume: 0.2 
+                        // userMedia == undefined ? 
+                        // this.webrtc.userMedia.volumeController.getVolume() :
+                        // userMedia.volumeController.getVolume()
+                }, //video: false
+                video: {
+                    mandatory: {
+                        minWidth: 640, // Provide your own width, height and frame rate here
+                        minHeight: 360,
+                        minFrameRate: 24,
+                    }
+                }
+            };
+            return mediaConst;
+        }
         componentWillUnmount() {
             this.clearTimer()
             this.disconnect();
@@ -138,16 +156,17 @@ export default (Comp) => {
             self.webrtc.userMedia.stopLocalStream();
             self.setState({ isFront });
 
-            let mediaContrains = {
-                audio: true,
-                video: {
-                    mandatory: {
-                        minWidth: 640, // Provide your own width, height and frame rate here
-                        minHeight: 360,
-                        minFrameRate: 30,
-                    }
-                }
-            }
+            let mediaContrains = self.getMediaConstraint(self.webrtc.userMedia);
+            // {
+            //     audio: true,
+            //     video: {
+            //         mandatory: {
+            //             minWidth: 640, // Provide your own width, height and frame rate here
+            //             minHeight: 360,
+            //             minFrameRate: 30,
+            //         }
+            //     }
+            // }
             self.webrtc.userMedia.stopLocalStream();
             self.webrtc.userMedia.startLocalStream(mediaContrains, isFront).then(function (stream) {
                 let peers = self.webrtc.peerManager.getPeers();

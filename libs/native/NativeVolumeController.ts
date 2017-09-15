@@ -1,4 +1,5 @@
-import RNVolume from 'react-native-volume';
+import RNVolume from 'react-native-stream-volume';
+
 export default class NativeVolumeController{
         /**
          * Volume of running device, must apply only when onVolumeChanged callback;
@@ -8,8 +9,11 @@ export default class NativeVolumeController{
         isMute = false;
         constructor(onVolumeChangedCallback = undefined){
                 this.onVolumeChangedCallback = onVolumeChangedCallback;
-                RNVolume.getVolume(this.getVolumnCallback.bind(this));
-                RNVolume.onVolumeChange(this.onVolumeChanged.bind(this));
+                let self = this;
+                RNVolume.adjustVolume(()=>{
+                        RNVolume.getVolume(self.getVolumnCallback.bind(self));
+                        RNVolume.onVolumeChange(self.onVolumeChanged.bind(self));
+                });
                 this.debuglog("Created object.");
         }
         /**
