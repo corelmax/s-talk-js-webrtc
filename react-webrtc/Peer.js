@@ -114,8 +114,7 @@ var Peer = /** @class */ (function (_super) {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
         });
-        if (self.offer)
-            self.addStream(self.stream);
+        self.addStream(self.stream);
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     };
     Peer.prototype.getRemoteStreamTracks = function () {
@@ -160,15 +159,11 @@ var Peer = /** @class */ (function (_super) {
                     console.log("setRemoteDescription complete");
                 if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
                     self.createAnswer(message);
-                    self.addStream(self.stream);
                 }
             }).catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
-                .then(function () {
-                // self.addStream(self.stream);
-            })
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {

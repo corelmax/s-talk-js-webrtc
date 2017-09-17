@@ -135,9 +135,7 @@ export class Peer extends AbstractPeer.BasePeer {
                 console.log("DetectRTC", DetectRTC);
         });
 
-        if (self.offer)
-            self.addStream(self.stream);
-
+        self.addStream(self.stream);
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
 
@@ -194,15 +192,11 @@ export class Peer extends AbstractPeer.BasePeer {
 
                     if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
                         self.createAnswer(message);
-                        self.addStream(self.stream);
                     }
                 }).catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
-                .then(() => {
-                    // self.addStream(self.stream);
-                })
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
