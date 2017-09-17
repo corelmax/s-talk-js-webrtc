@@ -22,6 +22,7 @@ export declare namespace AbstractWEBRTC {
         peerManager: IPC_Estabished;
         userMedia: IUserMedia;
         debug: boolean;
+        pingInverval: number;
         iceConfig: RTCConfiguration;
         constructor(configs: WebRtcConfig);
         join(roomname: string): void;

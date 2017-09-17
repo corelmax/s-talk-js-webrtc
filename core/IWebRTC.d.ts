@@ -13,6 +13,7 @@ export interface WebRtcConfig {
     socketOptions: any;
     debug: boolean;
     detectSpeakingEvents: boolean;
+    pingInterval: number;
 }
 export interface IWebRTC {
     signalingSocket: SocketIOClient.Socket;

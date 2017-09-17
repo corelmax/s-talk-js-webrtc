@@ -25,11 +25,13 @@ export namespace AbstractWEBRTC {
         peerManager: IPC_Estabished;
         userMedia: IUserMedia;
         debug: boolean = false;
+        pingInverval: number;
         iceConfig: RTCConfiguration;
 
         constructor(configs: WebRtcConfig) {
             let self = this;
             self.debug = configs.debug;
+            self.pingInverval = configs.pingInterval;
             self.iceConfig = { iceServers: [] };
 
             // this.signalingSocket = io.connect('https://sandbox.simplewebrtc.com:443/', { transports: ['websocket'], 'force new connection': true });
@@ -97,7 +99,7 @@ export namespace AbstractWEBRTC {
 
                 setTimeout(() => {
                     self.signalingSocket.emit('ping');
-                }, 5000);
+                }, self.pingInverval);
             });
             self.signalingSocket.emit('ping');
         }

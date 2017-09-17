@@ -19,6 +19,7 @@ export var AbstractWEBRTC;
             this.debug = false;
             var self = this;
             self.debug = configs.debug;
+            self.pingInverval = configs.pingInterval;
             self.iceConfig = { iceServers: [] };
             // this.signalingSocket = io.connect('https://sandbox.simplewebrtc.com:443/', { transports: ['websocket'], 'force new connection': true });
             this.signalingSocket = io.connect(configs.signalingUrl, configs.socketOptions);
@@ -80,7 +81,7 @@ export var AbstractWEBRTC;
                     console.log("ping, pong");
                 setTimeout(function () {
                     self.signalingSocket.emit('ping');
-                }, 5000);
+                }, self.pingInverval);
             });
             self.signalingSocket.emit('ping');
         }
