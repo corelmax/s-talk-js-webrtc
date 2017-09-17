@@ -91,6 +91,12 @@ export namespace AbstractWEBRTC {
                     console.log("turnservers", data);
                 self.iceConfig.iceServers[1] = data[0];
             });
+            self.signalingSocket.on("pong", () => {
+                setTimeout(() => {
+                    self.signalingSocket.emit('ping');
+                }, 5000);
+            });
+            self.signalingSocket.emit('ping');
         }
 
         join(roomname: string) {

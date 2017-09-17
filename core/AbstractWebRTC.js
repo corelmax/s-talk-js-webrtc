@@ -75,6 +75,12 @@ export var AbstractWEBRTC;
                     console.log("turnservers", data);
                 self.iceConfig.iceServers[1] = data[0];
             });
+            self.signalingSocket.on("pong", function () {
+                setTimeout(function () {
+                    self.signalingSocket.emit('ping');
+                }, 5000);
+            });
+            self.signalingSocket.emit('ping');
         }
         BaseWebRTC.prototype.join = function (roomname) {
             var self = this;
