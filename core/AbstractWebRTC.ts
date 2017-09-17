@@ -1,6 +1,6 @@
 /**
  * React,React-native webrtc peer implementation...
- * 
+ *
  * Copyright 2017 Ahoo Studio.co.th.
  */
 import * as events from "events";
@@ -92,6 +92,9 @@ export namespace AbstractWEBRTC {
                 self.iceConfig.iceServers[1] = data[0];
             });
             self.signalingSocket.on("pong", () => {
+                if (self.debug)
+                    console.log("ping, pong");
+
                 setTimeout(() => {
                     self.signalingSocket.emit('ping');
                 }, 5000);

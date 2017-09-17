@@ -76,6 +76,8 @@ export var AbstractWEBRTC;
                 self.iceConfig.iceServers[1] = data[0];
             });
             self.signalingSocket.on("pong", function () {
+                if (self.debug)
+                    console.log("ping, pong");
                 setTimeout(function () {
                     self.signalingSocket.emit('ping');
                 }, 5000);
