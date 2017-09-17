@@ -36,6 +36,7 @@ export var AbstractPeer;
             if (!config.stream) {
                 throw new Error("Missing stream!!!");
             }
+            this.stream = config.stream;
             this.debug = config.debug;
             this.id = config.peer_id;
             this.pcPeers = config.pcPeers;

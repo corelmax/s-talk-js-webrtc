@@ -30,10 +30,10 @@ var Peer = /** @class */ (function (_super) {
     function Peer(config) {
         var _this = _super.call(this, config) || this;
         _this.getRemoteStreamTracks = _this.getRemoteStreamTracks.bind(_this);
-        _this.initPeerConnection(config.stream, config.iceConfig);
+        _this.initPeerConnection(config.iceConfig);
         return _this;
     }
-    Peer.prototype.initPeerConnection = function (stream, iceConfig) {
+    Peer.prototype.initPeerConnection = function (iceConfig) {
         var self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
@@ -110,11 +110,12 @@ var Peer = /** @class */ (function (_super) {
             self.pcEvent.emit(AbstractPeerConnection.PeerEvent, "onremovestream");
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
-        this.pc.addStream(stream);
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
         });
+        if (self.offer)
+            self.addStream(self.stream);
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     };
     Peer.prototype.getRemoteStreamTracks = function () {
@@ -159,11 +160,15 @@ var Peer = /** @class */ (function (_super) {
                     console.log("setRemoteDescription complete");
                 if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
                     self.createAnswer(message);
+                    self.addStream(self.stream);
                 }
             }).catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
+                .then(function () {
+                // self.addStream(self.stream);
+            })
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
@@ -177,7 +182,9 @@ var Peer = /** @class */ (function (_super) {
                 if (self.debug)
                     console.warn('failed to add ICE Candidate: ' + error.toString());
             };
-            self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
+            self.pc.addIceCandidate(new RTCIceCandidate(message.payload))
+                .then(onAddIceCandidateSuccess)
+                .catch(onAddIceCandidateError);
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {
             this.parentsEmitter.emit(AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);

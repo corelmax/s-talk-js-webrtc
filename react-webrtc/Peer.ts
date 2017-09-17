@@ -30,10 +30,10 @@ export class Peer extends AbstractPeer.BasePeer {
 
         this.getRemoteStreamTracks = this.getRemoteStreamTracks.bind(this);
 
-        this.initPeerConnection(config.stream, config.iceConfig);
+        this.initPeerConnection(config.iceConfig);
     }
 
-    initPeerConnection(stream: MediaStream, iceConfig: RTCConfiguration) {
+    initPeerConnection(iceConfig: RTCConfiguration) {
         let self = this;
         self.channels = {};
         self.pcEvent = new EventEmitter();
@@ -130,13 +130,13 @@ export class Peer extends AbstractPeer.BasePeer {
             self.parentsEmitter.emit(AbstractPeerConnection.PEER_STREAM_REMOVED, peer.stream);
         };
 
-
-        this.pc.addStream(stream);
-
         DetectRTC.load(function () {
             if (self.debug)
                 console.log("DetectRTC", DetectRTC);
         });
+
+        if (self.offer)
+            self.addStream(self.stream);
 
         self.parentsEmitter.emit(AbstractPeerConnection.CREATED_PEER, self);
     }
@@ -194,11 +194,15 @@ export class Peer extends AbstractPeer.BasePeer {
 
                     if (self.pc.remoteDescription.type == AbstractPeerConnection.OFFER) {
                         self.createAnswer(message);
+                        self.addStream(self.stream);
                     }
                 }).catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.ANSWER) {
             self.pc.setRemoteDescription(new RTCSessionDescription(message.payload))
+                .then(() => {
+                    // self.addStream(self.stream);
+                })
                 .catch(self.onSetSessionDescriptionError);
         }
         else if (message.type === AbstractPeerConnection.CANDIDATE) {
@@ -213,7 +217,9 @@ export class Peer extends AbstractPeer.BasePeer {
                 if (self.debug)
                     console.warn('failed to add ICE Candidate: ' + error.toString());
             }
-            self.pc.addIceCandidate(new RTCIceCandidate(message.payload), onAddIceCandidateSuccess, onAddIceCandidateError);
+            self.pc.addIceCandidate(new RTCIceCandidate(message.payload))
+                .then(onAddIceCandidateSuccess)
+                .catch(onAddIceCandidateError);
         }
         else if (message.type === AbstractPeerConnection.CONNECTIVITY_ERROR) {
             this.parentsEmitter.emit(AbstractPeerConnection.CONNECTIVITY_ERROR, self.pc);

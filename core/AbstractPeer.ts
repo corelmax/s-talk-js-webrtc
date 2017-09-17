@@ -39,6 +39,7 @@ export namespace AbstractPeer {
         browserPrefix: string;
         nick;
         offer: boolean;
+        stream: MediaStream;
         audioTracks: MediaStreamTrack[];
         videoTracks: MediaStreamTrack[];
 
@@ -60,6 +61,7 @@ export namespace AbstractPeer {
                 throw new Error("Missing stream!!!");
             }
 
+            this.stream = config.stream;
             this.debug = config.debug;
             this.id = config.peer_id;
             this.pcPeers = config.pcPeers;
